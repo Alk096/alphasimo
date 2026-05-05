@@ -1,4 +1,4 @@
-{% load static %}
+{% load static %}{% load widget_tweaks %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -6,6 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALPHASIMO - Inscription</title>
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    <!-- Vendor CSS -->
+    <link rel="stylesheet" href="{% static 'vendor/intl-tel-input/css/intlTelInput.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/flatpickr/flatpickr.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/flatpickr/plugins/monthSelect/style.css' %}">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -15,6 +19,23 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        /* Custom styles for intl-tel-input to match our design */
+        .iti { width: 100%; }
+        .iti__country-list { border-radius: 0.5rem; shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); border-color: #E0E0E0; }
+        
+        /* Better input states */
+        input:focus, select:focus {
+            box-shadow: 0 0 0 4px rgba(26, 26, 75, 0.1);
+        }
+
+        /* Custom select arrow */
+        .custom-select-arrow {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231A1A4B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.5rem;
         }
     </style>
 </head>
@@ -39,8 +60,8 @@
         </div>
 
         <!-- Form Container -->
-        <div class="bg-white rounded-2xl shadow-2xl p-8 md:p-12 border border-[#E0E0E0]">
-            
+        <form method="POST" id="registration-form" class="bg-white rounded-2xl shadow-2xl p-8 md:p-12 border border-[#E0E0E0]">
+            {% csrf_token %}
             <!-- Slide 1: Identification -->
             <div id="slide-1" class="space-y-8 animate-fade-in">
                 <h2 class="text-3xl mb-6 font-semibold" style="color: #8B0000;">Votre Profil</h2>
@@ -54,25 +75,25 @@
                             <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
                                 <i data-lucide="user" class="w-4 h-4 text-[#1A1A4B]"></i> Prénom *
                             </label>
-                            <input type="text" id="firstName" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all">
+                            {% render_field form.prenom id="firstName" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
                         </div>
                         <div class="space-y-2">
                             <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
                                 <i data-lucide="user" class="w-4 h-4 text-[#1A1A4B]"></i> Nom *
                             </label>
-                            <input type="text" id="lastName" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all">
+                            {% render_field form.nom id="lastName" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
                         </div>
                         <div class="space-y-2">
                             <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
                                 <i data-lucide="phone" class="w-4 h-4 text-[#1A1A4B]"></i> Numéro WhatsApp *
                             </label>
-                            <input type="tel" id="phone" placeholder="+228 XX XX XX XX" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all">
+                            {% render_field form.number id="phone" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
                         </div>
                         <div class="space-y-2">
                             <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
                                 <i data-lucide="mail" class="w-4 h-4 text-[#1A1A4B]"></i> Email Professionnel *
                             </label>
-                            <input type="email" id="email" placeholder="email@exemple.com" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all">
+                            {% render_field form.email_pro id="email" placeholder="email@exemple.com" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
                         </div>
                     </div>
                 </div>
@@ -85,19 +106,19 @@
                             <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
                                 <i data-lucide="building-2" class="w-4 h-4 text-[#1A1A4B]"></i> Entreprise *
                             </label>
-                            <input type="text" id="company" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all">
+                            {% render_field form.entreprise id="company" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
                         </div>
                         <div class="space-y-2">
                             <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
                                 <i data-lucide="briefcase" class="w-4 h-4 text-[#1A1A4B]"></i> Poste Occupé *
                             </label>
-                            <input type="text" id="position" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all">
+                            {% render_field form.poste id="position" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
                         </div>
                         <div class="space-y-2 md:col-span-2">
                             <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
                                 <i data-lucide="globe" class="w-4 h-4 text-[#1A1A4B]"></i> Secteur d'Activité *
                             </label>
-                            <input type="text" id="sector" placeholder="Ex: Industrie, Services..." class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all">
+                            {% render_field form.secteur id="sector" placeholder="Ex: Industrie, Services..." class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
                         </div>
                     </div>
                 </div>
@@ -120,35 +141,20 @@
                     <div class="space-y-6">
                         <div class="space-y-2">
                             <label class="text-sm text-[#2D2D2D]">Programme Souhaité *</label>
-                            <select id="program" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] appearance-none cursor-pointer bg-no-repeat bg-[right_1rem_center] bg-[length:1.5rem]" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2224%22 height=%2224%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%231A1A4B%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpolyline points=%226 9 12 15 18 9%22%3E%3C/polyline%3E%3C/svg%3E');">
-                                <option value="">Sélectionnez un programme</option>
-                                <option>QSE Qualifiant</option>
-                                <option>Management des Processus</option>
-                                <option>Audit Interne</option>
-                                <option>ISO 9001</option>
-                                <option>ISO 14001</option>
-                                <option>ISO 45001</option>
-                            </select>
+                            {% render_field form.programme_souhaiter id="program" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] cursor-pointer bg-white shadow-sm custom-select-arrow" %}
                         </div>
 
                         <div class="grid md:grid-cols-2 gap-6">
                             <div class="space-y-2">
                                 <label class="text-sm text-[#2D2D2D]">Session Préférée *</label>
-                                <select id="session" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] appearance-none cursor-pointer bg-no-repeat bg-[right_1rem_center] bg-[length:1.5rem]" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2224%22 height=%2224%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%231A1A4B%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpolyline points=%226 9 12 15 18 9%22%3E%3C/polyline%3E%3C/svg%3E');">
-                                    <option value="">Choisir une session</option>
-                                    <option>Juin 2026</option>
-                                    <option>Août 2026</option>
-                                    <option>Novembre 2026</option>
-                                    <option>Février 2027</option>
-                                </select>
+                                <div class="relative">
+                                    {% render_field form.session_preferee id="session" placeholder="Choisir un mois" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] cursor-pointer bg-white shadow-sm pr-12" %}
+                                    <i data-lucide="calendar" class="w-5 h-5 absolute right-4 top-1/2 -translate-y-1/2 text-[#1A1A4B] pointer-events-none"></i>
+                                </div>
                             </div>
                             <div class="space-y-2">
                                 <label class="text-sm text-[#2D2D2D]">Lieu Souhaité *</label>
-                                <select id="location" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] appearance-none cursor-pointer bg-no-repeat bg-[right_1rem_center] bg-[length:1.5rem]" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2224%22 height=%2224%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%231A1A4B%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpolyline points=%226 9 12 15 18 9%22%3E%3C/polyline%3E%3C/svg%3E');">
-                                    <option value="">Sélectionner un lieu</option>
-                                    <option>Lomé</option>
-                                    <option>Tunis</option>
-                                </select>
+                                {% render_field form.lieu_souhaiter id="location" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] cursor-pointer bg-white shadow-sm custom-select-arrow" %}
                             </div>
                         </div>
                     </div>
@@ -158,6 +164,7 @@
                     <h3 class="text-xl mb-4 font-medium" style="color: #1A1A4B;">Besoins Spécifiques</h3>
                     <div class="h-px mb-6 bg-[#E0E0E0]"></div>
                     <p class="text-sm mb-4">Souhaitez-vous un devis personnalisé pour un groupe ? *</p>
+                    {% render_field form.besoin_specifique type="hidden" id="besoin_specifique" %}
                     <div class="flex gap-4">
                         <button type="button" onclick="setGroupQuote(true)" id="quote-yes" class="flex-1 px-6 py-4 rounded-lg border-2 border-[#E0E0E0] hover:bg-gray-50 transition-all">Oui</button>
                         <button type="button" onclick="setGroupQuote(false)" id="quote-no" class="flex-1 px-6 py-4 rounded-lg border-2 border-[#E0E0E0] hover:bg-gray-50 transition-all">Non</button>
@@ -168,15 +175,44 @@
                     <button id="prev-btn" class="flex items-center gap-2 px-8 py-4 rounded-lg bg-[#E0E0E0] text-[#2D2D2D] hover:shadow-lg transition-all">
                         <i data-lucide="chevron-left"></i> Précédent
                     </button>
-                    <button id="submit-btn" disabled class="flex items-center gap-2 px-8 py-4 rounded-lg text-white bg-[#1A1A4B] opacity-50 cursor-not-allowed hover:shadow-lg transition-all">
+                    <button type="button" id="submit-btn" disabled class="flex items-center gap-2 px-8 py-4 rounded-lg text-white bg-[#1A1A4B] opacity-50 cursor-not-allowed hover:shadow-lg transition-all">
                         <i data-lucide="check-circle"></i> Valider l'inscription
                     </button>
                 </div>
             </div>
-        </div>
+        </form>
 
         <div class="text-center mt-8 text-sm text-[#2D2D2D]">
             © 2026 Alphasimo - Formation Professionnelle
+        </div>
+    </div>
+
+    <!-- Vendor JS -->
+    <script src="{% static 'vendor/intl-tel-input/js/intlTelInputWithUtils.min.js' %}"></script>
+    <script src="{% static 'vendor/flatpickr/flatpickr.min.js' %}"></script>
+    <script src="{% static 'vendor/flatpickr/plugins/monthSelect/index.js' %}"></script>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl transform transition-all scale-110">
+            <div class="text-center">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <i data-lucide="check-circle" class="w-12 h-12 text-green-600"></i>
+                </div>
+                <h2 class="text-3xl font-bold mb-4" style="color: #1A1A4B;">Félicitations !</h2>
+                <p class="text-[#2D2D2D] mb-8 leading-relaxed">
+                    {% if messages %}
+                        {% for message in messages %}
+                            {% if message.tags == 'success' %}{{ message }}{% endif %}
+                        {% endfor %}
+                    {% else %}
+                        Votre inscription à la formation Alphasimo a été enregistrée avec succès. Nous vous contacterons très prochainement.
+                    {% endif %}
+                </p>
+                <button onclick="closeModal()" class="w-full py-4 px-6 rounded-xl text-white font-semibold transition-all hover:shadow-xl active:scale-95" style="background-color: #1A1A4B;">
+                    Continuer
+                </button>
+            </div>
         </div>
     </div>
 
@@ -193,6 +229,24 @@
         const nextBtn = document.getElementById('next-btn');
         const submitBtn = document.getElementById('submit-btn');
 
+        // Modal functions
+        window.closeModal = () => {
+            const modal = document.getElementById('success-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        };
+
+        // Show modal if success message exists
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'success' %}
+                const modal = document.getElementById('success-modal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
         // Form fields for validation
         const slide1Fields = ['firstName', 'lastName', 'phone', 'email', 'company', 'position', 'sector'];
         const slide2Fields = ['program', 'session', 'location'];
@@ -200,9 +254,40 @@
         // Initialize Lucide icons
         lucide.createIcons();
 
+        // Initialize Intl-Tel-Input
+        const phoneInput = document.getElementById('phone');
+        const iti = window.intlTelInput(phoneInput, {
+            initialCountry: "ne",
+            preferredCountries: ["tg", "bj", "ci", "sn"],
+            separateDialCode: true,
+        });
+
+        // Initialize Flatpickr Month Select
+        const sessionInput = document.getElementById('session');
+        flatpickr(sessionInput, {
+            plugins: [
+                new monthSelectPlugin({
+                    shorthand: true,
+                    dateFormat: "Y-m-d",
+                    altFormat: "F Y",
+                })
+            ],
+            enable: [
+                new Date(2026, 5),  // Juin 2026
+                new Date(2026, 7),  // Août 2026
+                new Date(2026, 10), // Nov 2026
+                new Date(2027, 1),  // Fév 2027
+            ],
+            onChange: validateSlide2
+        });
+
         // Validation Logic
         function validateSlide1() {
-            const isValid = slide1Fields.every(id => document.getElementById(id).value.trim() !== '');
+            const isValid = slide1Fields.every(id => {
+                const val = document.getElementById(id).value.trim();
+                if (id === 'phone') return iti.isValidNumber() || val.length > 5; // Basic check
+                return val !== '';
+            });
             nextBtn.disabled = !isValid;
             nextBtn.style.opacity = isValid ? '1' : '0.5';
             nextBtn.classList.toggle('cursor-not-allowed', !isValid);
@@ -218,6 +303,7 @@
 
         // Event Listeners for inputs
         slide1Fields.forEach(id => document.getElementById(id).addEventListener('input', validateSlide1));
+        phoneInput.addEventListener('countrychange', validateSlide1);
         slide2Fields.forEach(id => document.getElementById(id).addEventListener('change', validateSlide2));
 
         // Group Quote Toggle
@@ -270,7 +356,11 @@
         }
 
         submitBtn.addEventListener('click', () => {
-            alert('Inscription validée ! Merci pour votre inscription à Alphasimo.');
+            // Final validation and mapping
+            document.getElementById('besoin_specifique').value = groupQuote ? 'True' : 'False';
+
+            // Submit the form
+            document.getElementById('registration-form').submit();
         });
     </script>
 </body>

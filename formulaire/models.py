@@ -6,7 +6,8 @@ class User(AbstractUser):
 
 class Prospect(models.Model):
     # Information personnelle
-    full_name = models.CharField(max_length=100)
+    prenom = models.CharField(max_length=50)
+    nom = models.CharField(max_length=50)
     # International number format
     number = models.CharField(max_length=15)
     email_pro = models.EmailField()
@@ -27,9 +28,12 @@ class Prospect(models.Model):
         ('Lomé', 'Lomé'),
         ('Tunis', 'Tunis'),
     ]
-    programme_souhaiter = models.CharField(max_length=100)
+    programme_souhaiter = models.CharField(max_length=100, choices=CHOIX_PROGRAMME)
     session_preferee = models.DateField()
-    lieu_souhaiter = models.CharField(max_length=100)
+    lieu_souhaiter = models.CharField(max_length=100, choices=LIEU_SOUHAITER)
     
     # Besoins spécifiques
     besoin_specifique = models.BooleanField()
+
+    def __str__(self):
+        return f"{self.prenom} {self.nom} - {self.entreprise} - {self.lieu_souhaiter} - {self.session_preferee} - {self.besoin_specifique}"

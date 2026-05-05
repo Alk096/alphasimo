@@ -9,3 +9,4 @@ package-lock.json
 package.json
 node_modules
 static/css/output.css
+static/vendor

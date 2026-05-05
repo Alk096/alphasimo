@@ -1,0 +1,277 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALPHASIMO - Inscription</title>
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-white flex items-center justify-center p-4 md:p-8">
+
+    <div class="w-full max-w-4xl">
+        <!-- Logo/Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl mb-2 font-bold" style="color: #8B0000;">ALPHASIMO</h1>
+            <p class="text-lg" style="color: #2D2D2D;">Inscription à nos formations professionnelles</p>
+        </div>
+
+        <!-- Progress Indicator -->
+        <div class="flex items-center justify-center mb-8 gap-4">
+            <div id="step-1-indicator" class="w-12 h-12 rounded-full flex items-center justify-center text-white transition-all scale-110" style="background-color: #1A1A4B;">
+                <span id="step-1-content">1</span>
+            </div>
+            <div id="progress-line" class="w-16 md:w-24 h-1 transition-colors" style="background-color: #E0E0E0;"></div>
+            <div id="step-2-indicator" class="w-12 h-12 rounded-full flex items-center justify-center text-white transition-all" style="background-color: #E0E0E0;">
+                2
+            </div>
+        </div>
+
+        <!-- Form Container -->
+        <div class="bg-white rounded-2xl shadow-2xl p-8 md:p-12 border border-[#E0E0E0]">
+            
+            <!-- Slide 1: Identification -->
+            <div id="slide-1" class="space-y-8 animate-fade-in">
+                <h2 class="text-3xl mb-6 font-semibold" style="color: #8B0000;">Votre Profil</h2>
+                
+                <div>
+                    <h3 class="text-xl mb-4 font-medium" style="color: #1A1A4B;">Informations Personnelles</h3>
+                    <div class="h-px mb-6 bg-[#E0E0E0]"></div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
+                                <i data-lucide="user" class="w-4 h-4 text-[#1A1A4B]"></i> Prénom *
+                            </label>
+                            <input type="text" id="firstName" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
+                                <i data-lucide="user" class="w-4 h-4 text-[#1A1A4B]"></i> Nom *
+                            </label>
+                            <input type="text" id="lastName" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
+                                <i data-lucide="phone" class="w-4 h-4 text-[#1A1A4B]"></i> Numéro WhatsApp *
+                            </label>
+                            <input type="tel" id="phone" placeholder="+228 XX XX XX XX" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
+                                <i data-lucide="mail" class="w-4 h-4 text-[#1A1A4B]"></i> Email Professionnel *
+                            </label>
+                            <input type="email" id="email" placeholder="email@exemple.com" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all">
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl mb-4 font-medium" style="color: #1A1A4B;">Profil Professionnel</h3>
+                    <div class="h-px mb-6 bg-[#E0E0E0]"></div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
+                                <i data-lucide="building-2" class="w-4 h-4 text-[#1A1A4B]"></i> Entreprise *
+                            </label>
+                            <input type="text" id="company" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
+                                <i data-lucide="briefcase" class="w-4 h-4 text-[#1A1A4B]"></i> Poste Occupé *
+                            </label>
+                            <input type="text" id="position" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all">
+                        </div>
+                        <div class="space-y-2 md:col-span-2">
+                            <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
+                                <i data-lucide="globe" class="w-4 h-4 text-[#1A1A4B]"></i> Secteur d'Activité *
+                            </label>
+                            <input type="text" id="sector" placeholder="Ex: Industrie, Services..." class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end pt-6">
+                    <button id="next-btn" disabled class="flex items-center gap-2 px-8 py-4 rounded-lg text-white text-lg bg-[#1A1A4B] opacity-50 cursor-not-allowed hover:shadow-lg transition-all">
+                        Suivant <i data-lucide="chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Slide 2: Formation (Hidden by default) -->
+            <div id="slide-2" class="space-y-8 animate-fade-in hidden">
+                <h2 class="text-3xl mb-6 font-semibold" style="color: #8B0000;">Votre Projet de Formation</h2>
+                
+                <div>
+                    <h3 class="text-xl mb-4 font-medium" style="color: #1A1A4B;">Choix du Programme</h3>
+                    <div class="h-px mb-6 bg-[#E0E0E0]"></div>
+                    
+                    <div class="space-y-6">
+                        <div class="space-y-2">
+                            <label class="text-sm text-[#2D2D2D]">Programme Souhaité *</label>
+                            <select id="program" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] appearance-none cursor-pointer bg-no-repeat bg-[right_1rem_center] bg-[length:1.5rem]" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2224%22 height=%2224%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%231A1A4B%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpolyline points=%226 9 12 15 18 9%22%3E%3C/polyline%3E%3C/svg%3E');">
+                                <option value="">Sélectionnez un programme</option>
+                                <option>QSE Qualifiant</option>
+                                <option>Management des Processus</option>
+                                <option>Audit Interne</option>
+                                <option>ISO 9001</option>
+                                <option>ISO 14001</option>
+                                <option>ISO 45001</option>
+                            </select>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-sm text-[#2D2D2D]">Session Préférée *</label>
+                                <select id="session" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] appearance-none cursor-pointer bg-no-repeat bg-[right_1rem_center] bg-[length:1.5rem]" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2224%22 height=%2224%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%231A1A4B%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpolyline points=%226 9 12 15 18 9%22%3E%3C/polyline%3E%3C/svg%3E');">
+                                    <option value="">Choisir une session</option>
+                                    <option>Juin 2026</option>
+                                    <option>Août 2026</option>
+                                    <option>Novembre 2026</option>
+                                    <option>Février 2027</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-sm text-[#2D2D2D]">Lieu Souhaité *</label>
+                                <select id="location" class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] appearance-none cursor-pointer bg-no-repeat bg-[right_1rem_center] bg-[length:1.5rem]" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2224%22 height=%2224%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%231A1A4B%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpolyline points=%226 9 12 15 18 9%22%3E%3C/polyline%3E%3C/svg%3E');">
+                                    <option value="">Sélectionner un lieu</option>
+                                    <option>Lomé</option>
+                                    <option>Tunis</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xl mb-4 font-medium" style="color: #1A1A4B;">Besoins Spécifiques</h3>
+                    <div class="h-px mb-6 bg-[#E0E0E0]"></div>
+                    <p class="text-sm mb-4">Souhaitez-vous un devis personnalisé pour un groupe ? *</p>
+                    <div class="flex gap-4">
+                        <button type="button" onclick="setGroupQuote(true)" id="quote-yes" class="flex-1 px-6 py-4 rounded-lg border-2 border-[#E0E0E0] hover:bg-gray-50 transition-all">Oui</button>
+                        <button type="button" onclick="setGroupQuote(false)" id="quote-no" class="flex-1 px-6 py-4 rounded-lg border-2 border-[#E0E0E0] hover:bg-gray-50 transition-all">Non</button>
+                    </div>
+                </div>
+
+                <div class="flex justify-between pt-6">
+                    <button id="prev-btn" class="flex items-center gap-2 px-8 py-4 rounded-lg bg-[#E0E0E0] text-[#2D2D2D] hover:shadow-lg transition-all">
+                        <i data-lucide="chevron-left"></i> Précédent
+                    </button>
+                    <button id="submit-btn" disabled class="flex items-center gap-2 px-8 py-4 rounded-lg text-white bg-[#1A1A4B] opacity-50 cursor-not-allowed hover:shadow-lg transition-all">
+                        <i data-lucide="check-circle"></i> Valider l'inscription
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-8 text-sm text-[#2D2D2D]">
+            © 2026 Alphasimo - Formation Professionnelle
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let currentSlide = 1;
+        let groupQuote = null;
+
+        // Elements
+        const slides = { 1: document.getElementById('slide-1'), 2: document.getElementById('slide-2') };
+        const indicators = { 1: document.getElementById('step-1-indicator'), 2: document.getElementById('step-2-indicator') };
+        const step1Content = document.getElementById('step-1-content');
+        const progressLine = document.getElementById('progress-line');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('submit-btn');
+
+        // Form fields for validation
+        const slide1Fields = ['firstName', 'lastName', 'phone', 'email', 'company', 'position', 'sector'];
+        const slide2Fields = ['program', 'session', 'location'];
+
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Validation Logic
+        function validateSlide1() {
+            const isValid = slide1Fields.every(id => document.getElementById(id).value.trim() !== '');
+            nextBtn.disabled = !isValid;
+            nextBtn.style.opacity = isValid ? '1' : '0.5';
+            nextBtn.classList.toggle('cursor-not-allowed', !isValid);
+        }
+
+        function validateSlide2() {
+            const fieldsValid = slide2Fields.every(id => document.getElementById(id).value !== '');
+            const isValid = fieldsValid && groupQuote !== null;
+            submitBtn.disabled = !isValid;
+            submitBtn.style.opacity = isValid ? '1' : '0.5';
+            submitBtn.classList.toggle('cursor-not-allowed', !isValid);
+        }
+
+        // Event Listeners for inputs
+        slide1Fields.forEach(id => document.getElementById(id).addEventListener('input', validateSlide1));
+        slide2Fields.forEach(id => document.getElementById(id).addEventListener('change', validateSlide2));
+
+        // Group Quote Toggle
+        window.setGroupQuote = (val) => {
+            groupQuote = val;
+            const yesBtn = document.getElementById('quote-yes');
+            const noBtn = document.getElementById('quote-no');
+            
+            if(val) {
+                yesBtn.style.backgroundColor = '#1A1A4B'; yesBtn.style.color = 'white'; yesBtn.style.borderColor = '#1A1A4B';
+                noBtn.style.backgroundColor = 'white'; noBtn.style.color = '#2D2D2D'; noBtn.style.borderColor = '#E0E0E0';
+            } else {
+                noBtn.style.backgroundColor = '#1A1A4B'; noBtn.style.color = 'white'; noBtn.style.borderColor = '#1A1A4B';
+                yesBtn.style.backgroundColor = 'white'; yesBtn.style.color = '#2D2D2D'; yesBtn.style.borderColor = '#E0E0E0';
+            }
+            validateSlide2();
+        };
+
+        // Navigation
+        nextBtn.addEventListener('click', () => {
+            currentSlide = 2;
+            updateUI();
+        });
+
+        document.getElementById('prev-btn').addEventListener('click', () => {
+            currentSlide = 1;
+            updateUI();
+        });
+
+        function updateUI() {
+            // Slide visibility
+            slides[1].classList.toggle('hidden', currentSlide !== 1);
+            slides[2].classList.toggle('hidden', currentSlide !== 2);
+
+            // Indicators
+            if (currentSlide === 2) {
+                step1Content.innerHTML = '<i data-lucide="check-circle" class="w-6 h-6"></i>';
+                indicators[2].style.backgroundColor = '#1A1A4B';
+                indicators[2].classList.add('scale-110');
+                indicators[1].classList.remove('scale-110');
+                progressLine.style.backgroundColor = '#1A1A4B';
+                lucide.createIcons();
+            } else {
+                step1Content.innerText = '1';
+                indicators[2].style.backgroundColor = '#E0E0E0';
+                indicators[2].classList.remove('scale-110');
+                indicators[1].classList.add('scale-110');
+                progressLine.style.backgroundColor = '#E0E0E0';
+            }
+        }
+
+        submitBtn.addEventListener('click', () => {
+            alert('Inscription validée ! Merci pour votre inscription à Alphasimo.');
+        });
+    </script>
+</body>
+</html>

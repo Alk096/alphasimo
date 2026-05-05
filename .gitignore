@@ -5,4 +5,7 @@ __pycache__
 migrations
 db.sqlite3
 media
-
+package-lock.json
+package.json
+node_modules
+static/css/output.css

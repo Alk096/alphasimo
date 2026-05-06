@@ -13,29 +13,48 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        .animate-fade-in {
-            animation: fadeIn 0.3s ease-in-out;
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8fafc; }
+        .animate-fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        #success-modal {
+            display: none; /* Caché par défaut */
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background-color: rgba(0, 0, 0, 0.7); /* Fond noir transparent */
+            backdrop-filter: blur(4px); /* Flou d'arrière-plan */
+            align-items: center;
+            justify-content: center;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        /* Custom styles for intl-tel-input to match our design */
-        .iti { width: 100%; }
-        .iti__country-list { border-radius: 0.5rem; shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); border-color: #E0E0E0; }
-        
-        /* Better input states */
-        input:focus, select:focus {
-            box-shadow: 0 0 0 4px rgba(26, 26, 75, 0.1);
+        #success-modal.flex { display: flex !important; } /* Classe pour l'afficher en JS */
+
+        .modal-content {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            width: 90%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
 
-        /* Custom select arrow */
-        .custom-select-arrow {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231A1A4B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 1.5rem;
+        /* 3. Style des boutons et inputs (pour éviter l'effet écrasé) */
+        .iti { width: 100% !important; }
+        input, select { box-sizing: border-box !important; }
+        
+        .btn-primary {
+            background-color: #1A1A4B;
+            color: white;
+            transition: all 0.2s;
+        }
+        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* Fix pour les indicateurs de progression */
+        .step-circle {
+            width: 3rem; height: 3rem;
+            border-radius: 9999px;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s;
         }
     </style>
 </head>
@@ -206,7 +225,7 @@
                             {% if message.tags == 'success' %}{{ message }}{% endif %}
                         {% endfor %}
                     {% else %}
-                        Votre inscription à la formation Alphasimo a été enregistrée avec succès. Nous vous contacterons très prochainement.
+                        Votre inscription à la formation Alphasimo a été enregistrée avec succès.
                     {% endif %}
                 </p>
                 <button onclick="closeModal()" class="w-full py-4 px-6 rounded-xl text-white font-semibold transition-all hover:shadow-xl active:scale-95" style="background-color: #1A1A4B;">

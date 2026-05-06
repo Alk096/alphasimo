@@ -40,6 +40,8 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 
+CSRF_TRUSTED_ORIGINS = env.list('TRUSTED_ORIGINS', default=[])
+
 
 # Application definition
 

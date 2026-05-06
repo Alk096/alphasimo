@@ -2,7 +2,11 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
-    pass
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
 
 class Prospect(models.Model):
     # Information personnelle
@@ -34,6 +38,8 @@ class Prospect(models.Model):
     
     # Besoins spécifiques
     besoin_specifique = models.BooleanField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.prenom} {self.nom} - {self.entreprise} - {self.lieu_souhaiter} - {self.session_preferee} - {self.besoin_specifique}"

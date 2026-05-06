@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALPHASIMO - Connexion</title>
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    <link rel="shortcut icon" href="{% static 'images/logo.png' %}">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -28,8 +29,9 @@
     <div class="w-full max-w-md">
         <!-- Logo/Header -->
         <div class="text-center mb-8">
-            <h1 class="text-4xl md:text-5xl mb-2 font-bold" style="color: #8B0000;">ALPHASIMO</h1>
-            <p class="text-lg" style="color: #2D2D2D;">Accédez à votre espace</p>
+            {% comment %} <h1 class="text-4xl md:text-5xl mb-2 font-bold" style="color: #8B0000;">ALPHASIMO</h1> {% endcomment %}
+            <img src="{% static 'images/logo.png' %}" alt="Logo" class="w-40 h-40 mx-auto mb-4">
+            {% comment %} <p class="text-lg" style="color: #2D2D2D;">Accédez à votre espace</p> {% endcomment %}
         </div>
 
         <!-- Login Card -->
@@ -40,7 +42,7 @@
                     <label class="flex items-center gap-2 text-sm text-[#2D2D2D] font-medium">
                         <i data-lucide="user" class="w-4 h-4 text-[#1A1A4B]"></i> Email
                     </label>
-                    <input type="email" name="email" required class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" placeholder="votre@email.com">
+                    <input type="email" name="email" required class="w-full px-4 py-3 rounded-lg border border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" placeholder="votre@email.com">
                 </div>
 
                 <div class="space-y-2">
@@ -48,7 +50,7 @@
                         <i data-lucide="lock" class="w-4 h-4 text-[#1A1A4B]"></i> Mot de passe
                     </label>
                     <div class="relative">
-                        <input type="password" name="password" id="password" required class="w-full px-4 py-3 rounded-lg border-2 border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" placeholder="••••••••">
+                        <input type="password" name="password" id="password" required class="w-full px-4 py-3 rounded-lg border border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" placeholder="••••••••">
                         <button type="button" onclick="togglePassword()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#1A1A4B]">
                             <i data-lucide="eye" id="eye-icon" class="w-5 h-5"></i>
                         </button>
@@ -65,7 +67,7 @@
                 </div>
                 {% endif %}
 
-                <button type="submit" class="w-full py-4 rounded-lg text-white font-semibold shadow-lg hover:shadow-xl transition-all active:scale-[0.98]" style="background-color: #1A1A4B;">
+                <button type="submit" class="w-full py-4 rounded-lg text-white font-semibold shadow-lg hover:shadow-xl transition-all active:scale-[0.98]" style="background-color: #8D0000;">
                     Se connecter
                 </button>
             </form>

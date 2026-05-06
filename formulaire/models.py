@@ -17,9 +17,9 @@ class Prospect(models.Model):
     email_pro = models.EmailField()
 
     # Information professionnelle
-    entreprise = models.CharField(max_length=100)
-    poste = models.CharField(max_length=100)
-    secteur = models.CharField(max_length=100)
+    entreprise = models.CharField(max_length=100, null=True, blank=True)
+    poste = models.CharField(max_length=100, null=True, blank=True)
+    secteur = models.CharField(max_length=100, null=True, blank=True)
 
     # Choix du programme
     CHOIX_PROGRAMME = [

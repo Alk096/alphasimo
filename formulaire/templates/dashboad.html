@@ -334,10 +334,46 @@
     const pageNumbersContainer = document.getElementById('page-numbers');
 
     // ─── NOTIFICATION TOGGLE ────────────────────────────
-    notifBtn.addEventListener('click', (e) => {
+    notifBtn.addEventListener('click', async (e) => {
         e.stopPropagation();
+        const isOpening = notifDropdown.classList.contains('hidden');
         notifDropdown.classList.toggle('hidden');
+
+        if (isOpening) {
+            // Mark as read when opening
+            try {
+                const res = await fetch('{% url "mark_notifications_read" %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (res.ok) {
+                    document.getElementById('notif-badge').textContent = '0';
+                    document.getElementById('notif-badge').classList.add('hidden');
+                }
+            } catch (err) {
+                console.error('Error marking notifications read:', err);
+            }
+        }
     });
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
     document.addEventListener('click', () => {
         notifDropdown.classList.add('hidden');
     });
@@ -383,7 +419,7 @@
             renderKPIs(data.kpis);
             renderTable(data.prospects, data.pagination);
             renderChart(data.chart);
-            renderNotifications(data.latest);
+            renderNotifications(data.latest, data.unread_count);
             
             totalPages = data.pagination.total_pages;
             updatePaginationUI(data.pagination);
@@ -521,10 +557,16 @@
     }
 
     // ─── RENDER: Notifications ──────────────────────────
-    function renderNotifications(latest) {
+    function renderNotifications(latest, unread_count) {
         const badge = document.getElementById('notif-badge');
         const list = document.getElementById('notif-list');
-        badge.textContent = latest.length;
+        
+        badge.textContent = unread_count;
+        if (unread_count > 0) {
+            badge.classList.remove('hidden');
+        } else {
+            badge.classList.add('hidden');
+        }
 
         if (latest.length === 0) {
             list.innerHTML = '<p class="p-10 text-center text-gray-400 text-xs italic">Aucune notification récente.</p>';

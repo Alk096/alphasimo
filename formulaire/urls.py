@@ -9,4 +9,5 @@ urlpatterns = [
 
     path('dashboad/', views.dashboad, name='dashboad'),
     path('api/dashboard/', views.api_dashboard_data, name='api_dashboard_data'),
+    path('api/notifications/read/', views.mark_notifications_as_read, name='mark_notifications_read'),
 ]

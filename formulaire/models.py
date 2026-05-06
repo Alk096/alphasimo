@@ -38,7 +38,7 @@ class Prospect(models.Model):
     
     # Besoins spécifiques
     besoin_specifique = models.BooleanField()
-
+    is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

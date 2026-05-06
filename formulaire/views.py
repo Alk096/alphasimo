@@ -73,7 +73,7 @@ def api_dashboard_data(request):
     }
 
     # Latest 4 for notifications
-    latest_prospects = prospects_query[:4]
+    latest_prospects = prospects_query.filter(is_read=False)
     latest_data = []
     for p in latest_prospects:
         latest_data.append({
@@ -116,6 +116,7 @@ def api_dashboard_data(request):
         },
         'chart': chart_dict,
         'latest': latest_data,
+        'unread_count': Prospect.objects.filter(is_read=False).count(),
         'prospects': table_data,
         'pagination': {
             'current_page': page_obj.number,
@@ -125,3 +126,10 @@ def api_dashboard_data(request):
             'total_items': total_count,
         }
     })
+
+@login_required(login_url='login')
+def mark_notifications_as_read(request):
+    if request.method == 'POST':
+        Prospect.objects.filter(is_read=False).update(is_read=True)
+        return JsonResponse({'status': 'ok'})
+    return JsonResponse({'status': 'error'}, status=400)

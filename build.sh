@@ -13,4 +13,4 @@ python manage.py collectstatic --no-input
 # Migration de la base de données
 python manage.py migrate
 
-python manage.py shell -c "from django.contrib.auth.models import User; User.objects.filter(username='papy-sept').exists() or User.objects.create_superuser('papy-sept', '', '123456789')"
+python manage.py shell -c "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.filter(username='papy-sept').exists() or User.objects.create_superuser('papy-sept', '', '123456789')"

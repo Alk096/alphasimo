@@ -463,8 +463,8 @@
         prevPageBtn.disabled = !pagination.has_previous;
         nextPageBtn.disabled = !pagination.has_next;
 
-        const startIdx = (pagination.current_page - 1) * 10 + 1; // Assuming 10 per page
-        const endIdx = Math.min(pagination.current_page * 10, pagination.total_items);
+        const startIdx = (pagination.current_page - 1) * 8 + 1; // Assuming 8 per page
+        const endIdx = Math.min(pagination.current_page * 8, pagination.total_items);
         
         if (pagination.total_items === 0) {
             document.getElementById('pagination-info').textContent = '0';

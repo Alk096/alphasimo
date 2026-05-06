@@ -132,20 +132,23 @@
                 <!-- Notification Dropdown -->
                 <div id="notif-dropdown" class="hidden absolute right-0 mt-4 w-80 bg-white border border-gray-200 shadow-xl rounded-xl z-[60] overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-surface-container-low">
-                        <h3 class="font-button text-button text-primary uppercase">Dernières Inscriptions</h3>
+                        <h3 class="font-button text-button text-primary uppercase">Notifications</h3>
                     </div>
                     <div id="notif-list" class="max-h-[400px] overflow-y-auto">
                         <p class="p-10 text-center text-gray-400 text-xs italic">Chargement...</p>
                     </div>
-                    <div class="p-4 bg-surface-container-low text-center border-t border-gray-100">
+                    {% comment %} <div class="p-4 bg-surface-container-low text-center border-t border-gray-100">
                         <a class="text-xs font-bold text-primary hover:underline" href="#">Voir tout l'historique</a>
-                    </div>
+                    </div> {% endcomment %}
                 </div>
             </div>
-            <a href="{% url 'logout' %}" class="flex items-center gap-2 text-primary hover:bg-surface-container-low px-3 py-2 rounded-lg transition-colors font-button text-button">
-                <span class="material-symbols-outlined" data-icon="logout">logout</span>
-                <span>Déconnexion</span>
-            </a>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="flex items-center gap-2 text-primary hover:bg-surface-container-low px-3 py-2 rounded-lg transition-colors font-button text-button">
+                    <span class="material-symbols-outlined" data-icon="logout">logout</span>
+                    <span>Déconnexion</span>
+                </button>
+            </form>
         </div>
     </div>
 </header>
@@ -153,7 +156,7 @@
 <main class="max-w-7xl mx-auto px-6 py-10">
     <!-- Dashboard Header & KPIs -->
     <section class="mb-lg">
-        <h2 class="font-h1 text-h1 text-secondary mb-md">Suivi des Inscriptions Alphasimo</h2>
+        <h2 class="font-h1 text-h1 text-secondary mb-md">Suivi des prospects Alphasimo</h2>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
             <!-- KPI Card 1 -->
             <div class="bg-white p-md border border-gray-200 bordeaux-border custom-shadow relative overflow-hidden">

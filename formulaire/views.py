@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
 from .models import Prospect
 from django.db.models import Count, Q
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 def formulaire(request):
     if request.method == 'POST':
@@ -35,10 +37,11 @@ def user_login(request):
             
     return render(request, 'login.html')
 
-
+@login_required(login_url='login')
 def dashboad(request):
     return render(request, 'dashboad.html')
 
+@login_required(login_url='login')
 def api_dashboard_data(request):
     # Filters
     lieu = request.GET.get('lieu')
@@ -81,9 +84,14 @@ def api_dashboard_data(request):
             'entreprise': p.entreprise,
         })
 
+    # Pagination
+    page_number = request.GET.get('page', 1)
+    paginator = Paginator(prospects_query, 8)
+    page_obj = paginator.get_page(page_number)
+
     # Table data
     table_data = []
-    for p in prospects_query:
+    for p in page_obj:
         table_data.append({
             'initials': f"{p.prenom[0]}{p.nom[0]}".upper(),
             'prenom': p.prenom,
@@ -109,4 +117,11 @@ def api_dashboard_data(request):
         'chart': chart_dict,
         'latest': latest_data,
         'prospects': table_data,
+        'pagination': {
+            'current_page': page_obj.number,
+            'total_pages': paginator.num_pages,
+            'has_next': page_obj.has_next(),
+            'has_previous': page_obj.has_previous(),
+            'total_items': total_count,
+        }
     })

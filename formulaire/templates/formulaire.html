@@ -13,8 +13,9 @@
     <link rel="stylesheet" href="{% static 'vendor/flatpickr/plugins/monthSelect/style.css' %}">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
     <style>
-        body { margin: 0; font-family: 'Inter'; background-color: #f8fafc; }
+        body { margin: 0; font-family: 'Montserrat', sans-serif; background-color: #f8fafc; }
         .animate-fade-in { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         #success-modal {
@@ -220,7 +221,7 @@
                 <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                     <i data-lucide="check-circle" class="w-12 h-12 text-green-600"></i>
                 </div>
-                <h2 class="text-3xl font-bold mb-4" style="color: #1A1A4B;">Félicitations !</h2>
+                <h2 class="text-3xl font-bold mb-4" style="color: #8D0000;">Félicitations !</h2>
                 <p class="text-[#2D2D2D] mb-8 leading-relaxed">
                     {% if messages %}
                         {% for message in messages %}

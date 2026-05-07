@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{% static 'css/output.css' %}">
     <link rel="shortcut icon" href="{% static 'images/logo.png' %}">
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
@@ -120,17 +120,17 @@
         }
     </script>
 </head>
-<body class="bg-background font-body-md text-on-surface">
+<body class="bg-background font-body-md text-on-surface" style="font-family: 'Montserrat', sans-serif;">
 
 <!-- Top Navigation Bar -->
-<header class="bg-[#8B0000] font-['Inter'] antialiased docked full-width top-0 border-b border-gray-200 flat no shadows sticky z-50">
+<header class="bg-[#8B0000] antialiased docked full-width top-0 border-b border-gray-200 flat no shadows sticky z-50">
     <div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
         {% comment %} <h1 class="text-2xl font-bold tracking-tight text-white">Alphasimo</h1> {% endcomment %}
         <img src="{% static 'images/logo.png' %}" alt="Logo" class="w-8 h-8">
         <div class="flex items-center gap-4">
             <div class="relative mr-2">
                 <span id="notif-btn" class="material-symbols-outlined text-white cursor-pointer hover:bg-[#2D2D2D] rounded-full transition-colors" data-icon="notifications">notifications</span>
-                <span id="notif-badge" class="absolute top-1 right-1 bg-secondary text-white text-[10px] font-bold h-4 w-4 flex items-center justify-center rounded-full">0</span>
+                <span id="notif-badge" class="absolute -top-1 -right-1 bg-secondary text-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full border border-[#8B0000]">0</span>
                 <!-- Notification Dropdown -->
                 <div id="notif-dropdown" class="hidden absolute right-0 mt-4 w-80 bg-white border border-gray-200 shadow-xl rounded-xl z-[60] overflow-hidden">
                     <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-surface-container-low">
@@ -161,7 +161,7 @@
         <h2 class="font-h1 text-h1 text-[#2D2D2D] mb-md">Suivi des prospects Alphasimo</h2>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
             <!-- KPI Card 1 -->
-            <div class="bg-[#FFFFFF] p-md border-[#8D0000] border-2 rounded-xl bordeaux-border custom-shadow relative overflow-hidden">
+            <div class="bg-[#E0E0E0] p-md border-[#E0E0E0] border-2 rounded-xl bordeaux-border custom-shadow relative overflow-hidden">
                 <p class="font-label-md text-label-md text-[#2D2D2D] uppercase mb-xs">Total Prospects</p>
                 <div class="flex justify-between items-end">
                     <span id="kpi-total" class="font-h1 text-h1 text-[#8D0000]">—</span>
@@ -174,7 +174,7 @@
                 </div>
             </div>
             <!-- KPI Card 2 -->
-            <div class="bg-[#FFFFFF] p-md border-2 rounded-xl border-[#8D0000] bordeaux-border custom-shadow">
+            <div class="bg-[#8D000015] p-md border-2 rounded-xl border-[#8D000015] bordeaux-border custom-shadow">
                 <p class="font-label-md text-label-md text-[#2D2D2D] uppercase mb-xs">Demandes Lomé</p>
                 <div class="flex justify-between items-end">
                     <span id="kpi-lome" class="font-h1 text-h1 text-[#8D0000]">—</span>
@@ -182,11 +182,11 @@
                 </div>
             </div>
             <!-- KPI Card 3 -->
-            <div class="bg-[#FFFFFF] p-md border-2 rounded-xl border-[#8D0000] bordeaux-border custom-shadow">
-                <p class="font-label-md text-label-md text-[#2D2D2D] uppercase mb-xs">Demandes Tunis</p>
+            <div class="bg-[#1A1A4B] p-md border-2 rounded-xl border-[#1A1A4B] bordeaux-border custom-shadow">
+                <p class="font-label-md text-label-md text-[#FFFFFF] uppercase mb-xs">Demandes Tunis</p>
                 <div class="flex justify-between items-end">
-                    <span id="kpi-tunis" class="font-h1 text-h1 text-[#8D0000]">—</span>
-                    <span class="text-[#8D0000] text-sm font-semibold">Tunisie</span>
+                    <span id="kpi-tunis" class="font-h1 text-h1 text-[#FFFFFF]">—</span>
+                    <span class="text-[#FFFFFF] text-sm font-semibold">Tunisie</span>
                 </div>
             </div>
             <!-- KPI Card 4 -->
@@ -306,12 +306,12 @@
     <div class="flex flex-col md:flex-row justify-between items-center w-full px-8 py-10 max-w-7xl mx-auto gap-4">
         <div class="flex flex-col gap-1">
             <span class="text-sm font-bold text-white uppercase tracking-widest">Alphasimo</span>
-            <p class="text-xs font-['Inter'] text-white/80 uppercase tracking-wider">© 2026 Alphasimo. Institutional-grade reliability.</p>
+            <p class="text-xs text-white/80 uppercase tracking-wider">© 2026 Alphasimo. Institutional-grade reliability.</p>
         </div>
         <div class="flex gap-8">
-            <a class="text-xs font-['Inter'] text-white uppercase tracking-wider hover:text-[#2D2D2D] transition-opacity duration-200" href="#">Terms of Service</a>
-            <a class="text-xs font-['Inter'] text-white uppercase tracking-wider hover:text-[#2D2D2D] transition-opacity duration-200" href="#">Privacy Policy</a>
-            <a class="text-xs font-['Inter'] text-white uppercase tracking-wider hover:text-[#2D2D2D] transition-opacity duration-200" href="#">Contact Support</a>
+            <a class="text-xs text-white uppercase tracking-wider hover:text-[#2D2D2D] transition-opacity duration-200" href="#">Terms of Service</a>
+            <a class="text-xs text-white uppercase tracking-wider hover:text-[#2D2D2D] transition-opacity duration-200" href="#">Privacy Policy</a>
+            <a class="text-xs text-white uppercase tracking-wider hover:text-[#2D2D2D] transition-opacity duration-200" href="#">Contact Support</a>
         </div>
     </div>
 </footer>

@@ -73,7 +73,7 @@ def api_dashboard_data(request):
     }
 
     # Latest 4 for notifications
-    latest_prospects = prospects_query.filter(is_read=False)
+    latest_prospects = prospects_query[:4]
     latest_data = []
     for p in latest_prospects:
         latest_data.append({

@@ -185,7 +185,7 @@
                   <i data-lucide="phone" class="w-4 h-4 text-[#1A1A4B]"></i>
                   Numéro WhatsApp *
                 </label>
-                {% render_field form.number id="phone" class="w-full px-4 py-3 rounded-lg border-2 border-[#1A1A4B] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
+                {% render_field form.number id="phone" placeholder="xxx xxx xxx" class="w-full px-4 py-3 rounded-lg border-2 border-[#1A1A4B] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
               </div>
               <div class="space-y-2">
                 <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
@@ -417,6 +417,7 @@
           initialCountry: "ne",
           preferredCountries: ["tg", "bj", "ci", "sn"],
           separateDialCode: true,
+          autoPlaceholder: "off",
       });
 
       // Initialize Flatpickr Month Select

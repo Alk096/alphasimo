@@ -467,11 +467,13 @@
                 ? `<span class="material-symbols-outlined text-secondary" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>`
                 : `<span class="material-symbols-outlined text-gray-300" data-icon="radio_button_unchecked">radio_button_unchecked</span>`;
 
+            const rowNumber = (pagination.current_page - 1) * pagination.per_page + i + 1;
+
             return `
             <tr class="hover:bg-gray-100 transition-colors ${rowColor} border-b border-gray-100">
                 <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center font-bold text-primary">${p.initials}</div>
+                        <div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center font-bold text-primary">${rowNumber}</div>
                         <div>
                             <p class="font-h3 text-body-md text-primary leading-none">${p.prenom} ${p.nom}</p>
                             <p class="text-xs text-gray-500 mt-1 uppercase font-semibold">${p.entreprise || "-"}</p>

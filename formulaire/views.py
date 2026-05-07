@@ -121,6 +121,7 @@ def api_dashboard_data(request):
         'pagination': {
             'current_page': page_obj.number,
             'total_pages': paginator.num_pages,
+            'per_page': paginator.per_page,
             'has_next': page_obj.has_next(),
             'has_previous': page_obj.has_previous(),
             'total_items': total_count,

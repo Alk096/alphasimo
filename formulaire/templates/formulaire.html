@@ -79,7 +79,7 @@
       }
 
       .btn-primary {
-        background-color: #8d0000;
+        background-color: #1A1A4B;
         color: white;
         transition: all 0.2s;
       }
@@ -117,7 +117,7 @@
           class="w-40 h-40 mx-auto mb-4"
         />
         <p class="text-lg" style="color: #2d2d2d">
-          Inscription à nos formations professionnelles
+          Formulaire d'inscription
         </p>
       </div>
 
@@ -126,19 +126,19 @@
         <div
           id="step-1-indicator"
           class="w-12 h-12 rounded-full flex items-center justify-center text-white transition-all scale-110"
-          style="background-color: #8d0000"
+          style="background-color: #1A1A4B"
         >
           <span id="step-1-content">1</span>
         </div>
         <div
           id="progress-line"
           class="w-16 md:w-24 h-1 transition-colors"
-          style="background-color: #8d000015"
+          style="background-color: #1a1a4b15"
         ></div>
         <div
           id="step-2-indicator"
           class="w-12 h-12 rounded-full flex items-center justify-center text-white transition-all"
-          style="background-color: #8d000015"
+          style="background-color: #1a1a4b15"
         >
           2
         </div>
@@ -148,7 +148,7 @@
       <form
         method="POST"
         id="registration-form"
-        class="bg-[#8D000015] rounded-2xl shadow-2xl p-8 md:p-12 border border-[#E0E0E0]"
+        class="bg-[#1A1A4B15] rounded-2xl shadow-2xl p-8 md:p-12 border border-[#E0E0E0]"
       >
         {% csrf_token %}
         <!-- Slide 1: Identification -->
@@ -161,7 +161,7 @@
 
           <div>
             <h3 class="text-xl mb-4 font-medium" style="color: #1a1a4b">
-              Informations Personnelles
+              Profil
             </h3>
             <div class="h-px mb-6 bg-[#E0E0E0]"></div>
 
@@ -171,44 +171,35 @@
                   <i data-lucide="user" class="w-4 h-4 text-[#1A1A4B]"></i>
                   Prénom *
                 </label>
-                {% render_field form.prenom id="firstName" class="w-full px-4
-                py-3 rounded-lg border border-[#8B0000] outline-none
-                focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
+                {% render_field form.prenom id="firstName" class="w-full px-4 py-3 rounded-lg border-2 border-[#1A1A4B] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
               </div>
               <div class="space-y-2">
                 <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
                   <i data-lucide="user" class="w-4 h-4 text-[#1A1A4B]"></i> Nom
                   *
                 </label>
-                {% render_field form.nom id="lastName" class="w-full px-4 py-3
-                rounded-lg border border-[#8B0000] outline-none
-                focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
+                {% render_field form.nom id="lastName" class="w-full px-4 py-3 rounded-lg border-2 border-[#1A1A4B] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
               </div>
               <div class="space-y-2">
                 <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
                   <i data-lucide="phone" class="w-4 h-4 text-[#1A1A4B]"></i>
                   Numéro WhatsApp *
                 </label>
-                {% render_field form.number id="phone" class="w-full px-4 py-3
-                rounded-lg border border-[#8B0000] outline-none
-                focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
+                {% render_field form.number id="phone" class="w-full px-4 py-3 rounded-lg border-2 border-[#1A1A4B] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
               </div>
               <div class="space-y-2">
                 <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
                   <i data-lucide="mail" class="w-4 h-4 text-[#1A1A4B]"></i>
                   Email Professionnel *
                 </label>
-                {% render_field form.email_pro id="email"
-                placeholder="email@exemple.com" class="w-full px-4 py-3
-                rounded-lg border border-[#8B0000] outline-none
-                focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
+                {% render_field form.email_pro id="email" placeholder="email@exemple.com" class="w-full px-4 py-3 rounded-lg border-2 border-[#1A1A4B] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
               </div>
             </div>
           </div>
 
           <div>
             <h3 class="text-xl mb-4 font-medium" style="color: #1a1a4b">
-              Profil Professionnel
+              Informations professionnelles
             </h3>
             <div class="h-px mb-6 bg-[#E0E0E0]"></div>
             <div class="grid md:grid-cols-2 gap-6">
@@ -220,28 +211,21 @@
                   ></i>
                   Entreprise/Organisation
                 </label>
-                {% render_field form.entreprise id="company" class="w-full px-4
-                py-3 rounded-lg border border-[#8B0000] outline-none
-                focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
+                {% render_field form.entreprise id="company" class="w-full px-4 py-3 rounded-lg border-2 border-[#1A1A4B] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
               </div>
               <div class="space-y-2">
                 <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
                   <i data-lucide="briefcase" class="w-4 h-4 text-[#1A1A4B]"></i>
                   Poste Occupé
                 </label>
-                {% render_field form.poste id="position" class="w-full px-4 py-3
-                rounded-lg border border-[#8B0000] outline-none
-                focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
+                {% render_field form.poste id="position" class="w-full px-4 py-3 rounded-lg border-2 border-[#1A1A4B] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
               </div>
               <div class="space-y-2 md:col-span-2">
                 <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
                   <i data-lucide="globe" class="w-4 h-4 text-[#1A1A4B]"></i>
                   Secteur d'Activité
                 </label>
-                {% render_field form.secteur id="sector" placeholder="Ex:
-                Industrie, Services..." class="w-full px-4 py-3 rounded-lg
-                border border-[#8B0000] outline-none focus:border-[#1A1A4B]
-                transition-all bg-white shadow-sm" %}
+                {% render_field form.secteur id="sector" placeholder="Ex: Industrie, Services..." class="w-full px-4 py-3 rounded-lg border-2 border-[#1A1A4B] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
               </div>
             </div>
           </div>
@@ -250,7 +234,7 @@
             <button
               id="next-btn"
               disabled
-              class="flex items-center gap-2 px-8 py-4 rounded-lg text-white text-lg bg-[#8D0000] opacity-50 cursor-not-allowed hover:shadow-lg transition-all"
+              class="flex items-center gap-2 px-8 py-4 rounded-lg text-white text-lg bg-[#1A1A4B] opacity-50 cursor-not-allowed hover:shadow-lg transition-all"
             >
               Suivant <i data-lucide="chevron-right"></i>
             </button>
@@ -276,10 +260,7 @@
                 <label class="text-sm text-[#2D2D2D]"
                   >Programme Souhaité *</label
                 >
-                {% render_field form.programme_souhaiter id="program"
-                class="w-full px-4 py-3 rounded-lg border border-[#8B0000]
-                outline-none focus:border-[#1A1A4B] cursor-pointer bg-white
-                shadow-sm custom-select-arrow" %}
+                {% render_field form.programme_souhaiter id="program" class="w-full px-4 py-3 rounded-lg border-2 border-[#1A1A4B] outline-none focus:border-[#1A1A4B] cursor-pointer bg-white shadow-sm custom-select-arrow" %}
               </div>
 
               <div class="grid md:grid-cols-2 gap-6">
@@ -288,11 +269,7 @@
                     >Session Préférée *</label
                   >
                   <div class="relative">
-                    {% render_field form.session_preferee id="session"
-                    placeholder="Choisir un mois" class="w-full px-4 py-3
-                    rounded-lg border border-[#8B0000] outline-none
-                    focus:border-[#1A1A4B] cursor-pointer bg-white shadow-sm
-                    pr-12" %}
+                    {% render_field form.session_preferee id="session" placeholder="Choisir un mois" class="w-full px-4 py-3 rounded-lg border-2 border-[#1A1A4B] outline-none focus:border-[#1A1A4B] cursor-pointer bg-white shadow-sm pr-12" %}
                     <i
                       data-lucide="calendar"
                       class="w-5 h-5 absolute right-4 top-1/2 -translate-y-1/2 text-[#1A1A4B] pointer-events-none"
@@ -301,10 +278,7 @@
                 </div>
                 <div class="space-y-2">
                   <label class="text-sm text-[#2D2D2D]">Lieu Souhaité *</label>
-                  {% render_field form.lieu_souhaiter id="location"
-                  class="w-full px-4 py-3 rounded-lg border border-[#8B0000]
-                  outline-none focus:border-[#1A1A4B] cursor-pointer bg-white
-                  shadow-sm custom-select-arrow" %}
+                  {% render_field form.lieu_souhaiter id="location" class="w-full px-4 py-3 rounded-lg border-2 border-[#1A1A4B] outline-none focus:border-[#1A1A4B] cursor-pointer bg-white shadow-sm custom-select-arrow" %}
                 </div>
               </div>
             </div>
@@ -318,14 +292,13 @@
             <p class="text-sm mb-4">
               Souhaitez-vous un devis personnalisé pour un groupe ? *
             </p>
-            {% render_field form.besoin_specifique type="hidden"
-            id="besoin_specifique" %}
+            {% render_field form.besoin_specifique type="hidden" id="besoin_specifique" %}
             <div class="flex gap-4">
               <button
                 type="button"
                 onclick="setGroupQuote(true)"
                 id="quote-yes"
-                class="flex-1 px-6 py-4 rounded-lg border border-[#8B0000] hover:bg-gray-50 transition-all"
+                class="flex-1 px-6 py-4 rounded-lg border-2 border-[#1A1A4B] hover:bg-gray-50 transition-all"
               >
                 Oui
               </button>
@@ -333,7 +306,7 @@
                 type="button"
                 onclick="setGroupQuote(false)"
                 id="quote-no"
-                class="flex-1 px-6 py-4 rounded-lg border border-[#8B0000] hover:bg-gray-50 transition-all"
+                class="flex-1 px-6 py-4 rounded-lg border-2 border-[#1A1A4B] hover:bg-gray-50 transition-all"
               >
                 Non
               </button>
@@ -351,7 +324,7 @@
               type="button"
               id="submit-btn"
               disabled
-              class="flex items-center gap-2 px-8 py-4 rounded-lg text-white bg-[#8D0000] opacity-50 cursor-not-allowed hover:shadow-lg transition-all"
+              class="flex items-center gap-2 px-8 py-4 rounded-lg text-white bg-[#1A1A4B] opacity-50 cursor-not-allowed hover:shadow-lg transition-all"
             >
               <i data-lucide="check-circle"></i> Valider l'inscription
             </button>
@@ -381,19 +354,18 @@
           >
             <i data-lucide="check-circle" class="w-12 h-12 text-green-600"></i>
           </div>
-          <h2 class="text-3xl font-bold mb-4" style="color: #8d0000">
+          <h2 class="text-3xl font-bold mb-4" style="color: #1A1A4B">
             Félicitations !
           </h2>
           <p class="text-[#2D2D2D] mb-8 leading-relaxed">
-            {% if messages %} {% for message in messages %} {% if message.tags
-            == 'success' %}{{ message }}{% endif %} {% endfor %} {% else %}
+            {% if messages %} {% for message in messages %} {% if message.tags == 'success' %}{{ message }}{% endif %} {% endfor %} {% else %}
             Votre inscription à la formation Alphasimo a été enregistrée avec
             succès. {% endif %}
           </p>
           <button
             onclick="closeModal()"
             class="w-full py-4 px-6 rounded-xl text-white font-semibold transition-all hover:shadow-xl active:scale-95"
-            style="background-color: #8d0000"
+            style="background-color: #1A1A4B"
           >
             Continuer
           </button>
@@ -498,10 +470,10 @@
           const noBtn = document.getElementById('quote-no');
 
           if(val) {
-              yesBtn.style.backgroundColor = '#8B0000'; yesBtn.style.color = 'white'; yesBtn.style.borderColor = '#8B0000';
+              yesBtn.style.backgroundColor = '#1A1A4B'; yesBtn.style.color = 'white'; yesBtn.style.borderColor = '#1A1A4B';
               noBtn.style.backgroundColor = 'white'; noBtn.style.color = '#2D2D2D'; noBtn.style.borderColor = '#E0E0E0';
           } else {
-              noBtn.style.backgroundColor = '#8B0000'; noBtn.style.color = 'white'; noBtn.style.borderColor = '#8B0000';
+              noBtn.style.backgroundColor = '#1A1A4B'; noBtn.style.color = 'white'; noBtn.style.borderColor = '#1A1A4B';
               yesBtn.style.backgroundColor = 'white'; yesBtn.style.color = '#2D2D2D'; yesBtn.style.borderColor = '#E0E0E0';
           }
           validateSlide2();
@@ -526,17 +498,17 @@
           // Indicators
           if (currentSlide === 2) {
               step1Content.innerHTML = '<i data-lucide="check-circle" class="w-6 h-6"></i>';
-              indicators[2].style.backgroundColor = '#8D0000';
+              indicators[2].style.backgroundColor = '#1A1A4B';
               indicators[2].classList.add('scale-110');
               indicators[1].classList.remove('scale-110');
-              progressLine.style.backgroundColor = '#8D0000';
+              progressLine.style.backgroundColor = '#1A1A4B';
               lucide.createIcons();
           } else {
               step1Content.innerText = '1';
               indicators[2].style.backgroundColor = '#E0E0E0';
               indicators[2].classList.remove('scale-110');
               indicators[1].classList.add('scale-110');
-              progressLine.style.backgroundColor = '#8D000015';
+              progressLine.style.backgroundColor = '#1A1A4B15';
           }
       }
 

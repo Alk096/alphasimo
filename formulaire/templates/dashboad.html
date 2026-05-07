@@ -1,473 +1,718 @@
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html class="light" lang="fr">
-<head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Alphasimo | Dashboard</title>
-    <link rel="stylesheet" href="{% static 'css/output.css' %}">
-    <link rel="shortcut icon" href="{% static 'images/logo.png' %}">
+    <link rel="stylesheet" href="{% static 'css/output.css' %}" />
+    <link rel="shortcut icon" href="{% static 'images/logo.png' %}" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+      rel="stylesheet"
+    />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+
     <style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-        }
-        .bordeaux-border {
-            border-top: 2px solid #b52619;
-        }
-        .custom-shadow {
-            box-shadow: 0px 4px 20px rgba(2, 0, 52, 0.05);
-        }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+      }
+      .bordeaux-border {
+        border-top: 2px solid #b52619;
+      }
+      .custom-shadow {
+        box-shadow: 0px 4px 20px rgba(2, 0, 52, 0.05);
+      }
     </style>
     <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "on-tertiary-container": "#888787",
-                        "surface-dim": "#dadada",
-                        "surface-container": "#eeeeee",
-                        "surface-bright": "#f9f9f9",
-                        "primary": "#020034",
-                        "on-secondary": "#ffffff",
-                        "on-secondary-fixed": "#410000",
-                        "error": "#ba1a1a",
-                        "on-surface": "#1a1c1c",
-                        "surface-variant": "#e2e2e2",
-                        "tertiary-fixed": "#e4e2e1",
-                        "tertiary": "#080808",
-                        "secondary-fixed": "#ffdad4",
-                        "primary-container": "#1a1a4b",
-                        "on-background": "#1a1c1c",
-                        "tertiary-container": "#202020",
-                        "on-secondary-container": "#610000",
-                        "surface-container-highest": "#e2e2e2",
-                        "on-primary-fixed-variant": "#414274",
-                        "on-primary-fixed": "#151546",
-                        "surface-tint": "#59598d",
-                        "on-secondary-fixed-variant": "#920703",
-                        "secondary": "#b52619",
-                        "surface": "#f9f9f9",
-                        "on-tertiary": "#ffffff",
-                        "background": "#f9f9f9",
-                        "surface-container-high": "#e8e8e8",
-                        "on-error": "#ffffff",
-                        "secondary-fixed-dim": "#ffb4a8",
-                        "surface-container-lowest": "#ffffff",
-                        "on-tertiary-fixed-variant": "#474747",
-                        "inverse-primary": "#c2c1fc",
-                        "primary-fixed": "#e2dfff",
-                        "on-primary": "#ffffff",
-                        "error-container": "#ffdad6",
-                        "outline": "#777680",
-                        "inverse-on-surface": "#f1f1f1",
-                        "on-error-container": "#93000a",
-                        "inverse-surface": "#2f3131",
-                        "on-surface-variant": "#47464f",
-                        "surface-container-low": "#f4f3f3",
-                        "on-tertiary-fixed": "#1b1c1c",
-                        "on-primary-container": "#8383ba",
-                        "primary-fixed-dim": "#c2c1fc",
-                        "tertiary-fixed-dim": "#c8c6c6",
-                        "outline-variant": "#c8c5d0",
-                        "secondary-container": "#ff5c47"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.125rem",
-                        "lg": "0.25rem",
-                        "xl": "0.5rem",
-                        "full": "0.75rem"
-                    },
-                    "spacing": {
-                        "xl": "80px",
-                        "sm": "12px",
-                        "gutter": "24px",
-                        "base": "8px",
-                        "margin": "32px",
-                        "lg": "48px",
-                        "xs": "4px",
-                        "md": "24px"
-                    },
-                    "fontFamily": {
-                        "h3": ["Inter"],
-                        "body-sm": ["Inter"],
-                        "body-lg": ["Inter"],
-                        "h2": ["Inter"],
-                        "button": ["Inter"],
-                        "body-md": ["Inter"],
-                        "display": ["Inter"],
-                        "h1": ["Inter"],
-                        "label-md": ["Inter"]
-                    },
-                    "fontSize": {
-                        "h3": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
-                        "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
-                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
-                        "h2": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
-                        "button": ["14px", {"lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "600"}],
-                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
-                        "display": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
-                        "h1": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
-                        "label-md": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600"}]
-                    }
-                },
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary-container": "#888787",
+              "surface-dim": "#dadada",
+              "surface-container": "#eeeeee",
+              "surface-bright": "#f9f9f9",
+              primary: "#020034",
+              "on-secondary": "#ffffff",
+              "on-secondary-fixed": "#410000",
+              error: "#ba1a1a",
+              "on-surface": "#1a1c1c",
+              "surface-variant": "#e2e2e2",
+              "tertiary-fixed": "#e4e2e1",
+              tertiary: "#080808",
+              "secondary-fixed": "#ffdad4",
+              "primary-container": "#1a1a4b",
+              "on-background": "#1a1c1c",
+              "tertiary-container": "#202020",
+              "on-secondary-container": "#610000",
+              "surface-container-highest": "#e2e2e2",
+              "on-primary-fixed-variant": "#414274",
+              "on-primary-fixed": "#151546",
+              "surface-tint": "#59598d",
+              "on-secondary-fixed-variant": "#920703",
+              secondary: "#b52619",
+              surface: "#f9f9f9",
+              "on-tertiary": "#ffffff",
+              background: "#f9f9f9",
+              "surface-container-high": "#e8e8e8",
+              "on-error": "#ffffff",
+              "secondary-fixed-dim": "#ffb4a8",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed-variant": "#474747",
+              "inverse-primary": "#c2c1fc",
+              "primary-fixed": "#e2dfff",
+              "on-primary": "#ffffff",
+              "error-container": "#ffdad6",
+              outline: "#777680",
+              "inverse-on-surface": "#f1f1f1",
+              "on-error-container": "#93000a",
+              "inverse-surface": "#2f3131",
+              "on-surface-variant": "#47464f",
+              "surface-container-low": "#f4f3f3",
+              "on-tertiary-fixed": "#1b1c1c",
+              "on-primary-container": "#8383ba",
+              "primary-fixed-dim": "#c2c1fc",
+              "tertiary-fixed-dim": "#c8c6c6",
+              "outline-variant": "#c8c5d0",
+              "secondary-container": "#ff5c47",
             },
-        }
+            borderRadius: {
+              DEFAULT: "0.125rem",
+              lg: "0.25rem",
+              xl: "0.5rem",
+              full: "0.75rem",
+            },
+            spacing: {
+              xl: "80px",
+              sm: "12px",
+              gutter: "24px",
+              base: "8px",
+              margin: "32px",
+              lg: "48px",
+              xs: "4px",
+              md: "24px",
+            },
+            fontFamily: {
+              h3: ["Inter"],
+              "body-sm": ["Inter"],
+              "body-lg": ["Inter"],
+              h2: ["Inter"],
+              button: ["Inter"],
+              "body-md": ["Inter"],
+              display: ["Inter"],
+              h1: ["Inter"],
+              "label-md": ["Inter"],
+            },
+            fontSize: {
+              h3: ["20px", { lineHeight: "1.4", fontWeight: "600" }],
+              "body-sm": ["14px", { lineHeight: "1.5", fontWeight: "400" }],
+              "body-lg": ["18px", { lineHeight: "1.6", fontWeight: "400" }],
+              h2: ["24px", { lineHeight: "1.3", fontWeight: "600" }],
+              button: [
+                "14px",
+                { lineHeight: "1", letterSpacing: "0.02em", fontWeight: "600" },
+              ],
+              "body-md": ["16px", { lineHeight: "1.6", fontWeight: "400" }],
+              display: [
+                "48px",
+                {
+                  lineHeight: "1.1",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "700",
+                },
+              ],
+              h1: [
+                "32px",
+                {
+                  lineHeight: "1.2",
+                  letterSpacing: "-0.01em",
+                  fontWeight: "700",
+                },
+              ],
+              "label-md": [
+                "12px",
+                { lineHeight: "1", letterSpacing: "0.05em", fontWeight: "600" },
+              ],
+            },
+          },
+        },
+      };
     </script>
-</head>
-<body class="bg-background font-body-md text-on-surface" style="font-family: 'Montserrat', sans-serif;">
-
-<!-- Top Navigation Bar -->
-<header class="bg-[#8B0000] antialiased docked full-width top-0 border-b border-gray-200 flat no shadows sticky z-50">
-    <div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
-        {% comment %} <h1 class="text-2xl font-bold tracking-tight text-white">Alphasimo</h1> {% endcomment %}
-        <img src="{% static 'images/logo.png' %}" alt="Logo" class="w-8 h-8">
+  </head>
+  <body
+    class="bg-background font-body-md text-on-surface"
+    style="font-family: &quot;Montserrat&quot;, sans-serif"
+  >
+    <!-- Top Navigation Bar -->
+    <header
+      class="bg-[#8B0000] antialiased docked full-width top-0 border-b border-gray-200 flat no shadows sticky z-50"
+    >
+      <div
+        class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto"
+      >
+        {% comment %}
+        <h1 class="text-2xl font-bold tracking-tight text-white">Alphasimo</h1>
+        {% endcomment %}
+        <img src="{% static 'images/logo.png' %}" alt="Logo" class="w-8 h-8" />
         <div class="flex items-center gap-4">
-            <div class="relative mr-2">
-                <span id="notif-btn" class="material-symbols-outlined text-white cursor-pointer hover:bg-[#2D2D2D] rounded-full transition-colors" data-icon="notifications">notifications</span>
-                <span id="notif-badge" class="absolute -top-1 -right-1 bg-secondary text-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full border border-[#8B0000]">0</span>
-                <!-- Notification Dropdown -->
-                <div id="notif-dropdown" class="hidden absolute right-0 mt-4 w-80 bg-white border border-gray-200 shadow-xl rounded-xl z-[60] overflow-hidden">
-                    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-surface-container-low">
-                        <h3 class="font-button text-button text-primary uppercase">Notifications</h3>
-                    </div>
-                    <div id="notif-list" class="max-h-[400px] overflow-y-auto">
-                        <p class="p-10 text-center text-gray-400 text-xs italic">Chargement...</p>
-                    </div>
-                    {% comment %} <div class="p-4 bg-surface-container-low text-center border-t border-gray-100">
-                        <a class="text-xs font-bold text-primary hover:underline" href="#">Voir tout l'historique</a>
-                    </div> {% endcomment %}
-                </div>
+          <div class="relative mr-2">
+            <span
+              id="notif-btn"
+              class="material-symbols-outlined text-white cursor-pointer hover:bg-[#2D2D2D] rounded-full transition-colors"
+              data-icon="notifications"
+              >notifications</span
+            >
+            <span
+              id="notif-badge"
+              class="absolute -top-1 -right-1 bg-secondary text-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full border border-[#8B0000]"
+              >0</span
+            >
+            <!-- Notification Dropdown -->
+            <div
+              id="notif-dropdown"
+              class="hidden absolute right-0 mt-4 w-80 bg-white border border-gray-200 shadow-xl rounded-xl z-[60] overflow-hidden"
+            >
+              <div
+                class="px-6 py-4 border-b border-gray-100 flex items-center justify-between bg-surface-container-low"
+              >
+                <h3 class="font-button text-button text-primary uppercase">
+                  Notifications
+                </h3>
+              </div>
+              <div id="notif-list" class="max-h-[400px] overflow-y-auto">
+                <p class="p-10 text-center text-gray-400 text-xs italic">
+                  Chargement...
+                </p>
+              </div>
+              {% comment %}
+              <div
+                class="p-4 bg-surface-container-low text-center border-t border-gray-100"
+              >
+                <a
+                  class="text-xs font-bold text-primary hover:underline"
+                  href="#"
+                  >Voir tout l'historique</a
+                >
+              </div>
+              {% endcomment %}
             </div>
-            <form method="post" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit" class="flex items-center gap-2 text-white hover:bg-[#2D2D2D] px-3 py-2 rounded-lg transition-colors font-button text-button">
-                    <span class="material-symbols-outlined" data-icon="logout">logout</span>
-                    <span>Déconnexion</span>
-                </button>
-            </form>
+          </div>
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button
+              type="submit"
+              class="flex items-center gap-2 text-white hover:bg-[#2D2D2D] px-3 py-2 rounded-lg transition-colors font-button text-button"
+            >
+              <span class="material-symbols-outlined" data-icon="logout"
+                >logout</span
+              >
+              <span>Déconnexion</span>
+            </button>
+          </form>
         </div>
-    </div>
-</header>
+      </div>
+    </header>
 
-<main class="max-w-7xl mx-auto px-6 py-6">
-    <!-- Dashboard Header & KPIs -->
-    <section class="mb-lg">
-        {% comment %} <h2 class="font-h1 text-h1 text-[#2D2D2D] mb-md">Suivi des prospects Alphasimo</h2> {% endcomment %}
+    <main class="max-w-7xl mx-auto px-6 py-6">
+      <!-- Dashboard Header & KPIs -->
+      <section class="mb-lg">
+        {% comment %}
+        <h2 class="font-h1 text-h1 text-[#2D2D2D] mb-md">
+          Suivi des prospects Alphasimo
+        </h2>
+        {% endcomment %}
         <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
-            <!-- KPI Card 1 -->
-            <div class="bg-green-600 p-md border-green-600 border-2 rounded-xl bordeaux-border custom-shadow relative overflow-hidden">
-                <p class="font-label-md text-label-md text-white uppercase mb-xs">Total Prospects</p>
-                <div class="flex justify-between items-end">
-                    <span id="kpi-total" class="font-h1 text-h1 text-white">—</span>
-                    <span class="text-white text-sm font-semibold flex items-center gap-1">
-                        <span class="material-symbols-outlined text-xs" data-icon="trending_up">trending_up</span> +12%
-                    </span>
-                </div>
-                <div id="loading-indicator" class="hidden absolute top-0 left-0 w-full h-1 bg-gray-100">
-                    <div class="h-full bg-primary animate-pulse w-1/3"></div>
-                </div>
+          <!-- KPI Card 1 -->
+          <div
+            class="bg-green-600 p-md border-green-600 border-2 rounded-xl bordeaux-border custom-shadow relative overflow-hidden"
+          >
+            <p class="font-label-md text-label-md text-white uppercase mb-xs">
+              Total Prospects
+            </p>
+            <div class="flex justify-between items-end">
+              <span id="kpi-total" class="font-h1 text-h1 text-white">—</span>
+              <span
+                class="text-white text-sm font-semibold flex items-center gap-1"
+              >
+                <span
+                  class="material-symbols-outlined text-xs"
+                  data-icon="trending_up"
+                  >trending_up</span
+                >
+                +12%
+              </span>
             </div>
-            <!-- KPI Card 2 -->
-            <div class="bg-[#a0a0a0] p-md border-2 rounded-xl border-[#a0a0a0] bordeaux-border custom-shadow">
-                <p class="font-label-md text-label-md text-[#2D2D2D] uppercase mb-xs">Demandes Lomé</p>
-                <div class="flex justify-between items-end">
-                    <span id="kpi-lome" class="font-h1 text-h1 text-[#8D0000]">—</span>
-                    <span class="text-[#8D0000] text-sm font-semibold">Togo</span>
-                </div>
+            <div
+              id="loading-indicator"
+              class="hidden absolute top-0 left-0 w-full h-1 bg-gray-100"
+            >
+              <div class="h-full bg-primary animate-pulse w-1/3"></div>
             </div>
-            <!-- KPI Card 3 -->
-            <div class="bg-[#1A1A4B] p-md border-2 rounded-xl border-[#1A1A4B] bordeaux-border custom-shadow">
-                <p class="font-label-md text-label-md text-[#FFFFFF] uppercase mb-xs">Demandes Tunis</p>
-                <div class="flex justify-between items-end">
-                    <span id="kpi-tunis" class="font-h1 text-h1 text-[#FFFFFF]">—</span>
-                    <span class="text-[#FFFFFF] text-sm font-semibold">Tunisie</span>
-                </div>
+          </div>
+          <!-- KPI Card 2 -->
+          <div
+            class="bg-[#a0a0a0] p-md border-2 rounded-xl border-[#a0a0a0] bordeaux-border custom-shadow"
+          >
+            <p
+              class="font-label-md text-label-md text-[#2D2D2D] uppercase mb-xs"
+            >
+              Demandes Lomé
+            </p>
+            <div class="flex justify-between items-end">
+              <span id="kpi-lome" class="font-h1 text-h1 text-[#8D0000]"
+                >—</span
+              >
+              <span class="text-[#8D0000] text-sm font-semibold">Togo</span>
             </div>
-            <!-- KPI Card 4 -->
-            <div class="bg-[#8D0000] p-md border border-gray-200 bordeaux-border custom-shadow">
-                <p class="font-label-md text-label-md text-white uppercase mb-xs">% Devis Groupe</p>
-                <div class="flex justify-between items-end">
-                    <span id="kpi-group" class="font-h1 text-h1 text-[#D3C7C7]">—</span>
-                    <div class="w-24 bg-gray-200 h-2 rounded-full overflow-hidden">
-                        <div id="kpi-group-bar" class="bg-[#8d000077] h-full transition-all duration-700" style="width: 0%"></div>
-                    </div>
-                </div>
+          </div>
+          <!-- KPI Card 3 -->
+          <div
+            class="bg-[#1A1A4B] p-md border-2 rounded-xl border-[#1A1A4B] bordeaux-border custom-shadow"
+          >
+            <p
+              class="font-label-md text-label-md text-[#FFFFFF] uppercase mb-xs"
+            >
+              Demandes Tunis
+            </p>
+            <div class="flex justify-between items-end">
+              <span id="kpi-tunis" class="font-h1 text-h1 text-[#FFFFFF]"
+                >—</span
+              >
+              <span class="text-[#FFFFFF] text-sm font-semibold">Tunisie</span>
             </div>
+          </div>
+          <!-- KPI Card 4 -->
+          <div
+            class="bg-[#8D0000] p-md border border-gray-200 bordeaux-border custom-shadow"
+          >
+            <p class="font-label-md text-label-md text-white uppercase mb-xs">
+              % Devis Groupe
+            </p>
+            <div class="flex justify-between items-end">
+              <span id="kpi-group" class="font-h1 text-h1 text-[#D3C7C7]"
+                >—</span
+              >
+              <div class="w-24 bg-gray-200 h-2 rounded-full overflow-hidden">
+                <div
+                  id="kpi-group-bar"
+                  class="bg-[#8d000077] h-full transition-all duration-700"
+                  style="width: 0%"
+                ></div>
+              </div>
+            </div>
+          </div>
         </div>
-    </section>
+      </section>
 
-    <div class="flex flex-col lg:flex-row gap-lg">
+      <div class="flex flex-col lg:flex-row gap-lg">
         <!-- Main Content Area -->
         <div class="flex-grow space-y-md">
-            <!-- Filtering Toolbar -->
-            <div class="bg-[#1A1A4B] p-sm border border-[#1A1A4B] custom-shadow flex flex-wrap items-center gap-md">
-                <div class="flex items-center gap-2">
-                    <span class="material-symbols-outlined text-white text-sm" data-icon="filter_list">filter_list</span>
-                    <span class="font-button text-button text-white">Filtres:</span>
-                </div>
-                <select id="filter-lieu" class="border-gray-300 rounded focus:border-primary focus:ring-0 text-body-sm font-body-sm pl-4 pr-8 py-2 bg-white">
-                    <option value="">Tous les lieux</option>
-                    <option value="Lomé">Lomé, Togo</option>
-                    <option value="Tunis">Tunis, Tunisie</option>
-                </select>
-                <select id="filter-programme" class="border-gray-300 rounded focus:border-primary focus:ring-0 text-body-sm font-body-sm pl-4 pr-0 py-2 bg-white">
-                    <option value="">Tous les programmes</option>
-                    <option value="QSE">QSE Qualifiant</option>
-                    <option value="Management">Management des Processus</option>
-                    <option value="Audit">Audit Interne</option>
-                </select>
-                <select id="filter-session" class="border-gray-300 rounded focus:border-primary focus:ring-0 text-body-sm font-body-sm pl-4 pr-8 py-2 bg-white">
-                    <option value="">Toutes les sessions</option>
-                    <option value="2026-06-01">Juin 2026</option>
-                    <option value="2026-08-01">Août 2026</option>
-                    <option value="2026-12-01">Décembre 2026</option>
-                </select>
-                {% comment %} <button class="ml-auto bg-primary text-white px-6 py-2 font-button text-button hover:bg-primary-container transition-colors active:scale-95 duration-150">
-                    Exporter
-                </button> {% endcomment %}
+          <!-- Filtering Toolbar -->
+          <div
+            class="bg-[#1A1A4B] p-sm border border-[#1A1A4B] custom-shadow flex flex-wrap items-center gap-md"
+          >
+            <div class="flex items-center gap-2">
+              <span
+                class="material-symbols-outlined text-white text-sm"
+                data-icon="filter_list"
+                >filter_list</span
+              >
+              <span class="font-button text-button text-white">Filtres:</span>
             </div>
+            <select
+              id="filter-lieu"
+              class="border-gray-300 rounded focus:border-primary focus:ring-0 text-body-sm font-body-sm pl-4 pr-8 py-2 bg-white"
+            >
+              <option value="">Tous les lieux</option>
+              <option value="Lomé">Lomé, Togo</option>
+              <option value="Tunis">Tunis, Tunisie</option>
+            </select>
+            <select
+              id="filter-programme"
+              class="border-gray-300 rounded focus:border-primary focus:ring-0 text-body-sm font-body-sm pl-4 pr-0 py-2 bg-white"
+            >
+              <option value="">Tous les programmes</option>
+              <option value="QSE">QSE Qualifiant</option>
+              <option value="Management">Management des Processus</option>
+              <option value="Audit">Audit Interne</option>
+            </select>
+            <select
+              id="filter-session"
+              class="border-gray-300 rounded focus:border-primary focus:ring-0 text-body-sm font-body-sm pl-4 pr-8 py-2 bg-white"
+            >
+              <option value="">Toutes les sessions</option>
+              <option value="2026-06-01">Juin 2026</option>
+              <option value="2026-08-01">Août 2026</option>
+              <option value="2026-12-01">Décembre 2026</option>
+            </select>
+            {% comment %}
+            <button
+              class="ml-auto bg-primary text-white px-6 py-2 font-button text-button hover:bg-primary-container transition-colors active:scale-95 duration-150"
+            >
+              Exporter
+            </button>
+            {% endcomment %}
+          </div>
 
-            <!-- Prospects Table -->
-            <div class="bg-white border border-gray-200 custom-shadow overflow-hidden">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-[#1A1A4B] border-b border-gray-200">
-                            <th class="px-6 py-4 font-button text-button text-white uppercase">Candidat</th>
-                            <th class="px-6 py-4 font-button text-button text-white uppercase">Contact</th>
-                            <th class="px-6 py-4 font-button text-button text-white uppercase">Profil</th>
-                            <th class="px-6 py-4 font-button text-button text-white uppercase">Projet</th>
-                            <th class="px-6 py-4 font-button text-button text-white uppercase">Lieu</th>
-                            <th class="px-6 py-4 font-button text-button text-white uppercase">Groupe</th>
-                        </tr>
-                    </thead>
-                    <tbody id="prospects-tbody" class="divide-y divide-gray-100">
-                        <tr><td colspan="6" class="px-6 py-10 text-center text-gray-400 italic">Chargement des données...</td></tr>
-                    </tbody>
-                </table>
-                <div class="px-6 py-4 bg-white border-t border-[#8D000015] flex items-center justify-between">
-                    <div class="text-body-sm text-on-surface-variant">
-                        Affichage <span id="pagination-info" class="font-semibold text-primary">—</span> sur <span id="table-count" class="font-semibold text-primary">—</span> résultats
-                    </div>
-                    <nav class="inline-flex items-center gap-1">
-                        <button id="prev-page" class="p-2 rounded hover:bg-surface-container-low text-on-surface-variant disabled:opacity-50 transition-colors flex items-center justify-center">
-                            <span class="material-symbols-outlined text-lg" data-icon="chevron_left">chevron_left</span>
-                            <span class="font-button text-button ml-1">Précédent</span>
-                        </button>
-                        <div id="page-numbers" class="flex items-center gap-1 px-2">
-                            <!-- Page numbers here -->
-                        </div>
-                        <button id="next-page" class="p-2 rounded hover:bg-surface-container-low text-primary disabled:opacity-50 transition-colors flex items-center justify-center">
-                            <span class="font-button text-button mr-1">Suivant</span>
-                            <span class="material-symbols-outlined text-lg" data-icon="chevron_right">chevron_right</span>
-                        </button>
-                    </nav>
+          <!-- Prospects Table -->
+          <div
+            class="bg-white border border-gray-200 custom-shadow overflow-hidden"
+          >
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-[#1A1A4B] border-b border-gray-200">
+                  <th
+                    class="px-6 py-4 font-button text-button text-white uppercase"
+                  >
+                    Candidat
+                  </th>
+                  <th
+                    class="px-6 py-4 font-button text-button text-white uppercase"
+                  >
+                    Contact
+                  </th>
+                  <th
+                    class="px-6 py-4 font-button text-button text-white uppercase"
+                  >
+                    Profil
+                  </th>
+                  <th
+                    class="px-6 py-4 font-button text-button text-white uppercase"
+                  >
+                    Projet
+                  </th>
+                  <th
+                    class="px-6 py-4 font-button text-button text-white uppercase"
+                  >
+                    Lieu
+                  </th>
+                  <th
+                    class="px-6 py-4 font-button text-button text-white uppercase"
+                  >
+                    Groupe
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="prospects-tbody" class="divide-y divide-gray-100">
+                <tr>
+                  <td
+                    colspan="6"
+                    class="px-6 py-10 text-center text-gray-400 italic"
+                  >
+                    Chargement des données...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div
+              class="px-6 py-4 bg-white border-t border-[#8D000015] flex items-center justify-between"
+            >
+              <div class="text-body-sm text-on-surface-variant">
+                Affichage
+                <span id="pagination-info" class="font-semibold text-primary"
+                  >—</span
+                >
+                sur
+                <span id="table-count" class="font-semibold text-primary"
+                  >—</span
+                >
+                résultats
+              </div>
+              <nav class="inline-flex items-center gap-1">
+                <button
+                  id="prev-page"
+                  class="p-2 rounded hover:bg-surface-container-low text-on-surface-variant disabled:opacity-50 transition-colors flex items-center justify-center"
+                >
+                  <span
+                    class="material-symbols-outlined text-lg"
+                    data-icon="chevron_left"
+                    >chevron_left</span
+                  >
+                  <span class="font-button text-button ml-1">Précédent</span>
+                </button>
+                <div id="page-numbers" class="flex items-center gap-1 px-2">
+                  <!-- Page numbers here -->
                 </div>
+                <button
+                  id="next-page"
+                  class="p-2 rounded hover:bg-surface-container-low text-primary disabled:opacity-50 transition-colors flex items-center justify-center"
+                >
+                  <span class="font-button text-button mr-1">Suivant</span>
+                  <span
+                    class="material-symbols-outlined text-lg"
+                    data-icon="chevron_right"
+                    >chevron_right</span
+                  >
+                </button>
+              </nav>
             </div>
+          </div>
         </div>
 
         <!-- Sidebar -->
         <aside class="w-full lg:w-80 shrink-0 space-y-md">
-            <!-- Chart Section -->
-            <div class="bg-white border-2 rounded-xl border-[#8D0000] custom-shadow bordeaux-border">
-                <div class="bg-[#8D0000] px-6 py-4 border-b border-gray-100 flex items-center justify-center">
-                    <h3 class="font-label-md text-center text-white uppercase">Répartition Programmes</h3>
-                </div>
-                <div class="p-6">
-                    <div class="relative aspect-square">
-                        <canvas id="programChart"></canvas>
-                    </div>
-                    <div class="mt-6 space-y-3">
-                        <div class="flex items-center justify-between text-body-sm font-semibold text-primary">
-                            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-[#020034]"></div> QSE Qualifiant</div>
-                            <span id="chart-qse">—</span>
-                        </div>
-                        <div class="flex items-center justify-between text-body-sm font-semibold text-primary">
-                            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-[#b52619]"></div> Management Processus</div>
-                            <span id="chart-mgmt">—</span>
-                        </div>
-                        <div class="flex items-center justify-between text-body-sm font-semibold text-primary">
-                            <div class="flex items-center gap-2"><div class="w-3 h-3 rounded-full bg-[#e2dfff]"></div> Audit Interne</div>
-                            <span id="chart-audit">—</span>
-                        </div>
-                    </div>
-                </div>
+          <!-- Chart Section -->
+          <div
+            class="bg-white border-2 rounded-xl border-[#8D0000] custom-shadow bordeaux-border"
+          >
+            <div
+              class="bg-[#8D0000] px-6 py-4 border-b border-gray-100 flex items-center justify-center"
+            >
+              <h3 class="font-label-md text-center text-white uppercase">
+                Répartition Programmes
+              </h3>
             </div>
+            <div class="p-6">
+              <div class="relative aspect-square">
+                <canvas id="programChart"></canvas>
+              </div>
+              <div class="mt-6 space-y-3">
+                <div
+                  class="flex items-center justify-between text-body-sm font-semibold text-primary"
+                >
+                  <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full bg-[#020034]"></div>
+                    QSE Qualifiant
+                  </div>
+                  <span id="chart-qse">—</span>
+                </div>
+                <div
+                  class="flex items-center justify-between text-body-sm font-semibold text-primary"
+                >
+                  <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full bg-[#b52619]"></div>
+                    Management Processus
+                  </div>
+                  <span id="chart-mgmt">—</span>
+                </div>
+                <div
+                  class="flex items-center justify-between text-body-sm font-semibold text-primary"
+                >
+                  <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full bg-[#e2dfff]"></div>
+                    Audit Interne
+                  </div>
+                  <span id="chart-audit">—</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </aside>
-    </div>
-</main>
+      </div>
+    </main>
 
-<footer class="bg-[#8D0000] flat no shadows mt-10">
-    <div class="flex flex-col md:flex-row justify-between items-center w-full px-8 py-10 max-w-7xl mx-auto gap-4">
+    <footer class="bg-[#8D0000] flat no shadows mt-10">
+      <div
+        class="flex flex-col md:flex-row justify-between items-center w-full px-8 py-10 max-w-7xl mx-auto gap-4"
+      >
         <div class="flex flex-col gap-1">
-            <span class="text-sm font-bold text-white uppercase tracking-widest">Alphasimo</span>
-            <p class="text-xs text-white/80 uppercase tracking-wider">© 2026 Iman</p>
+          <span class="text-sm font-bold text-white uppercase tracking-widest"
+            >Alphasimo</span
+          >
+          <p class="text-xs text-white/80 uppercase tracking-wider">
+            © 2026 Iman
+          </p>
         </div>
         <div class="flex gap-8">
-            <a class="text-xs text-white uppercase tracking-wider hover:text-[#2D2D2D] transition-opacity duration-200" href="#">Terms of Service</a>
-            <a class="text-xs text-white uppercase tracking-wider hover:text-[#2D2D2D] transition-opacity duration-200" href="#">Privacy Policy</a>
-            <a class="text-xs text-white uppercase tracking-wider hover:text-[#2D2D2D] transition-opacity duration-200" href="#">Contact Support</a>
+          <a
+            class="text-xs text-white uppercase tracking-wider hover:text-[#2D2D2D] transition-opacity duration-200"
+            href="#"
+            >Terms of Service</a
+          >
+          <a
+            class="text-xs text-white uppercase tracking-wider hover:text-[#2D2D2D] transition-opacity duration-200"
+            href="#"
+            >Privacy Policy</a
+          >
+          <a
+            class="text-xs text-white uppercase tracking-wider hover:text-[#2D2D2D] transition-opacity duration-200"
+            href="#"
+            >Contact Support</a
+          >
         </div>
-    </div>
-</footer>
+      </div>
+    </footer>
 
-<script>
-    // ─── STATE ──────────────────────────────────────────
-    const API_URL = '{% url "api_dashboard_data" %}';
-    const POLL_INTERVAL = 10000; // 10s auto-refresh
-    let programChart = null;
-    let currentPage = 1;
-    let totalPages = 1;
+    <script>
+      // ─── STATE ──────────────────────────────────────────
+      const API_URL = '{% url "api_dashboard_data" %}';
+      const POLL_INTERVAL = 10000; // 10s auto-refresh
+      let programChart = null;
+      let currentPage = 1;
+      let totalPages = 1;
 
-    // ─── DOM REFERENCES ─────────────────────────────────
-    const filterLieu = document.getElementById('filter-lieu');
-    const filterProgramme = document.getElementById('filter-programme');
-    const filterSession = document.getElementById('filter-session');
-    const notifBtn = document.getElementById('notif-btn');
-    const notifDropdown = document.getElementById('notif-dropdown');
-    const loadingIndicator = document.getElementById('loading-indicator');
-    const prevPageBtn = document.getElementById('prev-page');
-    const nextPageBtn = document.getElementById('next-page');
-    const pageNumbersContainer = document.getElementById('page-numbers');
+      // ─── DOM REFERENCES ─────────────────────────────────
+      const filterLieu = document.getElementById("filter-lieu");
+      const filterProgramme = document.getElementById("filter-programme");
+      const filterSession = document.getElementById("filter-session");
+      const notifBtn = document.getElementById("notif-btn");
+      const notifDropdown = document.getElementById("notif-dropdown");
+      const loadingIndicator = document.getElementById("loading-indicator");
+      const prevPageBtn = document.getElementById("prev-page");
+      const nextPageBtn = document.getElementById("next-page");
+      const pageNumbersContainer = document.getElementById("page-numbers");
 
-    // ─── NOTIFICATION TOGGLE ────────────────────────────
-    notifBtn.addEventListener('click', async (e) => {
+      // ─── NOTIFICATION TOGGLE ────────────────────────────
+      notifBtn.addEventListener("click", async (e) => {
         e.stopPropagation();
-        const isOpening = notifDropdown.classList.contains('hidden');
-        notifDropdown.classList.toggle('hidden');
+        const isOpening = notifDropdown.classList.contains("hidden");
+        notifDropdown.classList.toggle("hidden");
 
         if (isOpening) {
-            // Mark as read when opening
-            try {
-                const res = await fetch('{% url "mark_notifications_read" %}', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRFToken': getCookie('csrftoken'),
-                        'Content-Type': 'application/json'
-                    }
-                });
-                if (res.ok) {
-                    document.getElementById('notif-badge').textContent = '0';
-                    document.getElementById('notif-badge').classList.add('hidden');
-                }
-            } catch (err) {
-                console.error('Error marking notifications read:', err);
+          // Mark as read when opening
+          try {
+            const res = await fetch('{% url "mark_notifications_read" %}', {
+              method: "POST",
+              headers: {
+                "X-CSRFToken": getCookie("csrftoken"),
+                "Content-Type": "application/json",
+              },
+            });
+            if (res.ok) {
+              document.getElementById("notif-badge").textContent = "0";
+              document.getElementById("notif-badge").classList.add("hidden");
             }
+          } catch (err) {
+            console.error("Error marking notifications read:", err);
+          }
         }
-    });
+      });
 
-    function getCookie(name) {
+      function getCookie(name) {
         let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
+        if (document.cookie && document.cookie !== "") {
+          const cookies = document.cookie.split(";");
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === name + "=") {
+              cookieValue = decodeURIComponent(
+                cookie.substring(name.length + 1),
+              );
+              break;
             }
+          }
         }
         return cookieValue;
-    }
+      }
 
-    document.addEventListener('click', () => {
-        notifDropdown.classList.add('hidden');
-    });
+      document.addEventListener("click", () => {
+        notifDropdown.classList.add("hidden");
+      });
 
-    // ─── PAGINATION EVENTS ──────────────────────────────
-    prevPageBtn.addEventListener('click', () => {
+      // ─── PAGINATION EVENTS ──────────────────────────────
+      prevPageBtn.addEventListener("click", () => {
         if (currentPage > 1) {
-            currentPage--;
-            fetchData();
+          currentPage--;
+          fetchData();
         }
-    });
+      });
 
-    nextPageBtn.addEventListener('click', () => {
+      nextPageBtn.addEventListener("click", () => {
         if (currentPage < totalPages) {
-            currentPage++;
-            fetchData();
+          currentPage++;
+          fetchData();
         }
-    });
+      });
 
-    window.goToPage = (page) => {
+      window.goToPage = (page) => {
         currentPage = page;
         fetchData();
-    };
+      };
 
-    // ─── FILTERS ────────────────────────────────────────
-    filterLieu.addEventListener('change', () => { currentPage = 1; fetchData(); });
-    filterProgramme.addEventListener('change', () => { currentPage = 1; fetchData(); });
-    filterSession.addEventListener('change', () => { currentPage = 1; fetchData(); });
+      // ─── FILTERS ────────────────────────────────────────
+      filterLieu.addEventListener("change", () => {
+        currentPage = 1;
+        fetchData();
+      });
+      filterProgramme.addEventListener("change", () => {
+        currentPage = 1;
+        fetchData();
+      });
+      filterSession.addEventListener("change", () => {
+        currentPage = 1;
+        fetchData();
+      });
 
-    // ─── FETCH DATA ─────────────────────────────────────
-    async function fetchData(isAutoRefresh = false) {
-        if (!isAutoRefresh) loadingIndicator.classList.remove('hidden');
+      // ─── FETCH DATA ─────────────────────────────────────
+      async function fetchData(isAutoRefresh = false) {
+        if (!isAutoRefresh) loadingIndicator.classList.remove("hidden");
 
         const params = new URLSearchParams();
-        if (filterLieu.value) params.set('lieu', filterLieu.value);
-        if (filterProgramme.value) params.set('programme', filterProgramme.value);
-        if (filterSession.value) params.set('session', filterSession.value);
-        params.set('page', currentPage);
+        if (filterLieu.value) params.set("lieu", filterLieu.value);
+        if (filterProgramme.value)
+          params.set("programme", filterProgramme.value);
+        if (filterSession.value) params.set("session", filterSession.value);
+        params.set("page", currentPage);
 
         try {
-            const res = await fetch(`${API_URL}?${params.toString()}`);
-            const data = await res.json();
-            renderKPIs(data.kpis);
-            renderTable(data.prospects, data.pagination);
-            renderChart(data.chart);
-            renderNotifications(data.latest, data.unread_count);
-            
-            totalPages = data.pagination.total_pages;
-            updatePaginationUI(data.pagination);
+          const res = await fetch(`${API_URL}?${params.toString()}`);
+          const data = await res.json();
+          renderKPIs(data.kpis);
+          renderTable(data.prospects, data.pagination);
+          renderChart(data.chart);
+          renderNotifications(data.latest, data.unread_count);
+
+          totalPages = data.pagination.total_pages;
+          updatePaginationUI(data.pagination);
         } catch (err) {
-            console.error('Dashboard fetch error:', err);
+          console.error("Dashboard fetch error:", err);
         } finally {
-            loadingIndicator.classList.add('hidden');
+          loadingIndicator.classList.add("hidden");
         }
-    }
+      }
 
-    // ─── RENDER: KPIs ───────────────────────────────────
-    function renderKPIs(kpis) {
-        document.getElementById('kpi-total').textContent = kpis.total;
-        document.getElementById('kpi-lome').textContent = kpis.lome_count;
-        document.getElementById('kpi-tunis').textContent = kpis.tunis_count;
-        document.getElementById('kpi-group').textContent = kpis.group_pct + '%';
-        document.getElementById('kpi-group-bar').style.width = kpis.group_pct + '%';
-    }
+      // ─── RENDER: KPIs ───────────────────────────────────
+      function renderKPIs(kpis) {
+        document.getElementById("kpi-total").textContent = kpis.total;
+        document.getElementById("kpi-lome").textContent = kpis.lome_count;
+        document.getElementById("kpi-tunis").textContent = kpis.tunis_count;
+        document.getElementById("kpi-group").textContent = kpis.group_pct + "%";
+        document.getElementById("kpi-group-bar").style.width =
+          kpis.group_pct + "%";
+      }
 
-    // ─── RENDER: Table ──────────────────────────────────
-    function renderTable(prospects, pagination) {
-        const tbody = document.getElementById('prospects-tbody');
-        
+      // ─── RENDER: Table ──────────────────────────────────
+      function renderTable(prospects, pagination) {
+        const tbody = document.getElementById("prospects-tbody");
+
         if (prospects.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-10 text-center text-gray-400 italic font-body-sm">Aucun prospect trouvé.</td></tr>';
-            document.getElementById('pagination-info').textContent = '0';
-            document.getElementById('table-count').textContent = '0';
-            return;
+          tbody.innerHTML =
+            '<tr><td colspan="6" class="px-6 py-10 text-center text-gray-400 italic font-body-sm">Aucun prospect trouvé.</td></tr>';
+          document.getElementById("pagination-info").textContent = "0";
+          document.getElementById("table-count").textContent = "0";
+          return;
         }
 
-        tbody.innerHTML = prospects.map((p, i) => {
-            let rowColor = 'bg-white';
-            if (p.lieu === 'Lomé') {
-                rowColor = 'bg-green-100/30';
-            } else if (p.lieu === 'Tunis') {
-                rowColor = 'bg-blue-100/30';
+        tbody.innerHTML = prospects
+          .map((p, i) => {
+            let rowColor = "bg-white";
+            if (p.lieu === "Lomé") {
+              rowColor = "bg-green-100/30";
+            } else if (p.lieu === "Tunis") {
+              rowColor = "bg-blue-100/30";
             }
-            
-            const lieuClass = p.lieu === 'Lomé'
-                ? 'bg-green-600 text-white'
-                : 'bg-[#1A1A4B] text-white';
-            const groupIcon = p.besoin_specifique
-                ? `<span class="material-symbols-outlined text-secondary" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>`
-                : `<span class="material-symbols-outlined text-gray-300" data-icon="radio_button_unchecked">radio_button_unchecked</span>`;
 
-            const rowNumber = (pagination.current_page - 1) * pagination.per_page + i + 1;
+            const lieuClass =
+              p.lieu === "Lomé"
+                ? "bg-green-600 text-white"
+                : "bg-[#1A1A4B] text-white";
+            const groupIcon = p.besoin_specifique
+              ? `<span class="material-symbols-outlined text-secondary" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>`
+              : `<span class="material-symbols-outlined text-gray-300" data-icon="radio_button_unchecked">radio_button_unchecked</span>`;
+
+            const rowNumber =
+              (pagination.current_page - 1) * pagination.per_page + i + 1;
 
             return `
             <tr class="hover:bg-gray-100 transition-colors ${rowColor} border-b border-gray-100">
@@ -501,89 +746,108 @@
                     ${groupIcon}
                 </td>
             </tr>`;
-        }).join('');
-    }
+          })
+          .join("");
+      }
 
-    // ─── RENDER: Pagination UI ──────────────────────────
-    function updatePaginationUI(pagination) {
+      // ─── RENDER: Pagination UI ──────────────────────────
+      function updatePaginationUI(pagination) {
         prevPageBtn.disabled = !pagination.has_previous;
         nextPageBtn.disabled = !pagination.has_next;
 
         const startIdx = (pagination.current_page - 1) * 8 + 1; // Assuming 8 per page
-        const endIdx = Math.min(pagination.current_page * 8, pagination.total_items);
-        
-        if (pagination.total_items === 0) {
-            document.getElementById('pagination-info').textContent = '0';
-        } else {
-            document.getElementById('pagination-info').textContent = `${startIdx}-${endIdx}`;
-        }
-        document.getElementById('table-count').textContent = pagination.total_items;
+        const endIdx = Math.min(
+          pagination.current_page * 8,
+          pagination.total_items,
+        );
 
-        let html = '';
+        if (pagination.total_items === 0) {
+          document.getElementById("pagination-info").textContent = "0";
+        } else {
+          document.getElementById("pagination-info").textContent =
+            `${startIdx}-${endIdx}`;
+        }
+        document.getElementById("table-count").textContent =
+          pagination.total_items;
+
+        let html = "";
         const total = pagination.total_pages;
         const cur = pagination.current_page;
-        
+
         for (let i = 1; i <= total; i++) {
-            if (i === cur) {
-                html += `<button class="w-8 h-8 flex items-center justify-center rounded font-button text-button bg-[#8D0000] text-white">${i}</button>`;
-            } else {
-                html += `<button onclick="goToPage(${i})" class="w-8 h-8 flex items-center justify-center rounded font-button text-button text-on-surface-variant hover:bg-surface-container-low transition-colors">${i}</button>`;
-            }
+          if (i === cur) {
+            html += `<button class="w-8 h-8 flex items-center justify-center rounded font-button text-button bg-[#8D0000] text-white">${i}</button>`;
+          } else {
+            html += `<button onclick="goToPage(${i})" class="w-8 h-8 flex items-center justify-center rounded font-button text-button text-on-surface-variant hover:bg-surface-container-low transition-colors">${i}</button>`;
+          }
         }
         pageNumbersContainer.innerHTML = html;
-    }
+      }
 
-    // ─── RENDER: Chart ──────────────────────────────────
-    function renderChart(chart) {
-        document.getElementById('chart-qse').textContent = chart.qse_count;
-        document.getElementById('chart-mgmt').textContent = chart.mgmt_count;
-        document.getElementById('chart-audit').textContent = chart.audit_count;
+      // ─── RENDER: Chart ──────────────────────────────────
+      function renderChart(chart) {
+        document.getElementById("chart-qse").textContent = chart.qse_count;
+        document.getElementById("chart-mgmt").textContent = chart.mgmt_count;
+        document.getElementById("chart-audit").textContent = chart.audit_count;
 
-        const chartData = [chart.qse_count, chart.mgmt_count, chart.audit_count];
+        const chartData = [
+          chart.qse_count,
+          chart.mgmt_count,
+          chart.audit_count,
+        ];
 
         if (programChart) {
-            programChart.data.datasets[0].data = chartData;
-            programChart.update('none');
+          programChart.data.datasets[0].data = chartData;
+          programChart.update("none");
         } else {
-            const ctx = document.getElementById('programChart').getContext('2d');
-            programChart = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['QSE Qualifiant', 'Management des Processus', 'Audit Interne'],
-                    datasets: [{
-                        data: chartData,
-                        backgroundColor: ['#020034', '#b52619', '#e2dfff'],
-                        borderWidth: 0,
-                        hoverOffset: 10
-                    }]
+          const ctx = document.getElementById("programChart").getContext("2d");
+          programChart = new Chart(ctx, {
+            type: "doughnut",
+            data: {
+              labels: [
+                "QSE Qualifiant",
+                "Management des Processus",
+                "Audit Interne",
+              ],
+              datasets: [
+                {
+                  data: chartData,
+                  backgroundColor: ["#020034", "#b52619", "#e2dfff"],
+                  borderWidth: 0,
+                  hoverOffset: 10,
                 },
-                options: {
-                    cutout: '75%',
-                    plugins: { legend: { display: false } },
-                    animation: { duration: 600 }
-                }
-            });
+              ],
+            },
+            options: {
+              cutout: "75%",
+              plugins: { legend: { display: false } },
+              animation: { duration: 600 },
+            },
+          });
         }
-    }
+      }
 
-    // ─── RENDER: Notifications ──────────────────────────
-    function renderNotifications(latest, unread_count) {
-        const badge = document.getElementById('notif-badge');
-        const list = document.getElementById('notif-list');
-        
+      // ─── RENDER: Notifications ──────────────────────────
+      function renderNotifications(latest, unread_count) {
+        const badge = document.getElementById("notif-badge");
+        const list = document.getElementById("notif-list");
+
         badge.textContent = unread_count;
         if (unread_count > 0) {
-            badge.classList.remove('hidden');
+          badge.classList.remove("hidden");
         } else {
-            badge.classList.add('hidden');
+          badge.classList.add("hidden");
         }
 
         if (latest.length === 0) {
-            list.innerHTML = '<p class="p-10 text-center text-gray-400 text-xs italic">Aucune notification récente.</p>';
-            return;
+          list.innerHTML =
+            '<p class="p-10 text-center text-gray-400 text-xs italic">Aucune notification récente.</p>';
+          return;
         }
 
-        list.innerHTML = latest.map(p => `
+        list.innerHTML = latest
+          .map(
+            (p) => `
             <div class="p-5 border-b border-gray-100 hover:bg-surface-container-low transition-colors flex gap-4">
                 <div class="mt-1">
                     <span class="material-symbols-outlined text-secondary text-lg" data-icon="person_add">person_add</span>
@@ -594,12 +858,14 @@
                     <p class="text-[10px] text-on-tertiary-container mt-2 font-bold uppercase">${p.entreprise || "-"}</p>
                 </div>
             </div>
-        `).join('');
-    }
+        `,
+          )
+          .join("");
+      }
 
-    // ─── INIT & POLLING ─────────────────────────────────
-    fetchData();
-    setInterval(() => fetchData(true), POLL_INTERVAL);
-</script>
-</body>
+      // ─── INIT & POLLING ─────────────────────────────────
+      fetchData();
+      setInterval(() => fetchData(true), POLL_INTERVAL);
+    </script>
+  </body>
 </html>

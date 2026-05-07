@@ -774,6 +774,15 @@
   .border-t-transparent {
     border-top-color: transparent;
   }
+  .bg-\[\#1A1A1\] {
+    background-color: #1A1A1;
+  }
+  .bg-\[\#1A1A4B1\] {
+    background-color: #1A1A4B1;
+  }
+  .bg-\[\#1A1A4B15\] {
+    background-color: #1A1A4B15;
+  }
   .bg-\[\#1A1A4B\] {
     background-color: #1A1A4B;
   }
@@ -785,6 +794,24 @@
   }
   .bg-\[\#1\] {
     background-color: #1;
+  }
+  .bg-\[\#1a1a4b9b\] {
+    background-color: #1a1a4b9b;
+  }
+  .bg-\[\#1a1a4b87\] {
+    background-color: #1a1a4b87;
+  }
+  .bg-\[\#1a1a4b\] {
+    background-color: #1a1a4b;
+  }
+  .bg-\[\#1a1a4ba0\] {
+    background-color: #1a1a4ba0;
+  }
+  .bg-\[\#1a1a4bc6\] {
+    background-color: #1a1a4bc6;
+  }
+  .bg-\[\#1a1a4bd7\] {
+    background-color: #1a1a4bd7;
   }
   .bg-\[\#2D2D2D\] {
     background-color: #2D2D2D;
@@ -884,6 +911,12 @@
   }
   .bg-\[\#green\] {
     background-color: #green;
+  }
+  .bg-\[1A1\] {
+    background-color: 1A1;
+  }
+  .bg-\[1\] {
+    background-color: 1;
   }
   .bg-\[E0E0E0\] {
     background-color: E0E0E0;
@@ -1217,6 +1250,9 @@
   .tracking-widest {
     --tw-tracking: var(--tracking-widest);
     letter-spacing: var(--tracking-widest);
+  }
+  .whitespace-nowrap {
+    white-space: nowrap;
   }
   .text-\[\#\#D3C7C7\] {
     color: ##D3C7C7;
@@ -1620,6 +1656,11 @@
   .disabled\:opacity-50 {
     &:disabled {
       opacity: 50%;
+    }
+  }
+  .sm\:inline {
+    @media (width >= 40rem) {
+      display: inline;
     }
   }
   .sm\:grid-cols-2 {

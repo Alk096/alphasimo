@@ -161,11 +161,11 @@
         <h2 class="font-h1 text-h1 text-[#2D2D2D] mb-md">Suivi des prospects Alphasimo</h2>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
             <!-- KPI Card 1 -->
-            <div class="bg-[#E0E0E0] p-md border-[#E0E0E0] border-2 rounded-xl bordeaux-border custom-shadow relative overflow-hidden">
-                <p class="font-label-md text-label-md text-[#2D2D2D] uppercase mb-xs">Total Prospects</p>
+            <div class="bg-green-600 p-md border-green-600 border-2 rounded-xl bordeaux-border custom-shadow relative overflow-hidden">
+                <p class="font-label-md text-label-md text-white uppercase mb-xs">Total Prospects</p>
                 <div class="flex justify-between items-end">
-                    <span id="kpi-total" class="font-h1 text-h1 text-[#8D0000]">—</span>
-                    <span class="text-green-600 text-sm font-semibold flex items-center gap-1">
+                    <span id="kpi-total" class="font-h1 text-h1 text-white">—</span>
+                    <span class="text-white text-sm font-semibold flex items-center gap-1">
                         <span class="material-symbols-outlined text-xs" data-icon="trending_up">trending_up</span> +12%
                     </span>
                 </div>
@@ -174,7 +174,7 @@
                 </div>
             </div>
             <!-- KPI Card 2 -->
-            <div class="bg-[#8D000015] p-md border-2 rounded-xl border-[#8D000015] bordeaux-border custom-shadow">
+            <div class="bg-[#a0a0a0] p-md border-2 rounded-xl border-[#a0a0a0] bordeaux-border custom-shadow">
                 <p class="font-label-md text-label-md text-[#2D2D2D] uppercase mb-xs">Demandes Lomé</p>
                 <div class="flex justify-between items-end">
                     <span id="kpi-lome" class="font-h1 text-h1 text-[#8D0000]">—</span>
@@ -206,23 +206,23 @@
         <!-- Main Content Area -->
         <div class="flex-grow space-y-md">
             <!-- Filtering Toolbar -->
-            <div class="bg-[#8d000015] p-sm border border-[#8d000015] custom-shadow flex flex-wrap items-center gap-md">
+            <div class="bg-[#1A1A4B] p-sm border border-[#1A1A4B] custom-shadow flex flex-wrap items-center gap-md">
                 <div class="flex items-center gap-2">
-                    <span class="material-symbols-outlined text-primary text-sm" data-icon="filter_list">filter_list</span>
-                    <span class="font-button text-button text-primary">Filtres:</span>
+                    <span class="material-symbols-outlined text-white text-sm" data-icon="filter_list">filter_list</span>
+                    <span class="font-button text-button text-white">Filtres:</span>
                 </div>
-                <select id="filter-lieu" class="border-gray-300 rounded focus:border-primary focus:ring-0 text-body-sm font-body-sm px-4 py-2 bg-white">
+                <select id="filter-lieu" class="border-gray-300 rounded focus:border-primary focus:ring-0 text-body-sm font-body-sm pl-4 pr-8 py-2 bg-white">
                     <option value="">Tous les lieux</option>
                     <option value="Lomé">Lomé, Togo</option>
                     <option value="Tunis">Tunis, Tunisie</option>
                 </select>
-                <select id="filter-programme" class="border-gray-300 rounded focus:border-primary focus:ring-0 text-body-sm font-body-sm px-4 py-2 bg-white">
+                <select id="filter-programme" class="border-gray-300 rounded focus:border-primary focus:ring-0 text-body-sm font-body-sm pl-4 pr-0 py-2 bg-white">
                     <option value="">Tous les programmes</option>
                     <option value="QSE">QSE Qualifiant</option>
                     <option value="Management">Management des Processus</option>
                     <option value="Audit">Audit Interne</option>
                 </select>
-                <select id="filter-session" class="border-gray-300 rounded focus:border-primary focus:ring-0 text-body-sm font-body-sm px-4 py-2 bg-white">
+                <select id="filter-session" class="border-gray-300 rounded focus:border-primary focus:ring-0 text-body-sm font-body-sm pl-4 pr-8 py-2 bg-white">
                     <option value="">Toutes les sessions</option>
                     <option value="2026-06-01">Juin 2026</option>
                     <option value="2026-08-01">Août 2026</option>
@@ -237,13 +237,13 @@
             <div class="bg-white border border-gray-200 custom-shadow overflow-hidden">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-[#8D000015] border-b border-gray-200">
-                            <th class="px-6 py-4 font-button text-button text-primary uppercase">Candidat</th>
-                            <th class="px-6 py-4 font-button text-button text-primary uppercase">Contact</th>
-                            <th class="px-6 py-4 font-button text-button text-primary uppercase">Profil</th>
-                            <th class="px-6 py-4 font-button text-button text-primary uppercase">Projet</th>
-                            <th class="px-6 py-4 font-button text-button text-primary uppercase">Lieu</th>
-                            <th class="px-6 py-4 font-button text-button text-primary uppercase">Groupe</th>
+                        <tr class="bg-[#1A1A4B] border-b border-gray-200">
+                            <th class="px-6 py-4 font-button text-button text-white uppercase">Candidat</th>
+                            <th class="px-6 py-4 font-button text-button text-white uppercase">Contact</th>
+                            <th class="px-6 py-4 font-button text-button text-white uppercase">Profil</th>
+                            <th class="px-6 py-4 font-button text-button text-white uppercase">Projet</th>
+                            <th class="px-6 py-4 font-button text-button text-white uppercase">Lieu</th>
+                            <th class="px-6 py-4 font-button text-button text-white uppercase">Groupe</th>
                         </tr>
                     </thead>
                     <tbody id="prospects-tbody" class="divide-y divide-gray-100">
@@ -306,7 +306,7 @@
     <div class="flex flex-col md:flex-row justify-between items-center w-full px-8 py-10 max-w-7xl mx-auto gap-4">
         <div class="flex flex-col gap-1">
             <span class="text-sm font-bold text-white uppercase tracking-widest">Alphasimo</span>
-            <p class="text-xs text-white/80 uppercase tracking-wider">© 2026 Alphasimo. Institutional-grade reliability.</p>
+            <p class="text-xs text-white/80 uppercase tracking-wider">© 2026 E-Iman</p>
         </div>
         <div class="flex gap-8">
             <a class="text-xs text-white uppercase tracking-wider hover:text-[#2D2D2D] transition-opacity duration-200" href="#">Terms of Service</a>

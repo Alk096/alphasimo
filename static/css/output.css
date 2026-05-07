@@ -720,6 +720,9 @@
   .border-\[\#E0E0E0\] {
     border-color: #E0E0E0;
   }
+  .border-\[\#E0E0a0a0a0E0\] {
+    border-color: #E0E0a0a0a0E0;
+  }
   .border-\[\#E0\] {
     border-color: #E0;
   }
@@ -731,6 +734,9 @@
   }
   .border-\[\#\] {
     border-color: #;
+  }
+  .border-\[\#a0a0a0\] {
+    border-color: #a0a0a0;
   }
   .border-\[gray-200\] {
     border-color: gray-200;
@@ -753,6 +759,9 @@
   .border-green-100 {
     border-color: var(--color-green-100);
   }
+  .border-green-600 {
+    border-color: var(--color-green-600);
+  }
   .border-indigo-100 {
     border-color: var(--color-indigo-100);
   }
@@ -770,6 +779,12 @@
   }
   .bg-\[\#1A1A\] {
     background-color: #1A1A;
+  }
+  .bg-\[\#1A\] {
+    background-color: #1A;
+  }
+  .bg-\[\#1\] {
+    background-color: #1;
   }
   .bg-\[\#2D2D2D\] {
     background-color: #2D2D2D;
@@ -831,6 +846,9 @@
   .bg-\[\#E0E0E0\] {
     background-color: #E0E0E0;
   }
+  .bg-\[\#E0E0E\] {
+    background-color: #E0E0E;
+  }
   .bg-\[\#E0E0\] {
     background-color: #E0E0;
   }
@@ -852,6 +870,9 @@
   .bg-\[\#_\] {
     background-color: # ;
   }
+  .bg-\[\#a0a0a0\] {
+    background-color: #a0a0a0;
+  }
   .bg-\[\#b52619\] {
     background-color: #b52619;
   }
@@ -860,6 +881,9 @@
   }
   .bg-\[\#e9dede\] {
     background-color: #e9dede;
+  }
+  .bg-\[\#green\] {
+    background-color: #green;
   }
   .bg-\[E0E0E0\] {
     background-color: E0E0E0;
@@ -906,6 +930,9 @@
   .bg-green-500 {
     background-color: var(--color-green-500);
   }
+  .bg-green-600 {
+    background-color: var(--color-green-600);
+  }
   .bg-indigo-50 {
     background-color: var(--color-indigo-50);
   }
@@ -941,6 +968,9 @@
   }
   .p-10 {
     padding: calc(var(--spacing) * 10);
+  }
+  .px-0 {
+    padding-inline: calc(var(--spacing) * 0);
   }
   .px-1 {
     padding-inline: calc(var(--spacing) * 1);
@@ -987,8 +1017,17 @@
   .pt-6 {
     padding-top: calc(var(--spacing) * 6);
   }
+  .pr-0 {
+    padding-right: calc(var(--spacing) * 0);
+  }
+  .pr-8 {
+    padding-right: calc(var(--spacing) * 8);
+  }
   .pr-12 {
     padding-right: calc(var(--spacing) * 12);
+  }
+  .pl-4 {
+    padding-left: calc(var(--spacing) * 4);
   }
   .text-center {
     text-align: center;

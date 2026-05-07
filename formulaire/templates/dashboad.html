@@ -155,10 +155,10 @@
     </div>
 </header>
 
-<main class="max-w-7xl mx-auto px-6 py-10">
+<main class="max-w-7xl mx-auto px-6 py-6">
     <!-- Dashboard Header & KPIs -->
     <section class="mb-lg">
-        <h2 class="font-h1 text-h1 text-[#2D2D2D] mb-md">Suivi des prospects Alphasimo</h2>
+        {% comment %} <h2 class="font-h1 text-h1 text-[#2D2D2D] mb-md">Suivi des prospects Alphasimo</h2> {% endcomment %}
         <div class="grid grid-cols-1 md:grid-cols-4 gap-gutter">
             <!-- KPI Card 1 -->
             <div class="bg-green-600 p-md border-green-600 border-2 rounded-xl bordeaux-border custom-shadow relative overflow-hidden">
@@ -453,16 +453,22 @@
         }
 
         tbody.innerHTML = prospects.map((p, i) => {
-            const rowBg = i % 2 === 1 ? 'bg-surface-container-lowest' : 'bg-white';
+            let rowColor = 'bg-white';
+            if (p.lieu === 'Lomé') {
+                rowColor = 'bg-green-100/30';
+            } else if (p.lieu === 'Tunis') {
+                rowColor = 'bg-blue-100/30';
+            }
+            
             const lieuClass = p.lieu === 'Lomé'
-                ? 'bg-secondary-fixed text-on-secondary-container'
-                : 'bg-primary-fixed text-primary';
+                ? 'bg-green-600 text-white'
+                : 'bg-[#1A1A4B] text-white';
             const groupIcon = p.besoin_specifique
                 ? `<span class="material-symbols-outlined text-secondary" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>`
                 : `<span class="material-symbols-outlined text-gray-300" data-icon="radio_button_unchecked">radio_button_unchecked</span>`;
 
             return `
-            <tr class="hover:bg-gray-50 transition-colors ${rowBg}">
+            <tr class="hover:bg-gray-100 transition-colors ${rowColor} border-b border-gray-100">
                 <td class="px-6 py-4">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center font-bold text-primary">${p.initials}</div>

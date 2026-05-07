@@ -1,105 +1,151 @@
 {% load static %}{% load widget_tweaks %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ALPHASIMO - Connexion</title>
-    <link rel="stylesheet" href="{% static 'css/output.css' %}">
-    <link rel="shortcut icon" href="{% static 'images/logo.png' %}">
+    <link rel="stylesheet" href="{% static 'css/output.css' %}" />
+    <link rel="shortcut icon" href="{% static 'images/logo.png' %}" />
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        body {
-            font-family: 'Montserrat', sans-serif;
+      body {
+        font-family: "Montserrat", sans-serif;
+      }
+      .animate-fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
         }
-        .animate-fade-in {
-            animation: fadeIn 0.3s ease-in-out;
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Better input states */
-        input:focus {
-            box-shadow: 0 0 0 4px rgba(26, 26, 75, 0.1);
-        }
+      }
+
+      /* Better input states */
+      input:focus {
+        box-shadow: 0 0 0 4px rgba(26, 26, 75, 0.1);
+      }
     </style>
-</head>
-<body class="min-h-screen bg-white flex items-center justify-center p-4 md:p-8">
-
+  </head>
+  <body
+    class="min-h-screen bg-white flex items-center justify-center p-4 md:p-8"
+  >
     <div class="w-full max-w-md">
-        <!-- Logo/Header -->
-        <div class="text-center mb-8">
-            {% comment %} <h1 class="text-4xl md:text-5xl mb-2 font-bold" style="color: #8B0000;">ALPHASIMO</h1> {% endcomment %}
-            <img src="{% static 'images/logo.png' %}" alt="Logo" class="w-40 h-40 mx-auto mb-4">
-            {% comment %} <p class="text-lg" style="color: #2D2D2D;">Accédez à votre espace</p> {% endcomment %}
-        </div>
+      <!-- Logo/Header -->
+      <div class="text-center mb-8">
+        {% comment %}
+        <h1 class="text-4xl md:text-5xl mb-2 font-bold" style="color: #8b0000">
+          ALPHASIMO
+        </h1>
+        {% endcomment %}
+        <img
+          src="{% static 'images/logo.png' %}"
+          alt="Logo"
+          class="w-40 h-40 mx-auto mb-4"
+        />
+        {% comment %}
+        <p class="text-lg" style="color: #2d2d2d">Accédez à votre espace</p>
+        {% endcomment %}
+      </div>
 
-        <!-- Login Card -->
-        <div class="bg-white rounded-2xl shadow-2xl p-8 border border-[#E0E0E0] animate-fade-in">
-            <form method="POST" class="space-y-6">
-                {% csrf_token %}
-                <div class="space-y-2">
-                    <label class="flex items-center gap-2 text-sm text-[#2D2D2D] font-medium">
-                        <i data-lucide="user" class="w-4 h-4 text-[#1A1A4B]"></i> Email
-                    </label>
-                    <input type="email" name="email" required class="w-full px-4 py-3 rounded-lg border border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" placeholder="votre@email.com">
-                </div>
+      <!-- Login Card -->
+      <div
+        class="bg-white rounded-2xl shadow-2xl p-8 border border-[#E0E0E0] animate-fade-in"
+      >
+        <form method="POST" class="space-y-6">
+          {% csrf_token %}
+          <div class="space-y-2">
+            <label
+              class="flex items-center gap-2 text-sm text-[#2D2D2D] font-medium"
+            >
+              <i data-lucide="user" class="w-4 h-4 text-[#1A1A4B]"></i> Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              required
+              class="w-full px-4 py-3 rounded-lg border border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm"
+              placeholder="votre@email.com"
+            />
+          </div>
 
-                <div class="space-y-2">
-                    <label class="flex items-center gap-2 text-sm text-[#2D2D2D] font-medium">
-                        <i data-lucide="lock" class="w-4 h-4 text-[#1A1A4B]"></i> Mot de passe
-                    </label>
-                    <div class="relative">
-                        <input type="password" name="password" id="password" required class="w-full px-4 py-3 rounded-lg border border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" placeholder="••••••••">
-                        <button type="button" onclick="togglePassword()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#1A1A4B]">
-                            <i data-lucide="eye" id="eye-icon" class="w-5 h-5"></i>
-                        </button>
-                    </div>
-                </div>
+          <div class="space-y-2">
+            <label
+              class="flex items-center gap-2 text-sm text-[#2D2D2D] font-medium"
+            >
+              <i data-lucide="lock" class="w-4 h-4 text-[#1A1A4B]"></i> Mot de
+              passe
+            </label>
+            <div class="relative">
+              <input
+                type="password"
+                name="password"
+                id="password"
+                required
+                class="w-full px-4 py-3 rounded-lg border border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm"
+                placeholder="••••••••"
+              />
+              <button
+                type="button"
+                onclick="togglePassword()"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#1A1A4B]"
+              >
+                <i data-lucide="eye" id="eye-icon" class="w-5 h-5"></i>
+              </button>
+            </div>
+          </div>
 
-                {% if messages %}
-                <div class="space-y-4">
-                    {% for message in messages %}
-                    <div class="p-4 rounded-lg text-center {% if message.tags == 'error' %} text-red-800{% else %}bg-green-50 text-green-800 border border-green-100{% endif %} text-sm">
-                        {{ message }}
-                    </div>
-                    {% endfor %}
-                </div>
-                {% endif %}
+          {% if messages %}
+          <div class="space-y-4">
+            {% for message in messages %}
+            <div
+              class="p-4 rounded-lg text-center {% if message.tags == 'error' %} text-red-800{% else %}bg-green-50 text-green-800 border border-green-100{% endif %} text-sm"
+            >
+              {{ message }}
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
 
-                <button type="submit" class="w-full py-4 rounded-lg text-white font-semibold shadow-lg hover:shadow-xl transition-all active:scale-[0.98]" style="background-color: #8D0000;">
-                    Se connecter
-                </button>
-            </form>
+          <button
+            type="submit"
+            class="w-full py-4 rounded-lg text-white font-semibold shadow-lg hover:shadow-xl transition-all active:scale-[0.98]"
+            style="background-color: #8d0000"
+          >
+            Se connecter
+          </button>
+        </form>
+      </div>
 
-           
-        </div>
-
-        <div class="text-center mt-8 text-sm text-[#2D2D2D]">
-            © 2026 E-Iman
-        </div>
+      <div class="text-center mt-8 text-sm text-[#2D2D2D]">© 2026 Iman</div>
     </div>
 
     <script>
-        lucide.createIcons();
+      lucide.createIcons();
 
-        function togglePassword() {
-            const passwordInput = document.getElementById('password');
-            const eyeIcon = document.getElementById('eye-icon');
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                eyeIcon.setAttribute('data-lucide', 'eye-off');
-            } else {
-                passwordInput.type = 'password';
-                eyeIcon.setAttribute('data-lucide', 'eye');
-            }
-            lucide.createIcons();
+      function togglePassword() {
+        const passwordInput = document.getElementById("password");
+        const eyeIcon = document.getElementById("eye-icon");
+
+        if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+          eyeIcon.setAttribute("data-lucide", "eye-off");
+        } else {
+          passwordInput.type = "password";
+          eyeIcon.setAttribute("data-lucide", "eye");
         }
+        lucide.createIcons();
+      }
     </script>
-</body>
+  </body>
 </html>

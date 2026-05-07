@@ -1,212 +1,365 @@
 {% load static %}{% load widget_tweaks %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ALPHASIMO - Inscription</title>
-    <link rel="stylesheet" href="{% static 'css/output.css' %}">
-    <link rel="shortcut icon" href="{% static 'images/logo.png' %}">
+    <link rel="stylesheet" href="{% static 'css/output.css' %}" />
+    <link rel="shortcut icon" href="{% static 'images/logo.png' %}" />
     <!-- Vendor CSS -->
-    <link rel="stylesheet" href="{% static 'vendor/intl-tel-input/css/intlTelInput.min.css' %}">
-    <link rel="stylesheet" href="{% static 'vendor/flatpickr/flatpickr.min.css' %}">
-    <link rel="stylesheet" href="{% static 'vendor/flatpickr/plugins/monthSelect/style.css' %}">
+    <link
+      rel="stylesheet"
+      href="{% static 'vendor/intl-tel-input/css/intlTelInput.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'vendor/flatpickr/flatpickr.min.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'vendor/flatpickr/plugins/monthSelect/style.css' %}"
+    />
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        body { margin: 0; font-family: 'Montserrat', sans-serif; background-color: #f8fafc; }
-        .animate-fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        #success-modal {
-            display: none; /* Caché par défaut */
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            background-color: rgba(0, 0, 0, 0.7); /* Fond noir transparent */
-            backdrop-filter: blur(4px); /* Flou d'arrière-plan */
-            align-items: center;
-            justify-content: center;
+      body {
+        margin: 0;
+        font-family: "Montserrat", sans-serif;
+        background-color: #f8fafc;
+      }
+      .animate-fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
         }
-        #success-modal.flex { display: flex !important; } /* Classe pour l'afficher en JS */
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      #success-modal {
+        display: none; /* Caché par défaut */
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background-color: rgba(0, 0, 0, 0.7); /* Fond noir transparent */
+        backdrop-filter: blur(4px); /* Flou d'arrière-plan */
+        align-items: center;
+        justify-content: center;
+      }
+      #success-modal.flex {
+        display: flex !important;
+      } /* Classe pour l'afficher en JS */
 
-        .modal-content {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 1.5rem;
-            width: 90%;
-            max-width: 450px;
-            text-align: center;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        }
+      .modal-content {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 1.5rem;
+        width: 90%;
+        max-width: 450px;
+        text-align: center;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      }
 
-        /* 3. Style des boutons et inputs (pour éviter l'effet écrasé) */
-        .iti { width: 100% !important; }
-        input, select { box-sizing: border-box !important; }
-        
-        .btn-primary {
-            background-color: #8D0000;
-            color: white;
-            transition: all 0.2s;
-        }
-        .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+      /* 3. Style des boutons et inputs (pour éviter l'effet écrasé) */
+      .iti {
+        width: 100% !important;
+      }
+      input,
+      select {
+        box-sizing: border-box !important;
+      }
 
-        /* Fix pour les indicateurs de progression */
-        .step-circle {
-            width: 3rem; height: 3rem;
-            border-radius: 9999px;
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.3s;
-        }
+      .btn-primary {
+        background-color: #8d0000;
+        color: white;
+        transition: all 0.2s;
+      }
+      .btn-primary:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      /* Fix pour les indicateurs de progression */
+      .step-circle {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 9999px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+      }
     </style>
-</head>
-<body class="min-h-screen bg-white flex items-center justify-center p-4 md:p-8">
-
+  </head>
+  <body
+    class="min-h-screen bg-white flex items-center justify-center p-4 md:p-8"
+  >
     <div class="w-full max-w-4xl">
-        <!-- Logo/Header -->
-        <div class="text-center mb-8">
-            {% comment %} <h1 class="text-4xl md:text-5xl mb-2 font-bold" style="color: #8B0000;">ALPHASIMO</h1> {% endcomment %}
-            <img src="{% static 'images/logo.png' %}" alt="Logo" class="w-40 h-40 mx-auto mb-4">
-            <p class="text-lg" style="color: #2D2D2D;">Inscription à nos formations professionnelles</p>
+      <!-- Logo/Header -->
+      <div class="text-center mb-8">
+        {% comment %}
+        <h1 class="text-4xl md:text-5xl mb-2 font-bold" style="color: #8b0000">
+          ALPHASIMO
+        </h1>
+        {% endcomment %}
+        <img
+          src="{% static 'images/logo.png' %}"
+          alt="Logo"
+          class="w-40 h-40 mx-auto mb-4"
+        />
+        <p class="text-lg" style="color: #2d2d2d">
+          Inscription à nos formations professionnelles
+        </p>
+      </div>
+
+      <!-- Progress Indicator -->
+      <div class="flex items-center justify-center mb-8 gap-4">
+        <div
+          id="step-1-indicator"
+          class="w-12 h-12 rounded-full flex items-center justify-center text-white transition-all scale-110"
+          style="background-color: #8d0000"
+        >
+          <span id="step-1-content">1</span>
+        </div>
+        <div
+          id="progress-line"
+          class="w-16 md:w-24 h-1 transition-colors"
+          style="background-color: #8d000015"
+        ></div>
+        <div
+          id="step-2-indicator"
+          class="w-12 h-12 rounded-full flex items-center justify-center text-white transition-all"
+          style="background-color: #8d000015"
+        >
+          2
+        </div>
+      </div>
+
+      <!-- Form Container -->
+      <form
+        method="POST"
+        id="registration-form"
+        class="bg-[#8D000015] rounded-2xl shadow-2xl p-8 md:p-12 border border-[#E0E0E0]"
+      >
+        {% csrf_token %}
+        <!-- Slide 1: Identification -->
+        <div id="slide-1" class="space-y-8 animate-fade-in">
+          {% comment %}
+          <h2 class="text-3xl mb-6 font-semibold" style="color: #8b0000">
+            Votre Profil
+          </h2>
+          {% endcomment %}
+
+          <div>
+            <h3 class="text-xl mb-4 font-medium" style="color: #1a1a4b">
+              Informations Personnelles
+            </h3>
+            <div class="h-px mb-6 bg-[#E0E0E0]"></div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
+                  <i data-lucide="user" class="w-4 h-4 text-[#1A1A4B]"></i>
+                  Prénom *
+                </label>
+                {% render_field form.prenom id="firstName" class="w-full px-4
+                py-3 rounded-lg border border-[#8B0000] outline-none
+                focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
+              </div>
+              <div class="space-y-2">
+                <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
+                  <i data-lucide="user" class="w-4 h-4 text-[#1A1A4B]"></i> Nom
+                  *
+                </label>
+                {% render_field form.nom id="lastName" class="w-full px-4 py-3
+                rounded-lg border border-[#8B0000] outline-none
+                focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
+              </div>
+              <div class="space-y-2">
+                <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
+                  <i data-lucide="phone" class="w-4 h-4 text-[#1A1A4B]"></i>
+                  Numéro WhatsApp *
+                </label>
+                {% render_field form.number id="phone" class="w-full px-4 py-3
+                rounded-lg border border-[#8B0000] outline-none
+                focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
+              </div>
+              <div class="space-y-2">
+                <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
+                  <i data-lucide="mail" class="w-4 h-4 text-[#1A1A4B]"></i>
+                  Email Professionnel *
+                </label>
+                {% render_field form.email_pro id="email"
+                placeholder="email@exemple.com" class="w-full px-4 py-3
+                rounded-lg border border-[#8B0000] outline-none
+                focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h3 class="text-xl mb-4 font-medium" style="color: #1a1a4b">
+              Profil Professionnel
+            </h3>
+            <div class="h-px mb-6 bg-[#E0E0E0]"></div>
+            <div class="grid md:grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
+                  <i
+                    data-lucide="building-2"
+                    class="w-4 h-4 text-[#1A1A4B]"
+                  ></i>
+                  Entreprise/Organisation
+                </label>
+                {% render_field form.entreprise id="company" class="w-full px-4
+                py-3 rounded-lg border border-[#8B0000] outline-none
+                focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
+              </div>
+              <div class="space-y-2">
+                <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
+                  <i data-lucide="briefcase" class="w-4 h-4 text-[#1A1A4B]"></i>
+                  Poste Occupé
+                </label>
+                {% render_field form.poste id="position" class="w-full px-4 py-3
+                rounded-lg border border-[#8B0000] outline-none
+                focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
+              </div>
+              <div class="space-y-2 md:col-span-2">
+                <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
+                  <i data-lucide="globe" class="w-4 h-4 text-[#1A1A4B]"></i>
+                  Secteur d'Activité
+                </label>
+                {% render_field form.secteur id="sector" placeholder="Ex:
+                Industrie, Services..." class="w-full px-4 py-3 rounded-lg
+                border border-[#8B0000] outline-none focus:border-[#1A1A4B]
+                transition-all bg-white shadow-sm" %}
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end pt-6">
+            <button
+              id="next-btn"
+              disabled
+              class="flex items-center gap-2 px-8 py-4 rounded-lg text-white text-lg bg-[#8D0000] opacity-50 cursor-not-allowed hover:shadow-lg transition-all"
+            >
+              Suivant <i data-lucide="chevron-right"></i>
+            </button>
+          </div>
         </div>
 
-        <!-- Progress Indicator -->
-        <div class="flex items-center justify-center mb-8 gap-4">
-            <div id="step-1-indicator" class="w-12 h-12 rounded-full flex items-center justify-center text-white transition-all scale-110" style="background-color: #8D0000;">
-                <span id="step-1-content">1</span>
+        <!-- Slide 2: Formation (Hidden by default) -->
+        <div id="slide-2" class="space-y-8 animate-fade-in hidden">
+          {% comment %}
+          <h2 class="text-3xl mb-6 font-semibold" style="color: #8b0000">
+            Votre Projet de Formation
+          </h2>
+          {% endcomment %}
+
+          <div>
+            <h3 class="text-xl mb-4 font-medium" style="color: #1a1a4b">
+              Choix du Programme
+            </h3>
+            <div class="h-px mb-6 bg-[#E0E0E0]"></div>
+
+            <div class="space-y-6">
+              <div class="space-y-2">
+                <label class="text-sm text-[#2D2D2D]"
+                  >Programme Souhaité *</label
+                >
+                {% render_field form.programme_souhaiter id="program"
+                class="w-full px-4 py-3 rounded-lg border border-[#8B0000]
+                outline-none focus:border-[#1A1A4B] cursor-pointer bg-white
+                shadow-sm custom-select-arrow" %}
+              </div>
+
+              <div class="grid md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                  <label class="text-sm text-[#2D2D2D]"
+                    >Session Préférée *</label
+                  >
+                  <div class="relative">
+                    {% render_field form.session_preferee id="session"
+                    placeholder="Choisir un mois" class="w-full px-4 py-3
+                    rounded-lg border border-[#8B0000] outline-none
+                    focus:border-[#1A1A4B] cursor-pointer bg-white shadow-sm
+                    pr-12" %}
+                    <i
+                      data-lucide="calendar"
+                      class="w-5 h-5 absolute right-4 top-1/2 -translate-y-1/2 text-[#1A1A4B] pointer-events-none"
+                    ></i>
+                  </div>
+                </div>
+                <div class="space-y-2">
+                  <label class="text-sm text-[#2D2D2D]">Lieu Souhaité *</label>
+                  {% render_field form.lieu_souhaiter id="location"
+                  class="w-full px-4 py-3 rounded-lg border border-[#8B0000]
+                  outline-none focus:border-[#1A1A4B] cursor-pointer bg-white
+                  shadow-sm custom-select-arrow" %}
+                </div>
+              </div>
             </div>
-            <div id="progress-line" class="w-16 md:w-24 h-1 transition-colors" style="background-color: #8D000015;"></div>
-            <div id="step-2-indicator" class="w-12 h-12 rounded-full flex items-center justify-center text-white transition-all" style="background-color: #8D000015;">
-                2
+          </div>
+
+          <div>
+            <h3 class="text-xl mb-4 font-medium" style="color: #1a1a4b">
+              Besoins Spécifiques
+            </h3>
+            <div class="h-px mb-6 bg-[#E0E0E0]"></div>
+            <p class="text-sm mb-4">
+              Souhaitez-vous un devis personnalisé pour un groupe ? *
+            </p>
+            {% render_field form.besoin_specifique type="hidden"
+            id="besoin_specifique" %}
+            <div class="flex gap-4">
+              <button
+                type="button"
+                onclick="setGroupQuote(true)"
+                id="quote-yes"
+                class="flex-1 px-6 py-4 rounded-lg border border-[#8B0000] hover:bg-gray-50 transition-all"
+              >
+                Oui
+              </button>
+              <button
+                type="button"
+                onclick="setGroupQuote(false)"
+                id="quote-no"
+                class="flex-1 px-6 py-4 rounded-lg border border-[#8B0000] hover:bg-gray-50 transition-all"
+              >
+                Non
+              </button>
             </div>
+          </div>
+
+          <div class="flex justify-between pt-6">
+            <button
+              id="prev-btn"
+              class="flex items-center gap-2 px-8 py-4 rounded-lg bg-white text-[#2D2D2D] hover:shadow-lg transition-all"
+            >
+              <i data-lucide="chevron-left"></i> Précédent
+            </button>
+            <button
+              type="button"
+              id="submit-btn"
+              disabled
+              class="flex items-center gap-2 px-8 py-4 rounded-lg text-white bg-[#8D0000] opacity-50 cursor-not-allowed hover:shadow-lg transition-all"
+            >
+              <i data-lucide="check-circle"></i> Valider l'inscription
+            </button>
+          </div>
         </div>
+      </form>
 
-        <!-- Form Container -->
-        <form method="POST" id="registration-form" class="bg-[#8D000015] rounded-2xl shadow-2xl p-8 md:p-12 border border-[#E0E0E0]">
-            {% csrf_token %}
-            <!-- Slide 1: Identification -->
-            <div id="slide-1" class="space-y-8 animate-fade-in">
-                {% comment %} <h2 class="text-3xl mb-6 font-semibold" style="color: #8B0000;">Votre Profil</h2> {% endcomment %}
-                
-                <div>
-                    <h3 class="text-xl mb-4 font-medium" style="color: #1A1A4B;">Informations Personnelles</h3>
-                    <div class="h-px mb-6 bg-[#E0E0E0]"></div>
-
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="space-y-2">
-                            <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
-                                <i data-lucide="user" class="w-4 h-4 text-[#1A1A4B]"></i> Prénom *
-                            </label>
-                            {% render_field form.prenom id="firstName" class="w-full px-4 py-3 rounded-lg border border-[#8B0000] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
-                        </div>
-                        <div class="space-y-2">
-                            <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
-                                <i data-lucide="user" class="w-4 h-4 text-[#1A1A4B]"></i> Nom *
-                            </label>
-                            {% render_field form.nom id="lastName" class="w-full px-4 py-3 rounded-lg border border-[#8B0000] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
-                        </div>
-                        <div class="space-y-2">
-                            <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
-                                <i data-lucide="phone" class="w-4 h-4 text-[#1A1A4B]"></i> Numéro WhatsApp *
-                            </label>
-                            {% render_field form.number id="phone" class="w-full px-4 py-3 rounded-lg border border-[#8B0000] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
-                        </div>
-                        <div class="space-y-2">
-                            <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
-                                <i data-lucide="mail" class="w-4 h-4 text-[#1A1A4B]"></i> Email Professionnel *
-                            </label>
-                            {% render_field form.email_pro id="email" placeholder="email@exemple.com" class="w-full px-4 py-3 rounded-lg border border-[#8B0000] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <h3 class="text-xl mb-4 font-medium" style="color: #1A1A4B;">Profil Professionnel</h3>
-                    <div class="h-px mb-6 bg-[#E0E0E0]"></div>
-                    <div class="grid md:grid-cols-2 gap-6">
-                        <div class="space-y-2">
-                            <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
-                                <i data-lucide="building-2" class="w-4 h-4 text-[#1A1A4B]"></i> Entreprise/Organisation
-                            </label>
-                            {% render_field form.entreprise id="company" class="w-full px-4 py-3 rounded-lg border border-[#8B0000] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
-                        </div>
-                        <div class="space-y-2">
-                            <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
-                                <i data-lucide="briefcase" class="w-4 h-4 text-[#1A1A4B]"></i> Poste Occupé
-                            </label>
-                            {% render_field form.poste id="position" class="w-full px-4 py-3 rounded-lg border border-[#8B0000] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
-                        </div>
-                        <div class="space-y-2 md:col-span-2">
-                            <label class="flex items-center gap-2 text-sm text-[#2D2D2D]">
-                                <i data-lucide="globe" class="w-4 h-4 text-[#1A1A4B]"></i> Secteur d'Activité
-                            </label>
-                            {% render_field form.secteur id="sector" placeholder="Ex: Industrie, Services..." class="w-full px-4 py-3 rounded-lg border border-[#8B0000] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" %}
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex justify-end pt-6">
-                    <button id="next-btn" disabled class="flex items-center gap-2 px-8 py-4 rounded-lg text-white text-lg bg-[#8D0000] opacity-50 cursor-not-allowed hover:shadow-lg transition-all">
-                        Suivant <i data-lucide="chevron-right"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Slide 2: Formation (Hidden by default) -->
-            <div id="slide-2" class="space-y-8 animate-fade-in hidden">
-                {% comment %} <h2 class="text-3xl mb-6 font-semibold" style="color: #8B0000;">Votre Projet de Formation</h2> {% endcomment %}
-                
-                <div>
-                    <h3 class="text-xl mb-4 font-medium" style="color: #1A1A4B;">Choix du Programme</h3>
-                    <div class="h-px mb-6 bg-[#E0E0E0]"></div>
-                    
-                    <div class="space-y-6">
-                        <div class="space-y-2">
-                            <label class="text-sm text-[#2D2D2D]">Programme Souhaité *</label>
-                            {% render_field form.programme_souhaiter id="program" class="w-full px-4 py-3 rounded-lg border border-[#8B0000] outline-none focus:border-[#1A1A4B] cursor-pointer bg-white shadow-sm custom-select-arrow" %}
-                        </div>
-
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div class="space-y-2">
-                                <label class="text-sm text-[#2D2D2D]">Session Préférée *</label>
-                                <div class="relative">
-                                    {% render_field form.session_preferee id="session" placeholder="Choisir un mois" class="w-full px-4 py-3 rounded-lg border border-[#8B0000] outline-none focus:border-[#1A1A4B] cursor-pointer bg-white shadow-sm pr-12" %}
-                                    <i data-lucide="calendar" class="w-5 h-5 absolute right-4 top-1/2 -translate-y-1/2 text-[#1A1A4B] pointer-events-none"></i>
-                                </div>
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-sm text-[#2D2D2D]">Lieu Souhaité *</label>
-                                {% render_field form.lieu_souhaiter id="location" class="w-full px-4 py-3 rounded-lg border border-[#8B0000] outline-none focus:border-[#1A1A4B] cursor-pointer bg-white shadow-sm custom-select-arrow" %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <h3 class="text-xl mb-4 font-medium" style="color: #1A1A4B;">Besoins Spécifiques</h3>
-                    <div class="h-px mb-6 bg-[#E0E0E0]"></div>
-                    <p class="text-sm mb-4">Souhaitez-vous un devis personnalisé pour un groupe ? *</p>
-                    {% render_field form.besoin_specifique type="hidden" id="besoin_specifique" %}
-                    <div class="flex gap-4">
-                        <button type="button" onclick="setGroupQuote(true)" id="quote-yes" class="flex-1 px-6 py-4 rounded-lg border border-[#8B0000] hover:bg-gray-50 transition-all">Oui</button>
-                        <button type="button" onclick="setGroupQuote(false)" id="quote-no" class="flex-1 px-6 py-4 rounded-lg border border-[#8B0000] hover:bg-gray-50 transition-all">Non</button>
-                    </div>
-                </div>
-
-                <div class="flex justify-between pt-6">
-                    <button id="prev-btn" class="flex items-center gap-2 px-8 py-4 rounded-lg bg-white text-[#2D2D2D] hover:shadow-lg transition-all">
-                        <i data-lucide="chevron-left"></i> Précédent
-                    </button>
-                    <button type="button" id="submit-btn" disabled class="flex items-center gap-2 px-8 py-4 rounded-lg text-white bg-[#8D0000] opacity-50 cursor-not-allowed hover:shadow-lg transition-all">
-                        <i data-lucide="check-circle"></i> Valider l'inscription
-                    </button>
-                </div>
-            </div>
-        </form>
-
-        <div class="text-center mt-8 text-sm text-[#2D2D2D]">
-            © 2026 E-Iman
-        </div>
+      <div class="text-center mt-8 text-sm text-[#2D2D2D]">© 2026 Iman</div>
     </div>
 
     <!-- Vendor JS -->
@@ -215,175 +368,185 @@
     <script src="{% static 'vendor/flatpickr/plugins/monthSelect/index.js' %}"></script>
 
     <!-- Success Modal -->
-    <div id="success-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl transform transition-all scale-110">
-            <div class="text-center">
-                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <i data-lucide="check-circle" class="w-12 h-12 text-green-600"></i>
-                </div>
-                <h2 class="text-3xl font-bold mb-4" style="color: #8D0000;">Félicitations !</h2>
-                <p class="text-[#2D2D2D] mb-8 leading-relaxed">
-                    {% if messages %}
-                        {% for message in messages %}
-                            {% if message.tags == 'success' %}{{ message }}{% endif %}
-                        {% endfor %}
-                    {% else %}
-                        Votre inscription à la formation Alphasimo a été enregistrée avec succès.
-                    {% endif %}
-                </p>
-                <button onclick="closeModal()" class="w-full py-4 px-6 rounded-xl text-white font-semibold transition-all hover:shadow-xl active:scale-95" style="background-color: #8D0000;">
-                    Continuer
-                </button>
-            </div>
+    <div
+      id="success-modal"
+      class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
+    >
+      <div
+        class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl transform transition-all scale-110"
+      >
+        <div class="text-center">
+          <div
+            class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6"
+          >
+            <i data-lucide="check-circle" class="w-12 h-12 text-green-600"></i>
+          </div>
+          <h2 class="text-3xl font-bold mb-4" style="color: #8d0000">
+            Félicitations !
+          </h2>
+          <p class="text-[#2D2D2D] mb-8 leading-relaxed">
+            {% if messages %} {% for message in messages %} {% if message.tags
+            == 'success' %}{{ message }}{% endif %} {% endfor %} {% else %}
+            Votre inscription à la formation Alphasimo a été enregistrée avec
+            succès. {% endif %}
+          </p>
+          <button
+            onclick="closeModal()"
+            class="w-full py-4 px-6 rounded-xl text-white font-semibold transition-all hover:shadow-xl active:scale-95"
+            style="background-color: #8d0000"
+          >
+            Continuer
+          </button>
         </div>
+      </div>
     </div>
 
     <script>
-        // State management
-        let currentSlide = 1;
-        let groupQuote = null;
+      // State management
+      let currentSlide = 1;
+      let groupQuote = null;
 
-        // Elements
-        const slides = { 1: document.getElementById('slide-1'), 2: document.getElementById('slide-2') };
-        const indicators = { 1: document.getElementById('step-1-indicator'), 2: document.getElementById('step-2-indicator') };
-        const step1Content = document.getElementById('step-1-content');
-        const progressLine = document.getElementById('progress-line');
-        const nextBtn = document.getElementById('next-btn');
-        const submitBtn = document.getElementById('submit-btn');
+      // Elements
+      const slides = { 1: document.getElementById('slide-1'), 2: document.getElementById('slide-2') };
+      const indicators = { 1: document.getElementById('step-1-indicator'), 2: document.getElementById('step-2-indicator') };
+      const step1Content = document.getElementById('step-1-content');
+      const progressLine = document.getElementById('progress-line');
+      const nextBtn = document.getElementById('next-btn');
+      const submitBtn = document.getElementById('submit-btn');
 
-        // Modal functions
-        window.closeModal = () => {
-            const modal = document.getElementById('success-modal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        };
+      // Modal functions
+      window.closeModal = () => {
+          const modal = document.getElementById('success-modal');
+          modal.classList.add('hidden');
+          modal.classList.remove('flex');
+      };
 
-        // Show modal if success message exists
-        {% if messages %}
-            {% for message in messages %}
-                {% if message.tags == 'success' %}
-                const modal = document.getElementById('success-modal');
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-                {% endif %}
-            {% endfor %}
-        {% endif %}
+      // Show modal if success message exists
+      {% if messages %}
+          {% for message in messages %}
+              {% if message.tags == 'success' %}
+              const modal = document.getElementById('success-modal');
+              modal.classList.remove('hidden');
+              modal.classList.add('flex');
+              {% endif %}
+          {% endfor %}
+      {% endif %}
 
-        // Form fields for validation
-        const slide1Fields = ['firstName', 'lastName', 'phone', 'email'];
-        const slide2Fields = ['program', 'session', 'location'];
+      // Form fields for validation
+      const slide1Fields = ['firstName', 'lastName', 'phone', 'email'];
+      const slide2Fields = ['program', 'session', 'location'];
 
-        // Initialize Lucide icons
-        lucide.createIcons();
+      // Initialize Lucide icons
+      lucide.createIcons();
 
-        // Initialize Intl-Tel-Input
-        const phoneInput = document.getElementById('phone');
-        const iti = window.intlTelInput(phoneInput, {
-            initialCountry: "ne",
-            preferredCountries: ["tg", "bj", "ci", "sn"],
-            separateDialCode: true,
-        });
+      // Initialize Intl-Tel-Input
+      const phoneInput = document.getElementById('phone');
+      const iti = window.intlTelInput(phoneInput, {
+          initialCountry: "ne",
+          preferredCountries: ["tg", "bj", "ci", "sn"],
+          separateDialCode: true,
+      });
 
-        // Initialize Flatpickr Month Select
-        const sessionInput = document.getElementById('session');
-        flatpickr(sessionInput, {
-            plugins: [
-                new monthSelectPlugin({
-                    shorthand: true,
-                    dateFormat: "Y-m-d",
-                    altFormat: "F Y",
-                })
-            ],
-            enable: [
-                new Date(2026, 5),  // Juin 2026
-                new Date(2026, 7),  // Août 2026
-                new Date(2026, 10), // Nov 2026
-                new Date(2027, 1),  // Fév 2027
-            ],
-            onChange: validateSlide2
-        });
+      // Initialize Flatpickr Month Select
+      const sessionInput = document.getElementById('session');
+      flatpickr(sessionInput, {
+          plugins: [
+              new monthSelectPlugin({
+                  shorthand: true,
+                  dateFormat: "Y-m-d",
+                  altFormat: "F Y",
+              })
+          ],
+          enable: [
+              new Date(2026, 5),  // Juin 2026
+              new Date(2026, 7),  // Août 2026
+              new Date(2026, 10), // Nov 2026
+              new Date(2027, 1),  // Fév 2027
+          ],
+          onChange: validateSlide2
+      });
 
-        // Validation Logic
-        function validateSlide1() {
-            const isValid = slide1Fields.every(id => {
-                const val = document.getElementById(id).value.trim();
-                if (id === 'phone') return iti.isValidNumber() || val.length > 5; // Basic check
-                return val !== '';
-            });
-            nextBtn.disabled = !isValid;
-            nextBtn.style.opacity = isValid ? '1' : '0.5';
-            nextBtn.classList.toggle('cursor-not-allowed', !isValid);
-        }
+      // Validation Logic
+      function validateSlide1() {
+          const isValid = slide1Fields.every(id => {
+              const val = document.getElementById(id).value.trim();
+              if (id === 'phone') return iti.isValidNumber() || val.length > 5; // Basic check
+              return val !== '';
+          });
+          nextBtn.disabled = !isValid;
+          nextBtn.style.opacity = isValid ? '1' : '0.5';
+          nextBtn.classList.toggle('cursor-not-allowed', !isValid);
+      }
 
-        function validateSlide2() {
-            const fieldsValid = slide2Fields.every(id => document.getElementById(id).value !== '');
-            const isValid = fieldsValid && groupQuote !== null;
-            submitBtn.disabled = !isValid;
-            submitBtn.style.opacity = isValid ? '1' : '0.5';
-            submitBtn.classList.toggle('cursor-not-allowed', !isValid);
-        }
+      function validateSlide2() {
+          const fieldsValid = slide2Fields.every(id => document.getElementById(id).value !== '');
+          const isValid = fieldsValid && groupQuote !== null;
+          submitBtn.disabled = !isValid;
+          submitBtn.style.opacity = isValid ? '1' : '0.5';
+          submitBtn.classList.toggle('cursor-not-allowed', !isValid);
+      }
 
-        // Event Listeners for inputs
-        slide1Fields.forEach(id => document.getElementById(id).addEventListener('input', validateSlide1));
-        phoneInput.addEventListener('countrychange', validateSlide1);
-        slide2Fields.forEach(id => document.getElementById(id).addEventListener('change', validateSlide2));
+      // Event Listeners for inputs
+      slide1Fields.forEach(id => document.getElementById(id).addEventListener('input', validateSlide1));
+      phoneInput.addEventListener('countrychange', validateSlide1);
+      slide2Fields.forEach(id => document.getElementById(id).addEventListener('change', validateSlide2));
 
-        // Group Quote Toggle
-        window.setGroupQuote = (val) => {
-            groupQuote = val;
-            const yesBtn = document.getElementById('quote-yes');
-            const noBtn = document.getElementById('quote-no');
-            
-            if(val) {
-                yesBtn.style.backgroundColor = '#8B0000'; yesBtn.style.color = 'white'; yesBtn.style.borderColor = '#8B0000';
-                noBtn.style.backgroundColor = 'white'; noBtn.style.color = '#2D2D2D'; noBtn.style.borderColor = '#E0E0E0';
-            } else {
-                noBtn.style.backgroundColor = '#8B0000'; noBtn.style.color = 'white'; noBtn.style.borderColor = '#8B0000';
-                yesBtn.style.backgroundColor = 'white'; yesBtn.style.color = '#2D2D2D'; yesBtn.style.borderColor = '#E0E0E0';
-            }
-            validateSlide2();
-        };
+      // Group Quote Toggle
+      window.setGroupQuote = (val) => {
+          groupQuote = val;
+          const yesBtn = document.getElementById('quote-yes');
+          const noBtn = document.getElementById('quote-no');
 
-        // Navigation
-        nextBtn.addEventListener('click', () => {
-            currentSlide = 2;
-            updateUI();
-        });
+          if(val) {
+              yesBtn.style.backgroundColor = '#8B0000'; yesBtn.style.color = 'white'; yesBtn.style.borderColor = '#8B0000';
+              noBtn.style.backgroundColor = 'white'; noBtn.style.color = '#2D2D2D'; noBtn.style.borderColor = '#E0E0E0';
+          } else {
+              noBtn.style.backgroundColor = '#8B0000'; noBtn.style.color = 'white'; noBtn.style.borderColor = '#8B0000';
+              yesBtn.style.backgroundColor = 'white'; yesBtn.style.color = '#2D2D2D'; yesBtn.style.borderColor = '#E0E0E0';
+          }
+          validateSlide2();
+      };
 
-        document.getElementById('prev-btn').addEventListener('click', () => {
-            currentSlide = 1;
-            updateUI();
-        });
+      // Navigation
+      nextBtn.addEventListener('click', () => {
+          currentSlide = 2;
+          updateUI();
+      });
 
-        function updateUI() {
-            // Slide visibility
-            slides[1].classList.toggle('hidden', currentSlide !== 1);
-            slides[2].classList.toggle('hidden', currentSlide !== 2);
+      document.getElementById('prev-btn').addEventListener('click', () => {
+          currentSlide = 1;
+          updateUI();
+      });
 
-            // Indicators
-            if (currentSlide === 2) {
-                step1Content.innerHTML = '<i data-lucide="check-circle" class="w-6 h-6"></i>';
-                indicators[2].style.backgroundColor = '#8D0000';
-                indicators[2].classList.add('scale-110');
-                indicators[1].classList.remove('scale-110');
-                progressLine.style.backgroundColor = '#8D0000';
-                lucide.createIcons();
-            } else {
-                step1Content.innerText = '1';
-                indicators[2].style.backgroundColor = '#E0E0E0';
-                indicators[2].classList.remove('scale-110');
-                indicators[1].classList.add('scale-110');
-                progressLine.style.backgroundColor = '#8D000015';
-            }
-        }
+      function updateUI() {
+          // Slide visibility
+          slides[1].classList.toggle('hidden', currentSlide !== 1);
+          slides[2].classList.toggle('hidden', currentSlide !== 2);
 
-        submitBtn.addEventListener('click', () => {
-            // Final validation and mapping
-            document.getElementById('besoin_specifique').value = groupQuote ? 'True' : 'False';
+          // Indicators
+          if (currentSlide === 2) {
+              step1Content.innerHTML = '<i data-lucide="check-circle" class="w-6 h-6"></i>';
+              indicators[2].style.backgroundColor = '#8D0000';
+              indicators[2].classList.add('scale-110');
+              indicators[1].classList.remove('scale-110');
+              progressLine.style.backgroundColor = '#8D0000';
+              lucide.createIcons();
+          } else {
+              step1Content.innerText = '1';
+              indicators[2].style.backgroundColor = '#E0E0E0';
+              indicators[2].classList.remove('scale-110');
+              indicators[1].classList.add('scale-110');
+              progressLine.style.backgroundColor = '#8D000015';
+          }
+      }
 
-            // Submit the form
-            document.getElementById('registration-form').submit();
-        });
+      submitBtn.addEventListener('click', () => {
+          // Final validation and mapping
+          document.getElementById('besoin_specifique').value = groupQuote ? 'True' : 'False';
+
+          // Submit the form
+          document.getElementById('registration-form').submit();
+      });
     </script>
-</body>
+  </body>
 </html>

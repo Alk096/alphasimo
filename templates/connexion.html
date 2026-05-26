@@ -58,7 +58,7 @@
         {% endcomment %}
       </div>
 
-      <!-- Login Card -->
+      <!-- connexion Card -->
       <div
         class="bg-[#1A1A4B15] rounded-2xl shadow-2xl p-8 border border-[#E0E0E0] animate-fade-in"
       >
@@ -70,13 +70,7 @@
             >
               <i data-lucide="user" class="w-4 h-4 text-[#1A1A4B]"></i> Email
             </label>
-            <input
-              type="email"
-              name="email"
-              required
-              class="w-full px-4 py-3 rounded-lg border border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm"
-              placeholder="votre@email.com"
-            />
+            {% render_field form.email class="w-full px-4 py-3 rounded-lg border border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" placeholder="votre@email.com"%}
           </div>
 
           <div class="space-y-2">
@@ -87,14 +81,7 @@
               passe
             </label>
             <div class="relative">
-              <input
-                type="password"
-                name="password"
-                id="password"
-                required
-                class="w-full px-4 py-3 rounded-lg border border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm"
-                placeholder="••••••••"
-              />
+              {% render_field form.password type="password" name="password" id="password" class="w-full px-4 py-3 rounded-lg border border-[#E0E0E0] outline-none focus:border-[#1A1A4B] transition-all bg-white shadow-sm" placeholder="••••••••"%}
               <button
                 type="button"
                 onclick="togglePassword()"
@@ -106,21 +93,25 @@
           </div>
 
           {% if messages %}
-          <div class="space-y-4">
+          <div class="space-y-2">
             {% for message in messages %}
             <div
-              class="p-4 rounded-lg text-center {% if message.tags == 'error' %} text-red-800{% else %}bg-green-50 text-green-800 border border-green-100{% endif %} text-sm"
+              class="rounded-lg text-center {% if message.tags == 'error' %} text-red-800{% else %}text-green-800{% endif %} text-sm"
             >
               {{ message }}
             </div>
             {% endfor %}
           </div>
           {% endif %}
-
+          <div class="flex items-center justify-end mb-6 text-sm">
+            <a href="{% url 'inscription' %}" class="text-[#1A1A4B] hover:text-[#8b0000] transition-colors">
+              Pas de compte ? <span class="font-medium">Créez-en un</span>
+            </a>
+          </div>
           <button
             type="submit"
             class="w-full py-4 rounded-lg text-white font-semibold shadow-lg hover:shadow-xl transition-all active:scale-[0.98]"
-            style="background-color: #1A1A4B"
+            style="background-color: #1a1a4b"
           >
             Se connecter
           </button>

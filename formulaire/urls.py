@@ -3,11 +3,12 @@ from . import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
-    path('', views.formulaire, name='formulaire'),
-    path('login/', views.user_login, name='login'),
+    path('', views.accueil_view, name='Accueil'),
+    path('Programmes/', views.programme, name='Programme'),
+    path('Inscription/<int:id>/',views.formulaire,name='Inscription'),
+    path('connexion/', views.user_connexion, name='connexion'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-
-    path('dashboad/', views.dashboad, name='dashboad'),
-    path('api/dashboard/', views.api_dashboard_data, name='api_dashboard_data'),
-    path('api/notifications/read/', views.mark_notifications_as_read, name='mark_notifications_read'),
+    path('dashboard_user/', views.dashboard_user, name='dashboard_user'),
+    path('Dashboard/', views.dashboad, name='dashboad'),
+    path('Inscription/', views.inscription, name='inscription'),
 ]

@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Alpha Simo</title>
+    <meta
+      name="description"
+      content="Alpha Simo : formations certifiantes en Management QSE, Audit Interne et Gestion Documentaire en Afrique de l'Ouest."
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "as-blue": "#1A1A4B",
+              "as-red": "#C41E3A",
+              "as-red-dark": "#A31830",
+              "as-light": "#E9F1F9",
+              "as-gray": "#F8FAFC",
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+        display: inline-block;
+        vertical-align: middle;
+      }
+      .hero-gradient {
+        background: linear-gradient(
+          135deg,
+          #1a1a4b 0%,
+          #2a2a6b 50%,
+          #1a1a4b 100%
+        );
+      }
+      .glass {
+        background: rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .stat-glow {
+        box-shadow: 0 0 40px rgba(196, 30, 58, 0.15);
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+      .fade-up {
+        animation: fadeUp 0.7s ease forwards;
+        opacity: 0;
+      }
+      .fade-up-d1 {
+        animation-delay: 0.1s;
+      }
+      .fade-up-d2 {
+        animation-delay: 0.25s;
+      }
+      .fade-up-d3 {
+        animation-delay: 0.4s;
+      }
+      .fade-up-d4 {
+        animation-delay: 0.55s;
+      }
+      .float-anim {
+        animation: float 4s ease-in-out infinite;
+      }
+      .card-hover {
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .card-hover:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 60px rgba(26, 26, 75, 0.12);
+      }
+      .cta-pulse {
+        position: relative;
+        overflow: hidden;
+      }
+      .cta-pulse::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.15),
+          transparent
+        );
+        transform: translateX(-100%);
+        transition: transform 0.6s;
+      }
+      .cta-pulse:hover::after {
+        transform: translateX(100%);
+      }
+    </style>
+  </head>
+
+  <body class="bg-white text-gray-800 antialiased">
+    <!-- ═══ NAVBAR ═══ -->
+    <nav
+      class="fixed top-0 w-full z-50 transition-all duration-300 bg-as-blue/95 backdrop-blur-sm shadow-sm"
+      id="navbar"
+    >
+      <div
+        class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"
+      >
+        <a href="/" class="flex items-center gap-3">
+          <img
+            src="{% static 'images/logo.png' %}"
+            alt="Alpha Simo"
+            class="w-10 h-10 rounded-full shadow"
+          />
+          <span class="text-xl font-bold text-white tracking-tight"
+            >Alpha Simo</span
+          >
+        </a>
+        {% comment %}
+        <div
+          class="hidden md:flex items-center gap-8 text-sm font-medium text-white/80"
+        >
+          <a href="#services" class="hover:text-white transition">Services</a>
+          <a href="#formations" class="hover:text-white transition"
+            >Formations</a
+          >
+          <a href="#chiffres" class="hover:text-white transition">Chiffres</a>
+          <a href="#contact" class="hover:text-white transition">Contact</a>
+        </div>
+        {% endcomment %}
+        <div class="flex items-center gap-3">
+          {% if user.is_authenticated %}
+          <a
+            href="{% if user.is_admin %}{% url 'dashboad' %}{% else %}{% url 'dashboard_user' %}{% endif %}"
+            class="hidden md:inline-flex px-4 py-2 text-white/80 text-sm font-medium hover:text-white transition"
+          >
+            Espace personnel
+          </a>
+          <a
+            href="{% url 'Programme' %}"
+            class="hidden md:inline-flex px-5 py-2.5 bg-as-red text-white text-sm font-semibold rounded-lg hover:bg-as-red-dark transition cta-pulse"
+          >
+            Voir les programmes
+          </a>
+          {% else %}
+          <a
+            href="{% url 'Programme' %}"
+            class="hidden md:inline-flex px-5 py-2.5 bg-as-red text-white text-sm font-semibold rounded-lg hover:bg-as-red-dark transition cta-pulse"
+          >
+            Voir les programmes
+          </a>
+          {% endif %}
+          <button
+            id="burger"
+            class="md:hidden text-white"
+            onclick="
+              document.getElementById('mobile-menu').classList.toggle('hidden')
+            "
+          >
+            <span class="material-symbols-outlined text-[28px]">menu</span>
+          </button>
+        </div>
+      </div>
+      <!-- Mobile menu -->
+      <div
+        id="mobile-menu"
+        class="hidden md:hidden bg-as-blue/95 backdrop-blur px-6 pb-6 space-y-3 text-white"
+      >
+
+        {% comment %} <a href="#services" class="block py-2 border-b border-white/10"
+          >Services</a
+        >
+        <a href="#formations" class="block py-2 border-b border-white/10"
+          >Formations</a
+        >
+        <a href="#chiffres" class="block py-2 border-b border-white/10"
+          >Chiffres</a
+        >
+        <a href="#contact" class="block py-2 border-b border-white/10"
+          >Contact</a> {% endcomment %}
+        {% if user.is_authenticated %}
+        <a
+          href="{% if user.is_admin %}{% url 'dashboad' %}{% else %}{% url 'dashboard_user' %}{% endif %}"
+          class="block py-2 border-b border-white/10"
+          >Espace personnel</a
+        >
+        <a
+          href="{% url 'Programme' %}"
+          class="block py-2 border-b border-white/10"
+          >Voir les programmes</a
+        >
+        {% else %}
+        <a
+          href="{% url 'Programme' %}"
+          class="block py-2 border-b border-white/10"
+          >Voir les programmes</a
+        >
+        {% endif %}
+      </div>
+    </nav>
+
+    <!-- ═══ HERO ═══ -->
+    <section
+      class="hero-gradient relative min-h-screen flex items-center overflow-hidden"
+    >
+      <!-- Decorative circles -->
+      <div
+        class="absolute top-20 right-10 w-72 h-72 bg-as-red/10 rounded-full blur-3xl"
+      ></div>
+      <div
+        class="absolute bottom-10 left-10 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"
+      ></div>
+      <div
+        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-white/5 rounded-full"
+      ></div>
+
+      <div
+        class="max-w-7xl mx-auto px-6 pt-28 pb-20 grid lg:grid-cols-2 gap-16 items-center relative z-10"
+      >
+        <div>
+          <div
+            class="fade-up inline-flex items-center gap-2 px-4 py-2 glass rounded-full text-white/90 text-xs font-medium mb-8"
+          >
+            <span class="w-2 h-2 bg-as-red rounded-full animate-pulse"></span>
+            Sessions ouvertes — Places limitées
+          </div>
+          <h1
+            class="fade-up fade-up-d1 text-4xl md:text-5xl lg:text-6xl font-900 text-white leading-[1.1] mb-6"
+          >
+            Développez vos<br />
+            <span
+              class="text-transparent bg-clip-text bg-gradient-to-r from-as-red to-[#FF5C7A]"
+              >compétences</span
+            ><br />
+            stratégiques
+          </h1>
+          <p
+            class="fade-up fade-up-d2 text-lg text-white/70 max-w-lg mb-10 leading-relaxed"
+          >
+            Formations certifiantes en
+            <strong class="text-white/90">Management QSE</strong>,
+            <strong class="text-white/90">Audit Interne</strong> et
+            <strong class="text-white/90">Gestion Documentaire</strong> —
+            conçues pour les professionnels d'Afrique de l'Ouest.
+          </p>
+          <div class="fade-up fade-up-d3 flex flex-wrap gap-4">
+            <a
+              href="{% url 'Programme' %}"
+              class="px-8 py-4 bg-as-red text-white font-bold rounded-xl hover:bg-as-red-dark transition-all hover:shadow-lg hover:shadow-as-red/20 cta-pulse text-sm"
+            >
+              Explorer les programmes →
+            </a>
+            <a
+              href="#contact"
+              class="px-8 py-4 glass text-white font-semibold rounded-xl hover:bg-white/10 transition text-sm"
+            >
+              Nous contacter
+            </a>
+          </div>
+        </div>
+
+        <!-- Hero visual -->
+        <div class="fade-up fade-up-d4 hidden lg:flex justify-center">
+          <div class="relative">
+            <div
+              class="w-80 h-80 rounded-3xl glass p-8 float-anim flex items-center justify-center"
+            >
+              <img
+                src="{% static 'images/logo.png' %}"
+                alt="Alpha Simo"
+                class="w-52 h-52 drop-shadow-2xl"
+              />
+            </div>
+            <!-- Floating badges -->
+            <div
+              class="absolute -top-4 -right-4 glass rounded-2xl px-5 py-3 text-white text-sm font-semibold animate-pulse"
+            >
+              Certifiant
+            </div>
+            <div
+              class="absolute -bottom-4 -left-4 glass rounded-2xl px-5 py-3 text-white text-sm font-semibold"
+              style="animation: float 5s ease-in-out infinite 0.5s"
+            >
+              Formation
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div
+        class="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/40 flex flex-col items-center gap-2 text-xs"
+      >
+        <span>Défiler</span>
+        <span class="material-symbols-outlined animate-bounce text-[20px]"
+          >expand_more</span
+        >
+      </div>
+    </section>
+
+    <!-- ═══ FORMATIONS PREVIEW ═══ -->
+    {% if programmes.count > 0 %}
+    <section id="formations" class="pb-16 bg-white">
+      <div class="max-w-7xl mx-auto px-6">
+        <div
+          class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4"
+        >
+          <div>
+            <h2 class="text-3xl md:text-4xl font-800 text-as-blue mt-3">
+              Nos programmes
+            </h2>
+          </div>
+          <a
+            href="{% url 'Programme' %}"
+            class="text-sm font-semibold text-as-red hover:underline flex items-center gap-1"
+          >
+            Voir tout
+            <span class="material-symbols-outlined text-[18px]"
+              >arrow_forward</span
+            >
+          </a>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- Cards -->
+           {% for p in programmes %}
+          <div
+            class="course-card group rounded-2xl overflow-hidden border border-gray-100 bg-white card-hover flex flex-col"
+            data-title="{{ p.titre|lower }}"
+            data-label="{{ p.label|lower }}">
+            
+            <!-- Top accent bar -->
+            <div class="h-2 {% if p.label|lower == 'qse' or p.label|lower == 'qshe' %}bg-gradient-to-r from-as-blue to-blue-800{% elif p.label|lower == 'audit' %}bg-gradient-to-r from-as-red to-as-red-dark{% else %}bg-gradient-to-r from-as-blue via-purple-700 to-as-red{% endif %}"></div>
+
+            <div class="p-7 flex-grow flex flex-col">
+              <!-- Badge -->
+              <div class="flex items-center justify-between mb-5">
+                <span class="inline-block px-3 py-1 {% if p.label|lower == 'qse' or p.label|lower == 'qshe' or p.label|lower == 'management' %}bg-as-blue{% else %}bg-as-red{% endif %} text-white text-xs font-bold rounded">
+                  {{ p.label }}
+                </span>
+                {% if p.restant is not None and p.restant <= 5 %}
+                <span class="inline-flex items-center gap-1 px-2 py-1 bg-amber-50 text-amber-700 text-xs font-semibold rounded border border-amber-200">
+                  <span class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>
+                  {{ p.restant }} place{{ p.restant|pluralize }}
+                </span>
+                {% endif %}
+              </div>
+
+              <!-- Title -->
+              <h3 class="text-lg font-bold text-as-blue mb-4 leading-snug">{{ p.titre }}</h3>
+
+              <!-- Info list -->
+              <p class="text-sm text-gray-600 leading-relaxed mb-5">
+                  {{ p.description|truncatewords:20 }}
+              </p>
+              <a
+                class="w-full block bg-as-red hover:bg-as-red-dark text-white text-center font-bold py-3.5 rounded-xl cursor-pointer"
+                onclick="openModal({{ p.id }})"
+              >
+                Voir les sessions
+              </a>
+            </div>
+          </div>
+          {% endfor %}
+          {% comment %} Pop-up Modal {% endcomment %}
+          <div id="sessionModal" class="fixed inset-0 hidden bg-black/50 flex items-center justify-center z-50">
+            <div class="bg-white w-full max-w-3xl rounded-2xl shadow-xl p-6 relative">
+              <!-- Close -->
+              <button onclick="closeModal()" class="absolute top-3 right-3 text-gray-500 hover:text-red-500">
+                ✕
+              </button>
+
+              <h2 class="text-xl font-bold text-as-blue mb-5">
+                Sessions disponibles
+              </h2>
+
+              <div id="sessionContent" class="grid gap-4">
+                <!-- JS injecte ici -->
+              </div>
+
+            </div>
+          </div>         
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+    <!-- ═══ CTA ═══ -->
+    {% comment %} <section class="pb-20 bg-white">
+      <div class="max-w-4xl mx-auto px-6 text-center">
+        <div
+          class="bg-gradient-to-br from-as-blue to-[#2a2a6b] rounded-3xl p-12 md:p-16 relative overflow-hidden"
+        >
+          <div
+            class="absolute top-0 right-0 w-64 h-64 bg-as-red/10 rounded-full blur-3xl"
+          ></div>
+          <h2
+            class="text-3xl md:text-4xl font-800 text-white mb-4 relative z-10"
+          >
+            Prêt à franchir le cap ?
+          </h2>
+          <p class="text-white/70 mb-8 max-w-lg mx-auto relative z-10">
+            Inscrivez-vous dès aujourd'hui et rejoignez les professionnels qui
+            font confiance à Alpha Simo.
+          </p>
+          <div class="flex flex-wrap justify-center gap-4 relative z-10">
+            <a
+              href="{% url 'Programme' %}"
+              class="px-10 py-4 bg-as-red text-white font-bold rounded-xl hover:bg-as-red-dark transition cta-pulse"
+            >
+              Voir les programmes
+            </a>
+            <a
+              href="https://wa.me/22796968188"
+              target="_blank"
+              class="px-10 py-4 glass text-white font-semibold rounded-xl hover:bg-white/10 transition flex items-center gap-2"
+            >
+              <span class="material-symbols-outlined text-[20px]">chat</span>
+              WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </section> {% endcomment %}
+
+    <!-- ═══ CONTACT ═══ -->
+    <section id="contact" class="pb-24 bg-as-gray">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl md:text-4xl font-800 text-as-blue mt-3">
+            Contact
+          </h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8 max-w-3xl mx-auto">
+          <a
+            href="tel:+22796968188"
+            class="bg-white rounded-2xl p-8 text-center card-hover border border-gray-100"
+          >
+            <span
+              class="material-symbols-outlined text-as-blue text-[32px] mb-4"
+              >call</span
+            >
+            <h4 class="font-bold text-as-blue mb-1">Téléphone</h4>
+            <p class="text-gray-500 text-sm">+227 96 96 81 88</p>
+          </a>
+          <a
+            href="https://wa.me/22796968188"
+            target="_blank"
+            class="bg-white rounded-2xl p-8 text-center card-hover border border-gray-100"
+          >
+            <span
+              class="material-symbols-outlined text-green-600 text-[32px] mb-4"
+              >chat</span
+            >
+            <h4 class="font-bold text-as-blue mb-1">WhatsApp</h4>
+            <p class="text-gray-500 text-sm">+227 96 96 81 88</p>
+          </a>
+          <a
+            href="mailto:formations@alphasimo.ne"
+            class="bg-white rounded-2xl p-8 text-center card-hover border border-gray-100"
+          >
+            <span class="material-symbols-outlined text-as-red text-[32px] mb-4"
+              >mail</span
+            >
+            <h4 class="font-bold text-as-blue mb-1">Email</h4>
+            <p class="text-gray-500 text-sm">formations@alphasimo.ne</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="bg-as-blue text-white py-12 px-6">
+      <div
+        class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6"
+      >
+        <div class="flex items-center gap-3">
+          <img
+            src="{% static 'images/logo.png' %}"
+            alt="Alpha Simo"
+            class="w-8 h-8 rounded-full"
+          />
+          <span class="font-bold">Alpha Simo</span>
+          <span class="text-white/40 text-sm">· Formation</span>
+        </div>
+        {% comment %}
+        <div class="flex gap-6 text-sm text-white/50">
+          <a href="#" class="hover:text-white transition"
+            >Conditions générales</a
+          >
+          <a href="#" class="hover:text-white transition">Confidentialité</a>
+        </div>
+        {% endcomment %}
+        <div class="text-sm text-white/40">© 2026 Agence Iman</div>
+      </div>
+    </footer>
+
+    <!-- ═══ SCRIPTS ═══ -->
+    <script>
+      // Navbar scroll effect
+      const nav = document.getElementById("navbar");
+      window.addEventListener("scroll", () => {
+        nav.classList.toggle("shadow-lg", window.scrollY > 50);
+      });
+
+      // Smooth scroll
+      document.querySelectorAll('a[href^="#"]').forEach((a) => {
+        a.addEventListener("click", (e) => {
+          e.preventDefault();
+          const t = document.querySelector(a.getAttribute("href"));
+          if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
+          document.getElementById("mobile-menu").classList.add("hidden");
+        });
+      });
+    </script>
+
+    <script>
+      const programmes = {
+        {% for p in programmes %}
+          {{ p.id }}: [
+            {% for s in p.sessions.all %}
+            {
+              id: {{ s.id }},
+              date_debut: "{{ s.date_debut }}",
+              date_fin: "{{ s.date_fin }}",
+              start_time: "{{ s.start_time }}",
+              prix: "{{ s.prix }}",
+              lieu: "{{ s.lieu }}",
+              places: {{ s.nombre_de_place }}
+            },
+            {% endfor %}
+          ],
+        {% endfor %}
+      };
+
+      function openModal(programmeId) {
+        const modal = document.getElementById("sessionModal");
+        const container = document.getElementById("sessionContent");
+
+        container.innerHTML = "";
+
+        const sessions = programmes[programmeId];
+
+        if (!sessions || sessions.length === 0) {
+          container.innerHTML = `
+            <p class="text-gray-500 text-center">Aucune session disponible</p>
+          `;
+        } else {
+          sessions.forEach(s => {
+
+            container.innerHTML += `
+
+              <div class="border rounded-xl p-4 flex justify-between items-center">
+
+                <div>
+                  <h3 class="font-bold text-as-blue">
+                    ${s.date_debut} → ${s.date_fin}
+                  </h3>
+                  <div class="text-sm text-gray-600 flex items-center gap-6 flex-wrap">
+
+                    <span class="flex items-center gap-2">
+                      <span class="material-symbols-outlined text-[16px] text-gray-400">
+                        schedule
+                      </span>
+                      ${s.start_time}
+                    </span>
+
+                    <span class="flex items-center gap-2">
+                      <span class="material-symbols-outlined text-[16px] text-gray-400">
+                        location_on
+                      </span>
+                      ${s.lieu}
+                    </span>
+
+                    <span class="flex items-center gap-2">
+                      <span class="material-symbols-outlined text-[16px] text-gray-400">
+                        confirmation_number
+                      </span>
+                      ${s.prix} FCFA
+                    </span>
+
+                  </div>
+                </div>
+
+                <!-- RIGHT SIDE -->
+                <div class="flex items-center gap-3">
+
+                  <!-- Places badge -->
+                  <span class="px-3 py-1 text-xs font-bold rounded-full 
+                    ${s.places > 5 
+                      ? 'bg-green-100 text-green-700' 
+                      : 'bg-amber-100 text-amber-700'} 
+                    border">
+                    ${s.places} places
+                  </span>
+
+                  <a href="/Inscription/${s.id}/"
+                    class="px-3 py-1 text-xs font-bold rounded-full 
+                            bg-as-red text-white border border-as-red
+                            hover:bg-as-red-dark transition-all whitespace-nowrap">
+                      S'inscrire
+                  </a>
+
+                </div>
+
+              </div>
+            `;
+          });
+        }
+
+        modal.classList.remove("hidden");
+      }
+
+      function closeModal() {
+        document.getElementById("sessionModal").classList.add("hidden");
+      }
+    </script>
+  </body>
+</html>

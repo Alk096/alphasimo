@@ -1,136 +1,288 @@
-from django.shortcuts import render, redirect
-from .forms import ProspectForm
+from formulaire.models import Utilisateur
+from django.contrib.auth.models import User
+from django.utils import timezone
+from django.utils.timezone import now
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from django.http import JsonResponse
-from .models import Prospect
-from django.db.models import Count, Q
-from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.db.models import Prefetch
+from . import forms, models
+import random, string
 
-def formulaire(request):
-    if request.method == 'POST':
-        form = ProspectForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Votre inscription a été enregistrée avec succès !")
-            return redirect('formulaire')
-        else:
-            messages.error(request, "Veuillez corriger les erreurs dans le formulaire.")
-    else:
-        form = ProspectForm()
+def accueil_view(request):
+    programmes = models.Programme.objects.filter(
+        sessions__date_debut__gte=timezone.localdate()
+    ).prefetch_related(
+        Prefetch('sessions', queryset=models.Session.objects.filter(date_debut__gte=timezone.localdate()))
+    ).distinct()[:3]
+    context = {
+        "programmes":programmes
+    }
+    return render(request, 'accueil.html', context=context)
+
+def programme(request):
+    programmes = models.Programme.objects.filter(
+        sessions__date_debut__gte=timezone.localdate()
+    ).prefetch_related(
+        Prefetch('sessions', queryset=models.Session.objects.filter(date_debut__gte=timezone.localdate()))
+    ).distinct()
+    labels = models.Programme.objects.distinct().values_list('label', flat=True).distinct()
+    context = {
+        "programmes":programmes,
+        "labels":labels
+    }
+    return render(request, 'programme.html', context=context)
+
+def random_password():
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+
+def formulaire(request, id):
+    session = models.Session.objects.get(id=id)
+    if not session.is_active:
+        return redirect('Programme')
     
-    return render(request, 'formulaire.html', {'form': form})
-
-
-def user_login(request):
+    # Calculer le nombre de places restantes
+    session.restant = session.nombre_de_place - models.Inscription.objects.filter(session=session).count()
+    form = forms.InscriptionForm()
+    
     if request.method == 'POST':
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+        form = forms.InscriptionForm(request.POST)
+        registration_type = request.POST.get('registration_type', 'individuel')
+        
+        is_valid = form.is_valid()
+        custom_errors = []
+        
+        if is_valid:
+            # Validation personnalisée selon le type d'inscription
+            if registration_type == 'organisation':
+                raison = request.POST.get('org_name') or form.cleaned_data.get('raison')
+                if not raison:
+                    form.add_error('raison', "Le nom de l'organisation est requis pour une inscription en organisation.")
+                    is_valid = False
+                
+                # Empêcher l'inscription multiple pour l'inscrivant principal
+                email_main_clean = form.cleaned_data['email'].strip()
+                if models.Inscription.objects.filter(participant__utilisateur__user__email=email_main_clean, session=session).exists():
+                    form.add_error('email', "L'inscrivant principal (contact) est déjà inscrit à cette session.")
+                    is_valid = False
+                
+                # Vérifier qu'il y a au moins un participant valide
+                p_firstnames = request.POST.getlist('p_firstname[]')
+                p_lastnames = request.POST.getlist('p_lastname[]')
+                p_emails = request.POST.getlist('p_email[]')
+                
+                has_participant = False
+                for i in range(len(p_emails)):
+                    if (i < len(p_firstnames) and i < len(p_lastnames) and 
+                        p_firstnames[i].strip() and p_lastnames[i].strip() and p_emails[i].strip()):
+                        has_participant = True
+                        break
+                
+                if not has_participant:
+                    custom_errors.append("Pour une inscription d'organisation, vous devez enregistrer au moins un participant avec prénom, nom et email.")
+                    is_valid = False
+                else:
+                    # Empêcher les inscriptions multiples pour les participants de la liste
+                    for i in range(len(p_emails)):
+                        email_clean = p_emails[i].strip()
+                        if email_clean and models.Inscription.objects.filter(participant__utilisateur__user__email=email_clean, session=session).exists():
+                            custom_errors.append(f"Le participant avec l'email '{email_clean}' est déjà inscrit à cette session.")
+                            is_valid = False
+            else:
+                # Inscription individuelle : le poste de la personne est requis
+                poste = form.cleaned_data.get('poste') or request.POST.get('position')
+                if not poste:
+                    form.add_error('poste', "Le poste/fonction est requis pour une inscription individuelle.")
+                    is_valid = False
+                
+                # Empêcher l'inscription multiple pour l'individu
+                email_clean = form.cleaned_data['email'].strip()
+                if models.Inscription.objects.filter(participant__utilisateur__user__email=email_clean, session=session).exists():
+                    form.add_error('email', "Vous êtes déjà inscrit à cette session.")
+                    is_valid = False
+
+        if is_valid:
+            # 1. Créer ou récupérer le User principal (le contact)
+            user, created = User.objects.get_or_create(
+                email=form.cleaned_data['email'].strip(),
+                defaults={
+                    'username': form.cleaned_data['email'].strip(),
+                    'first_name': form.cleaned_data['prenom'],
+                    'last_name': form.cleaned_data['nom'],
+                }
+            )
+            if created:
+                pwd = random_password()
+                user.set_password(pwd)
+                print("Mot de passe : ", pwd)
+                user.save()
+            
+            # Profil Utilisateur
+            utilisateur, _ = models.Utilisateur.objects.get_or_create(
+                user=user,
+                defaults={'profil': 'Learner'}
+            )
+            
+            # 2. Créer ou obtenir l'entreprise (si organisation)
+            entreprise = None
+            if registration_type == 'organisation':
+                org_name = request.POST.get('org_name') or form.cleaned_data.get('raison')
+                entreprise, _ = models.Entreprise.objects.get_or_create(
+                    raison=org_name.strip(),
+                    defaults={'secteur': form.cleaned_data.get('secteur', '')}
+                )
+            
+            # 3. Créer le(s) Participant(s) et les Inscriptions
+            if registration_type == 'organisation':
+                # Le participant contact (celui qui remplit le formulaire) doit aussi être lié à l'entreprise
+                contact_participant, p_created = models.Participant.objects.get_or_create(
+                    utilisateur=utilisateur,
+                    defaults={
+                        'whatsapp': form.cleaned_data['whatsapp'],
+                        'entreprise': entreprise,
+                        'poste': form.cleaned_data.get('poste') or request.POST.get('position', '')
+                    }
+                )
+                if not p_created:
+                    contact_participant.entreprise = entreprise
+                    contact_participant.poste = form.cleaned_data.get('poste') or request.POST.get('position', '')
+                    contact_participant.save()
+
+                # Inscrire également l'inscrivant principal à la session
+                models.Inscription.objects.create(
+                    participant=contact_participant,
+                    session=session,
+                    type='organisation',
+                    condition=True,
+                    statut=False
+                )
+
+                p_firstnames = request.POST.getlist('p_firstname[]')
+                p_lastnames = request.POST.getlist('p_lastname[]')
+                p_emails = request.POST.getlist('p_email[]')
+                p_positions = request.POST.getlist('p_position[]')
+                
+                for i in range(len(p_emails)):
+                    if (i < len(p_firstnames) and i < len(p_lastnames) and 
+                        p_firstnames[i].strip() and p_lastnames[i].strip() and p_emails[i].strip()):
+                        
+                        p_user, p_created = User.objects.get_or_create(
+                            email=p_emails[i].strip(),
+                            defaults={
+                                'username': p_emails[i].strip(),
+                                'first_name': p_firstnames[i].strip(),
+                                'last_name': p_lastnames[i].strip(),
+                            }
+                        )
+                        if p_created:
+                            p_pwd = random_password()
+                            p_user.set_password(p_pwd)
+                            p_user.save()
+                            
+                        p_utilisateur, _ = models.Utilisateur.objects.get_or_create(
+                            user=p_user,
+                            defaults={'profil': 'Learner'}
+                        )
+                        
+                        p_participant, p_part_created = models.Participant.objects.get_or_create(
+                            utilisateur=p_utilisateur,
+                            defaults={
+                                'whatsapp': form.cleaned_data['whatsapp'],
+                                'entreprise': entreprise,
+                                'poste': p_positions[i].strip() if i < len(p_positions) else ''
+                            }
+                        )
+                        if not p_part_created:
+                            p_participant.entreprise = entreprise
+                            p_participant.poste = p_positions[i].strip() if i < len(p_positions) else ''
+                            p_participant.save()
+                        
+                        models.Inscription.objects.create(
+                            participant=p_participant,
+                            session=session,
+                            type='organisation',
+                            condition=True,
+                            statut=False
+                        )
+            else:
+                # Inscription individuelle
+                participant, p_created = models.Participant.objects.get_or_create(
+                    utilisateur=utilisateur,
+                    defaults={
+                        'whatsapp': form.cleaned_data['whatsapp'],
+                        'entreprise': None,
+                        'poste': form.cleaned_data.get('poste') or request.POST.get('position', '')
+                    }
+                )
+                if not p_created:
+                    participant.poste = form.cleaned_data.get('poste') or request.POST.get('position', '')
+                    participant.save()
+                
+                models.Inscription.objects.create(
+                    participant=participant,
+                    session=session,
+                    type='individuel',
+                    condition=True,
+                    statut=False
+                )
+                
+            messages.success(request, "Votre inscription a bien été enregistrée.")
+            return redirect('dashboard_user')
+            
+        else:
+            for error in custom_errors:
+                messages.error(request, error)
+                
+    context = {'form': form, 'session': session}
+    return render(request, 'formulaire.html', context=context)
+
+def user_connexion(request):
+    form = forms.connexionForm()
+    if request.method == 'POST':
+        form = forms.connexionForm(request.POST)
+        email = form.data.get('email')
+        password = form.data.get('password')
         
         user = authenticate(request, username=email, password=password)
-        if user is not None:
+        utlisateur = models.Utilisateur(user=user)
+        if utlisateur is not None:
+            if utlisateur.profil == 'Formateur':
+                login(request, user)
+                return redirect('dashboad')
             login(request, user)
-            return redirect('dashboad') 
+            return redirect('dashboard_user')
         else:
-            messages.error(request, "Nom d'utilisateur ou mot de passe incorrect.")
-            
-    return render(request, 'login.html')
+            messages.error(request, "Email ou mot de passe incorrect.")
 
-@login_required(login_url='login')
+    context = {'form': form}
+    return render(request, 'connexion.html', context=context)
+
+def inscription(request):
+    return 1
+
+@login_required(login_url='connexion')
+# @user_passes_test(lambda u: u.is_admin)
 def dashboad(request):
     return render(request, 'dashboad.html')
 
-@login_required(login_url='login')
-def api_dashboard_data(request):
-    # Filters
-    lieu = request.GET.get('lieu')
-    programme = request.GET.get('programme')
-    session = request.GET.get('session')
+@login_required(login_url='connexion')
+# @user_passes_test(lambda u: not u.is_admin)
+def dashboard_user(request):
+    programmes = models.Programme.objects.prefetch_related('sessions').all()
+    for p in programmes:
+        p.first_session = p.sessions.all().order_by('date_debut').first()
+        if p.first_session:
+            p.date_debut = p.first_session.date_debut
+            p.date_fin = p.first_session.date_fin
+            p.total_prix = p.first_session.prix
+        else:
+            p.date_debut = None
+            p.date_fin = None
+            p.total_prix = 0
 
-    prospects_query = Prospect.objects.all().order_by('-created_at')
-
-    if lieu:
-        prospects_query = prospects_query.filter(lieu_souhaiter=lieu)
-    if programme:
-        prospects_query = prospects_query.filter(programme_souhaiter=programme)
-    if session:
-        prospects_query = prospects_query.filter(session_preferee=session)
-
-    # KPIs calculation
-    total_count = prospects_query.count()
-    lome_count = prospects_query.filter(lieu_souhaiter='Lomé').count()
-    tunis_count = prospects_query.filter(lieu_souhaiter='Tunis').count()
-    group_count = prospects_query.filter(besoin_specifique=True).count()
-    group_pct = round((group_count / total_count * 100), 1) if total_count > 0 else 0
-
-    # Chart data
-    chart_data = prospects_query.values('programme_souhaiter').annotate(count=Count('id'))
-    chart_dict = {
-        'qse_count': prospects_query.filter(programme_souhaiter='QSE').count(),
-        'mgmt_count': prospects_query.filter(programme_souhaiter='Management').count(),
-        'audit_count': prospects_query.filter(programme_souhaiter='Audit').count(),
+    context = {
+        'programmes': programmes,
+        'programmes_count': programmes.count(),
     }
-
-    # Latest 4 for notifications
-    latest_prospects = prospects_query[:4]
-    latest_data = []
-    for p in latest_prospects:
-        latest_data.append({
-            'prenom': p.prenom,
-            'nom': p.nom,
-            'programme': p.get_programme_souhaiter_display(),
-            'lieu': p.lieu_souhaiter,
-            'entreprise': p.entreprise,
-        })
-
-    # Pagination
-    page_number = request.GET.get('page', 1)
-    paginator = Paginator(prospects_query, 8)
-    page_obj = paginator.get_page(page_number)
-
-    # Table data
-    table_data = []
-    for p in page_obj:
-        table_data.append({
-            'initials': f"{p.prenom[0]}{p.nom[0]}".upper(),
-            'prenom': p.prenom,
-            'nom': p.nom,
-            'number': p.number,
-            'email_pro': p.email_pro,
-            'entreprise': p.entreprise,
-            'poste': p.poste,
-            'secteur': p.secteur,
-            'programme': p.get_programme_souhaiter_display(),
-            'session': p.session_preferee.strftime('%b %Y') if p.session_preferee else '',
-            'lieu': p.lieu_souhaiter,
-            'besoin_specifique': p.besoin_specifique,
-        })
-
-    return JsonResponse({
-        'kpis': {
-            'total': total_count,
-            'lome_count': lome_count,
-            'tunis_count': tunis_count,
-            'group_pct': group_pct,
-        },
-        'chart': chart_dict,
-        'latest': latest_data,
-        'unread_count': Prospect.objects.filter(is_read=False).count(),
-        'prospects': table_data,
-        'pagination': {
-            'current_page': page_obj.number,
-            'total_pages': paginator.num_pages,
-            'per_page': paginator.per_page,
-            'has_next': page_obj.has_next(),
-            'has_previous': page_obj.has_previous(),
-            'total_items': total_count,
-        }
-    })
-
-@login_required(login_url='login')
-def mark_notifications_as_read(request):
-    if request.method == 'POST':
-        Prospect.objects.filter(is_read=False).update(is_read=True)
-        return JsonResponse({'status': 'ok'})
-    return JsonResponse({'status': 'error'}, status=400)
+    return render(request, 'dashboard_user.html', context=context)

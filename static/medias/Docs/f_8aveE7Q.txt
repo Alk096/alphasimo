@@ -1,0 +1,2 @@
+ org.eclipse.emf.ecore,
+ org.eclipse.emf.ecore.xmi,

@@ -546,11 +546,11 @@
 
     <script>
       // ─── STATE ──────────────────────────────────────────
-      const API_URL = '{% url "api_dashboard_data" %}';
+      {% comment %} const API_URL = '{% url"#" %}';
       const POLL_INTERVAL = 10000; // 10s auto-refresh
       let programChart = null;
       let currentPage = 1;
-      let totalPages = 1;
+      let totalPages = 1; {% endcomment %}
 
       // ─── DOM REFERENCES ─────────────────────────────────
       const filterLieu = document.getElementById("filter-lieu");
@@ -564,7 +564,7 @@
       const pageNumbersContainer = document.getElementById("page-numbers");
 
       // ─── NOTIFICATION TOGGLE ────────────────────────────
-      notifBtn.addEventListener("click", async (e) => {
+      {% comment %} notifBtn.addEventListener("click", async (e) => {
         e.stopPropagation();
         const isOpening = notifDropdown.classList.contains("hidden");
         notifDropdown.classList.toggle("hidden");
@@ -572,7 +572,7 @@
         if (isOpening) {
           // Mark as read when opening
           try {
-            const res = await fetch('{% url "mark_notifications_read" %}', {
+            const res = await fetch('{% url "#" %}', {
               method: "POST",
               headers: {
                 "X-CSRFToken": getCookie("csrftoken"),
@@ -587,7 +587,7 @@
             console.error("Error marking notifications read:", err);
           }
         }
-      });
+      }); {% endcomment %}
 
       function getCookie(name) {
         let cookieValue = null;
@@ -631,7 +631,7 @@
       };
 
       // ─── FILTERS ────────────────────────────────────────
-      filterLieu.addEventListener("change", () => {
+      {% comment %} filterLieu.addEventListener("change", () => {
         currentPage = 1;
         fetchData();
       });
@@ -642,10 +642,10 @@
       filterSession.addEventListener("change", () => {
         currentPage = 1;
         fetchData();
-      });
+      }); {% endcomment %}
 
       // ─── FETCH DATA ─────────────────────────────────────
-      async function fetchData(isAutoRefresh = false) {
+      {% comment %} async function fetchData(isAutoRefresh = false) {
         if (!isAutoRefresh) loadingIndicator.classList.remove("hidden");
 
         const params = new URLSearchParams();
@@ -670,17 +670,17 @@
         } finally {
           loadingIndicator.classList.add("hidden");
         }
-      }
+      } {% endcomment %}
 
       // ─── RENDER: KPIs ───────────────────────────────────
-      function renderKPIs(kpis) {
+      {% comment %} function renderKPIs(kpis) {
         document.getElementById("kpi-total").textContent = kpis.total;
         document.getElementById("kpi-lome").textContent = kpis.lome_count;
         document.getElementById("kpi-tunis").textContent = kpis.tunis_count;
         document.getElementById("kpi-group").textContent = kpis.group_pct + "%";
         document.getElementById("kpi-group-bar").style.width =
           kpis.group_pct + "%";
-      }
+      } {% endcomment %}
 
       // ─── RENDER: Table ──────────────────────────────────
       function renderTable(prospects, pagination) {

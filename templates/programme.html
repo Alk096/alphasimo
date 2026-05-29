@@ -78,7 +78,7 @@
             Programmes
           </a>
           {% if user.is_authenticated %}
-          <a href="{% if user.is_admin %}{% url 'dashboad' %}{% else %}{% url 'dashboard_user' %}{% endif %}" class="hidden md:inline-flex px-4 py-2 text-white/80 text-sm font-medium hover:text-white transition">
+          <a href="{% if user.is_admin %}{% url 'Dashboad' %}{% else %}{% url 'Dashboard_user' %}{% endif %}" class="hidden md:inline-flex px-4 py-2 text-white/80 text-sm font-medium hover:text-white transition">
             Espace personnel
           </a>
           {% endif %}
@@ -91,7 +91,7 @@
         <a href="{% url 'Accueil' %}" class="block py-2 border-b border-white/10">Accueil</a>
         <a href="{% url 'Programme' %}" class="block py-2 border-b border-white/10 font-semibold">Programmes</a>
         {% if user.is_authenticated %}
-        <a href="{% if user.is_admin %}{% url 'dashboad' %}{% else %}{% url 'dashboard_user' %}{% endif %}" class="block py-2 border-b border-white/10">Espace personnel</a>
+        <a href="{% if user.is_admin %}{% url 'Dashboad' %}{% else %}{% url 'Dashboard_user' %}{% endif %}" class="block py-2 border-b border-white/10">Espace personnel</a>
         {% endif %}
       </div>
     </nav>

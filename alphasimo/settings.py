@@ -129,6 +129,15 @@ STATICFILES_DIRS = [
 MEDIA_URL = 'medias/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/medias')
 
-LOGOUT_REDIRECT_URL = 'connexion'
+LOGOUT_REDIRECT_URL = 'Connexion'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'rhimanadch@gmail.com'
+EMAIL_HOST_PASSWORD = 'bapk yczh dejk mtkc'
+DEFAULT_FROM_EMAIL = 'Recrutement Iman'

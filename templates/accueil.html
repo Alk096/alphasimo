@@ -169,20 +169,20 @@
           >
             Espace personnel
           </a>
-          <a
-            href="{% url 'Programme' %}"
-            class="hidden md:inline-flex px-5 py-2.5 bg-as-red text-white text-sm font-semibold rounded-lg hover:bg-as-red-dark transition cta-pulse"
-          >
-            Voir les programmes
-          </a>
           {% else %}
           <a
+            href="{% url 'Connexion' %}"
+            class="hidden md:inline-flex px-5 py-2.5 bg-as-red text-white text-sm font-semibold rounded-lg hover:bg-as-red-dark transition cta-pulse"
+          >
+          Connexion
+          </a>
+          {% endif %}
+          <a
             href="{% url 'Programme' %}"
             class="hidden md:inline-flex px-5 py-2.5 bg-as-red text-white text-sm font-semibold rounded-lg hover:bg-as-red-dark transition cta-pulse"
           >
             Voir les programmes
           </a>
-          {% endif %}
           <button
             id="burger"
             class="md:hidden text-white"

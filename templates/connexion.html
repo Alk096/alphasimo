@@ -103,11 +103,11 @@
             {% endfor %}
           </div>
           {% endif %}
-          <div class="flex items-center justify-end mb-6 text-sm">
+          {% comment %} <div class="flex items-center justify-end mb-6 text-sm">
             <a href="{% url 'inscription' %}" class="text-[#1A1A4B] hover:text-[#8b0000] transition-colors">
               Pas de compte ? <span class="font-medium">Créez-en un</span>
             </a>
-          </div>
+          </div> {% endcomment %}
           <button
             type="submit"
             class="w-full py-4 rounded-lg text-white font-semibold shadow-lg hover:shadow-xl transition-all active:scale-[0.98]"

@@ -245,44 +245,55 @@ def user_connexion(request):
         password = form.data.get('password')
         
         user = authenticate(request, username=email, password=password)
-        utlisateur = models.Utilisateur(user=user)
+        utlisateur = models.Utilisateur.objects.filter(user=user).first()
         if utlisateur is not None:
             if utlisateur.profil == 'Formateur':
                 login(request, user)
-                return redirect('dashboad')
+                return redirect('Dashboard')
             login(request, user)
-            return redirect('dashboard_user')
+            return redirect('Dashboard_user')
         else:
             messages.error(request, "Email ou mot de passe incorrect.")
 
     context = {'form': form}
     return render(request, 'connexion.html', context=context)
 
-def inscription(request):
-    return 1
+# ===============================================================
+# DECORATEUR POUR VERIFIER LE PROFIL DE L'UTILISATEUR
+# ===============================================================
 
-@login_required(login_url='connexion')
-# @user_passes_test(lambda u: u.is_admin)
+def is_formateur(user):
+    utilisateur = models.Utilisateur.objects.filter(user=user).first()
+    return utilisateur.profil == 'Formateur'
+
+def is_learner(user):
+    utilisateur = models.Utilisateur.objects.filter(user=user).first()
+    return utilisateur.profil == 'Learner'
+
+@login_required(login_url='Connexion')
+@user_passes_test(is_formateur, login_url='Connexion')
 def dashboad(request):
     return render(request, 'dashboad.html')
 
-@login_required(login_url='connexion')
-# @user_passes_test(lambda u: not u.is_admin)
+@login_required(login_url='Connexion')
+@user_passes_test(is_learner, login_url='Connexion')
 def dashboard_user(request):
-    programmes = models.Programme.objects.prefetch_related('sessions').all()
-    for p in programmes:
-        p.first_session = p.sessions.all().order_by('date_debut').first()
-        if p.first_session:
-            p.date_debut = p.first_session.date_debut
-            p.date_fin = p.first_session.date_fin
-            p.total_prix = p.first_session.prix
-        else:
-            p.date_debut = None
-            p.date_fin = None
-            p.total_prix = 0
-
+    programmes = models.Programme.objects.filter(
+        sessions__date_debut__gte=timezone.localdate()
+    ).prefetch_related(
+        Prefetch('sessions', queryset=models.Session.objects.filter(date_debut__gte=timezone.localdate()))
+    ).distinct()
+    participant = models.Participant.objects.filter(utilisateur__user=request.user).first()
+    whatsapp = participant.whatsapp if participant else ''
+    mes_inscriptions = models.Inscription.objects.filter(participant=participant)
+    mes_sessions = models.Inscription.objects.filter(participant=participant, session__date_debut__gte=timezone.localdate())
     context = {
         'programmes': programmes,
+        'whatsapp': whatsapp,
         'programmes_count': programmes.count(),
+        'mes_inscriptions': mes_inscriptions,
+        'mes_inscriptions_count': mes_inscriptions.count(),
+        'mes_sessions': mes_sessions,
+        'mes_sessions_count': mes_sessions.count()
     }
     return render(request, 'dashboard_user.html', context=context)

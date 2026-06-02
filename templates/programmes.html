@@ -1,0 +1,875 @@
+{% load static %} {% load widget_tweaks %}
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Alpha Simo — Gestion des Programmes</title>
+    <meta
+      name="description"
+      content="Administration des programmes de formation Alpha Simo."
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "as-blue": "#1A1A4B",
+              "as-red": "#C41E3A",
+              "as-red-dark": "#A31830",
+              "as-light": "#E9F1F9",
+              "as-gray": "#F8FAFC",
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
+        display: inline-block;
+        vertical-align: middle;
+      }
+      .hero-gradient {
+        background: linear-gradient(
+          135deg,
+          #1a1a4b 0%,
+          #2a2a6b 50%,
+          #1a1a4b 100%
+        );
+      }
+      .glass {
+        background: rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .fade-up {
+        animation: fadeUp 0.6s ease forwards;
+        opacity: 0;
+      }
+      .fade-up-d1 {
+        animation-delay: 0.1s;
+      }
+      .fade-up-d2 {
+        animation-delay: 0.2s;
+      }
+      .fade-up-d3 {
+        animation-delay: 0.3s;
+      }
+      .fade-up-d4 {
+        animation-delay: 0.4s;
+      }
+      .card-hover {
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .card-hover:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 60px rgba(26, 26, 75, 0.1);
+      }
+      .stat-card {
+        position: relative;
+        overflow: hidden;
+      }
+      .programme-card {
+        transition: all 0.3s ease;
+        overflow: hidden;
+      }
+      .programme-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 40px rgba(26, 26, 75, 0.1);
+      }
+      .badge-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+      .search-input:focus {
+        outline: none;
+        border-color: #1a1a4b;
+      }
+      .filter-btn.active {
+        background: #1a1a4b;
+        color: #fff;
+      }
+      .filter-btn {
+        transition: all 0.2s;
+      }
+      .modal-backdrop {
+        backdrop-filter: blur(4px);
+        background: rgba(10, 10, 30, 0.5);
+      }
+    </style>
+  </head>
+
+  <body class="bg-as-gray text-gray-800 antialiased">
+    <nav
+      id="navbar"
+      class="fixed top-0 w-full z-50 bg-as-blue/95 backdrop-blur-sm shadow-sm"
+    >
+      <div
+        class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"
+      >
+        <a href="{% url 'Accueil' %}" class="flex items-center gap-3">
+          <img
+            src="{% static 'images/logo.png' %}"
+            alt="Alpha Simo"
+            class="w-10 h-10 rounded-full shadow"
+          />
+          <span class="text-xl font-bold text-white tracking-tight"
+            >Alpha Simo</span
+          >
+        </a>
+
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex items-center gap-6">
+          <a
+            href="{% url 'Dashboard' %}"
+            class="text-white/70 hover:text-white text-sm font-medium transition flex items-center gap-1"
+          >
+            <span class="material-symbols-outlined text-[18px]">dashboard</span>
+            Dashboard
+          </a>
+          <a
+            href="{% url 'Programmes_admin' %}"
+            class="text-white text-sm font-semibold border-b-2 border-as-red pb-0.5 flex items-center gap-1"
+          >
+            <span class="material-symbols-outlined text-[18px]">school</span>
+            Programmes
+          </a>
+          <a
+            href="{% url 'Sessions_admin' %}"
+            class="text-white/70 hover:text-white text-sm font-medium transition flex items-center gap-1"
+          >
+            <span class="material-symbols-outlined text-[18px]"
+              >calendar_month</span
+            >
+            Sessions
+          </a>
+          <a href="{% url 'Demandes_admin' %}" class="text-white/70 hover:text-white text-sm font-medium transition flex items-center gap-1">
+            <span class="material-symbols-outlined text-[18px]">air</span>
+            Demandes
+          </a>
+          <div class="w-px h-6 bg-white/20"></div>
+          <div class="flex items-center gap-3">
+            <div
+              class="w-9 h-9 rounded-full bg-as-red/20 border border-as-red/30 flex items-center justify-center text-white text-sm font-bold"
+            >
+              {{ user.first_name|first }}{{ user.last_name|first }}
+            </div>
+            <span class="text-white text-sm font-medium"
+              >{{ user.first_name }}</span
+            >
+          </div>
+          <a
+            href="javascript:void(0);"
+            onclick="document.getElementById('logout-form').submit()"
+            class="text-white/40 hover:text-as-red transition text-sm flex items-center gap-1"
+          >
+            <span class="material-symbols-outlined text-[18px]">logout</span>
+          </a>
+        </div>
+
+        <!-- Mobile burger -->
+        <button
+          class="md:hidden text-white"
+          onclick="
+            document.getElementById('mobile-menu').classList.toggle('hidden')
+          "
+        >
+          <span class="material-symbols-outlined text-[28px]">menu</span>
+        </button>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div
+        id="mobile-menu"
+        class="hidden md:hidden bg-as-blue/95 backdrop-blur px-6 pb-6 space-y-3 text-white"
+      >
+        <a
+          href="{% url 'Dashboard' %}"
+          class="block py-2 border-b border-white/10"
+          >Dashboard</a
+        >
+        <a
+          href="{% url 'Programmes_admin' %}"
+          class="block py-2 border-b border-white/10 font-semibold"
+          >Programmes</a
+        >
+        <a
+          href="{% url 'Sessions_admin' %}"
+          class="block py-2 border-b border-white/10"
+          >Sessions</a
+        >
+        <a
+          href="{% url 'Demandes_admin' %}"
+          class="block py-2 border-b border-white/10"
+          >Demandes</a
+        >
+        <a
+          href="javascript:void(0);"
+          onclick="document.getElementById('logout-form').submit()"
+          class="block py-2 text-white/60"
+          >Déconnexion</a
+        >
+      </div>
+    </nav>
+
+    <section class="hero-gradient pt-28 pb-20 relative overflow-hidden">
+      <div
+        class="absolute top-10 right-10 w-80 h-80 bg-as-red/8 rounded-full blur-3xl"
+      ></div>
+      <div
+        class="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"
+      ></div>
+      <div
+        class="absolute top-1/2 right-1/4 w-[400px] h-[400px] border border-white/5 rounded-full -translate-y-1/2"
+      ></div>
+      <div class="max-w-7xl mx-auto px-6 relative z-10">
+        <div
+          class="flex flex-col md:flex-row md:items-end justify-between gap-6"
+        >
+          <div>
+            <h1
+              class="fade-up fade-up-d1 text-3xl md:text-4xl font-black text-white leading-tight"
+            >
+              Gestion des
+              <span
+                class="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60"
+                >Programmes</span
+              >
+            </h1>
+            <p class="fade-up fade-up-d2 text-white/50 mt-3 text-sm">
+              {{ programmes|length }} programme{{ programmes|length|pluralize }}
+              enregistré{{ programmes|length|pluralize }}
+            </p>
+          </div>
+          <div class="fade-up fade-up-d3">
+            <button
+              id="open-modal-add"
+              class="inline-flex items-center gap-2 px-6 py-3 bg-as-red hover:bg-as-red-dark text-white font-semibold rounded-xl transition-all text-sm shadow-lg shadow-as-red/30"
+            >
+              <span class="material-symbols-outlined text-[20px]">add</span>
+              Nouveau programme
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-6 -mt-10 relative z-20 mb-12">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-5">
+        <div
+          class="fade-up fade-up-d1 stat-card bg-white rounded-2xl p-6 border border-gray-100 shadow-sm card-hover"
+        >
+          <div
+            class="w-12 h-12 rounded-xl bg-as-blue/10 flex items-center justify-center mb-4"
+          >
+            <span class="material-symbols-outlined text-as-blue text-[24px]"
+              >school</span
+            >
+          </div>
+          <p class="text-3xl font-black text-as-blue">
+            {{ programmes|length }}
+          </p>
+          <p class="text-xs text-gray-400 mt-1 font-medium">
+            Programmes au total
+          </p>
+        </div>
+
+        <div
+          class="fade-up fade-up-d2 stat-card bg-white rounded-2xl p-6 border border-gray-100 shadow-sm card-hover"
+        >
+          <div
+            class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center mb-4"
+          >
+            <span class="material-symbols-outlined text-purple-600 text-[24px]"
+              >calendar_clock</span
+            >
+          </div>
+          <p class="text-3xl font-black text-as-blue">{{ total_sessions }}</p>
+          <p class="text-xs text-gray-400 mt-1 font-medium">
+            Sessions au total
+          </p>
+        </div>
+
+        <div
+          class="fade-up fade-up-d3 stat-card bg-white rounded-2xl p-6 border border-gray-100 shadow-sm card-hover"
+        >
+          <div
+            class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center mb-4"
+          >
+            <span class="material-symbols-outlined text-green-600 text-[24px]"
+              >event_available</span
+            >
+          </div>
+          <p class="text-3xl font-black text-as-blue">{{ sessions_av }}</p>
+          <p class="text-xs text-gray-400 mt-1 font-medium">Sessions à venir</p>
+        </div>
+
+        <div
+          class="fade-up fade-up-d4 stat-card bg-white rounded-2xl p-6 border border-gray-100 shadow-sm card-hover"
+        >
+          <div
+            class="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center mb-4"
+          >
+            <span class="material-symbols-outlined text-amber-600 text-[24px]"
+              >people</span
+            >
+          </div>
+          <p class="text-3xl font-black text-as-blue">
+            {{ total_inscriptions }}
+          </p>
+          <p class="text-xs text-gray-400 mt-1 font-medium">
+            Inscriptions totales
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-6 pb-20">
+      <div
+        class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8"
+      >
+        <div class="flex items-center gap-2 flex-wrap">
+          <button
+            onclick="filterCards('all')"
+            class="filter-btn active px-4 py-2 rounded-full text-xs font-bold border border-gray-200 bg-as-blue text-white"
+            data-filter="all"
+          >
+            Tous
+          </button>
+          {% for lbl in labels %}
+          <button
+            onclick="filterCards('{{ lbl|lower }}')"
+            class="filter-btn px-4 py-2 rounded-full text-xs font-bold border border-gray-200 bg-white text-gray-600 hover:bg-as-blue hover:text-white"
+            data-filter="{{ lbl|lower }}"
+          >
+            {{ lbl }}
+          </button>
+          {% endfor %}
+        </div>
+        <div class="relative w-full md:w-72">
+          <span
+            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-[20px]"
+            >search</span
+          >
+          <input
+            id="searchInput"
+            type="text"
+            oninput="searchCards()"
+            placeholder="Rechercher un programme…"
+            class="search-input w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:border-as-blue transition-all shadow-sm"
+          />
+        </div>
+      </div>
+
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
+        id="programmeGrid"
+      >
+        {% for p in programmes %}
+        <div
+          class="programme-card bg-white rounded-2xl border border-gray-100 shadow-sm flex flex-col justify-between"
+          data-label="{{ p.label|lower }}"
+          data-title="{{ p.titre|lower }}"
+        >
+          <div
+            class="h-2 {% if p.label|lower == 'qse' or p.label|lower == 'qshe' %}bg-gradient-to-r from-as-blue to-blue-800{% elif p.label|lower == 'audit' %}bg-gradient-to-r from-as-red to-as-red-dark{% else %}bg-gradient-to-r from-as-blue via-purple-700 to-as-red{% endif %}"
+          ></div>
+
+          <div class="p-6 flex flex-col flex-grow">
+            <div>
+              <div class="flex items-start justify-between mb-4">
+                <span
+                  class="badge-label inline-block px-3 py-1 rounded {% if p.label|lower == 'qse' or p.label|lower == 'qshe' or p.label|lower == 'management' %}bg-as-blue text-white{% elif p.label|lower == 'audit' %}bg-as-red text-white{% else %}bg-gradient-to-r from-as-blue to-purple-700 text-white{% endif %}"
+                >
+                  {{ p.label }}
+                </span>
+                <div class="flex gap-1">
+                  <button
+                    onclick="openEditModal(this)"
+                    data-id="{{ p.id }}"
+                    data-titre="{{ p.titre }}"
+                    data-description="{{ p.description|default:'' }}"
+                    data-label="{{ p.label }}"
+                    class="p-1.5 rounded-lg bg-gray-50 hover:bg-as-blue/10 text-gray-400 hover:text-as-blue transition-colors"
+                    title="Éditer"
+                  >
+                    <span class="material-symbols-outlined text-[18px]"
+                      >edit</span
+                    >
+                  </button>
+                  <button
+                    onclick="openDeleteModal('{{ p.id }}', '{{ p.titre }}')"
+                    class="p-1.5 rounded-lg bg-gray-50 hover:bg-red-50 text-gray-400 hover:text-as-red transition-colors"
+                    title="Supprimer"
+                  >
+                    <span class="material-symbols-outlined text-[18px]"
+                      >delete</span
+                    >
+                  </button>
+                </div>
+              </div>
+
+              <h3 class="text-lg font-bold text-as-blue mb-2 leading-snug">
+                {{ p.titre }}
+              </h3>
+              <p
+                class="text-sm text-gray-500 leading-relaxed mb-5 line-clamp-2"
+              >
+                {{ p.description|default:"Aucune description disponible."|truncatewords:25 }}
+              </p>
+
+              {% with sessions_a_venir=p.sessions.all %} {% if sessions_a_venir %}
+              <div class="space-y-2 mb-4">
+                {% for s in sessions_a_venir|slice:":3" %}
+                <div
+                  class="flex items-center justify-between bg-as-gray rounded-xl px-3 py-2 text-xs"
+                >
+                  <div class="flex items-center gap-2 text-gray-600">
+                    <span
+                      class="material-symbols-outlined text-[14px] text-as-blue/40"
+                      >calendar_today</span
+                    >
+                    <span class="font-medium"> {{ s.date_debut|date:"d M" }} → {{ s.date_fin|date:"d M Y" }}</span>
+                  </div>
+                  <div class="w-max text-gray-500 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[14px]"
+                      >location_on</span
+                    >
+                    <span>{{ s.lieu }}</span>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+              {% else %}
+              <div
+                class="flex items-center gap-2 bg-gray-50 rounded-xl px-3 py-2 mb-4"
+              >
+                <span
+                  class="material-symbols-outlined text-[16px] text-gray-300"
+                  >event_busy</span
+                >
+                <span class="text-xs text-gray-400"
+                  >Aucune session à venir</span
+                >
+              </div>
+              {% endif %}
+              {% endwith %}
+            </div>
+
+            <div
+              class="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto"
+            >
+              <div class="flex items-center gap-2 text-xs text-gray-500">
+                <span
+                  class="material-symbols-outlined text-[16px] text-as-red/50"
+                  >event_repeat</span
+                >
+                <span
+                  ><strong class="text-as-blue"
+                    >{{ p.sessions.all|length }}</strong
+                  >
+                  session{{ p.sessions.all|length|pluralize }}</span
+                >
+              </div>
+              {% if p.document %}
+              <a
+                href="{{ p.document.url }}"
+                target="_blank"
+                class="inline-flex items-center gap-1 text-xs font-semibold text-as-blue hover:text-as-red transition-colors"
+              >
+                <span class="material-symbols-outlined text-[16px]"
+                  >download</span
+                >
+                document
+              </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div
+          class="col-span-full bg-white rounded-2xl border border-gray-100 p-16 text-center"
+        >
+          <span class="material-symbols-outlined text-gray-200 text-[64px] mb-4"
+            >inventory_2</span
+          >
+          <h3 class="text-xl font-bold text-gray-300 mb-2">Aucun programme</h3>
+          <p class="text-gray-400 text-sm">
+            Ajoutez votre premier programme de formation.
+          </p>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div id="empty-state" class="hidden text-center py-20">
+        <span class="material-symbols-outlined text-gray-200 text-[64px]"
+          >search_off</span
+        >
+        <p class="text-gray-400 mt-4 text-sm">Aucun programme trouvé.</p>
+      </div>
+    </main>
+
+    <footer class="bg-as-blue text-white py-10 px-6">
+      <div
+        class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6"
+      >
+        <div class="flex items-center gap-3">
+          <span class="font-bold">Alpha Simo</span>
+        </div>
+        <div class="text-sm text-white/40">
+          © 2026 Propulsé par e-IMAN. Tous droits réservés.
+        </div>
+      </div>
+    </footer>
+
+    <form
+      id="logout-form"
+      action="{% url 'Logout' %}"
+      method="POST"
+      class="hidden"
+    >
+      {% csrf_token %}
+    </form>
+    <form id="js-delete-form" method="POST" class="hidden">
+      {% csrf_token %}
+    </form>
+
+    <div
+      id="modal-add"
+      class="fixed inset-0 z-50 hidden flex items-center justify-center modal-backdrop p-4"
+    >
+      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg relative p-6">
+        <div
+          class="flex items-center justify-between pb-4 border-b border-gray-100 mb-4"
+        >
+          <h2 class="text-lg font-bold text-as-blue">Nouveau programme</h2>
+          <button
+            onclick="closeModal('modal-add')"
+            class="text-gray-400 hover:text-as-red"
+          >
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+        <form
+          method="POST"
+          action="{% url 'add_programme' %}"
+          enctype="multipart/form-data"
+          class="space-y-4"
+        >
+          {% csrf_token %}
+          <div>
+            <label
+              class="block text-xs font-semibold text-gray-600 mb-1 uppercase"
+              >Titre *</label
+            >
+            {% render_field form.titre class="w-full px-4 py-2 border
+            border-gray-200 rounded-xl text-sm focus:border-as-blue focus:ring-1
+            focus:ring-as-blue" placeholder="Ex: Management QSE" %}
+          </div>
+          <div>
+            <label
+              class="block text-xs font-semibold text-gray-600 mb-1 uppercase"
+              >Label *</label
+            >
+            {% render_field form.label class="w-full px-4 py-2 border
+            border-gray-200 rounded-xl text-sm focus:border-as-blue focus:ring-1
+            focus:ring-as-blue" placeholder="Ex: QSE" %}
+          </div>
+          <div>
+            <label
+              class="block text-xs font-semibold text-gray-600 mb-1 uppercase"
+              >Description</label
+            >
+            {% render_field form.description class="w-full px-4 py-2 border
+            border-gray-200 rounded-xl text-sm resize-none focus:border-as-blue
+            focus:ring-1 focus:ring-as-blue" rows="3" %}
+          </div>
+          <div>
+            <label
+              class="block text-xs font-semibold text-gray-600 mb-1 uppercase"
+              >Document PDF</label
+            >
+            {% render_field form.document class="w-full text-sm text-gray-500
+            file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0
+            file:text-xs file:font-semibold file:bg-as-blue/10 file:text-as-blue
+            hover:file:bg-as-blue/20" %}
+          </div>
+          <div class="flex gap-3 pt-2">
+            <button
+              type="button"
+              onclick="closeModal('modal-add')"
+              class="flex-1 py-2 border border-gray-200 rounded-xl text-sm"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="flex-1 py-2 bg-as-blue text-white text-sm font-semibold rounded-xl"
+            >
+              Créer
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div
+      id="modal-edit"
+      class="fixed inset-0 z-50 hidden flex items-center justify-center modal-backdrop p-4"
+    >
+      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg relative p-6">
+        <div
+          class="flex items-center justify-between pb-4 border-b border-gray-100 mb-4"
+        >
+          <h2 class="text-lg font-bold text-as-blue">Modifier le programme</h2>
+          <button
+            type="button"
+            onclick="closeModal('modal-edit')"
+            class="text-gray-400 hover:text-as-red"
+          >
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+
+        <form
+          id="edit-form"
+          method="POST"
+          enctype="multipart/form-data"
+          class="space-y-4"
+        >
+          {% csrf_token %}
+          <input type="hidden" id="edit-programme-id" name="programme_id" />
+
+          <div>
+            <label
+              class="block text-xs font-semibold text-gray-600 mb-1 uppercase"
+              >Titre *</label
+            >
+            {% render_field form.titre id="edit-titre" class="w-full px-4 py-2
+            border border-gray-200 rounded-xl text-sm focus:border-as-blue
+            focus:ring-1 focus:ring-as-blue" %}
+          </div>
+
+          <div>
+            <label
+              class="block text-xs font-semibold text-gray-600 mb-1 uppercase"
+              >Label *</label
+            >
+            {% render_field form.label id="edit-label" class="w-full px-4 py-2
+            border border-gray-200 rounded-xl text-sm focus:border-as-blue
+            focus:ring-1 focus:ring-as-blue" %}
+          </div>
+
+          <div>
+            <label
+              class="block text-xs font-semibold text-gray-600 mb-1 uppercase"
+              >Description</label
+            >
+            {% render_field form.description id="edit-description" class="w-full
+            px-4 py-2 border border-gray-200 rounded-xl text-sm resize-none
+            focus:border-as-blue focus:ring-1 focus:ring-as-blue" rows="3" %}
+          </div>
+
+          <div>
+            <label
+              class="block text-xs font-semibold text-gray-600 mb-1 uppercase"
+              >Nouveau PDF</label
+            >
+            {% render_field form.document class="w-full text-sm text-gray-500
+            file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0
+            file:text-xs file:font-semibold file:bg-as-blue/10 file:text-as-blue
+            hover:file:bg-as-blue/20" accept=".pdf" %}
+          </div>
+
+          <div class="flex gap-3 pt-2">
+            <button
+              type="button"
+              onclick="closeModal('modal-edit')"
+              class="flex-1 py-2 border border-gray-200 rounded-xl text-sm hover:bg-gray-50 transition-colors"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="flex-1 py-2 bg-as-blue hover:bg-as-blue/90 text-white text-sm font-semibold rounded-xl transition-colors"
+            >
+              Enregistrer
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div
+      id="modal-delete"
+      class="fixed inset-0 z-50 hidden flex items-center justify-center modal-backdrop p-4"
+    >
+      <div
+        class="bg-white rounded-2xl shadow-2xl w-full max-w-md relative p-6 text-center"
+      >
+        <span class="material-symbols-outlined text-as-red text-[48px] mb-2"
+          >warning</span
+        >
+        <h2 class="text-lg font-bold text-gray-800 mb-1">
+          Supprimer ce programme ?
+        </h2>
+        <p
+          id="delete-programme-name"
+          class="text-sm font-bold text-as-red mb-4"
+        ></p>
+        <input type="hidden" id="delete-programme-id" />
+        <div class="flex gap-3">
+          <button
+            onclick="closeModal('modal-delete')"
+            class="flex-1 py-2 border border-gray-200 rounded-xl text-sm"
+          >
+            Annuler
+          </button>
+          <button
+            onclick="confirmDelete()"
+            class="flex-1 py-2 bg-as-red text-white text-sm font-bold rounded-xl"
+          >
+            Supprimer
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const nav = document.getElementById("navbar");
+      window.addEventListener("scroll", () => {
+        nav.classList.toggle("shadow-lg", window.scrollY > 50);
+      });
+
+      function openAddModal() {
+        document.getElementById("modal-add").classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+      }
+
+      // Configuration pour injecter la route et ouvrir l'édition
+      function openEditModal(btn) {
+        const id = btn.dataset.id;
+
+        // 1. Génère dynamiquement l'URL demandée : /Dashboard/Programmes/<id>/edit/
+        document.getElementById("edit-form").action =
+          `/Dashboard/Programmes/${id}/edit/`;
+
+        // 2. Pré-remplit les valeurs
+        document.getElementById("edit-programme-id").value = id;
+        document.getElementById("edit-titre").value = btn.dataset.titre || "";
+        document.getElementById("edit-label").value = btn.dataset.label || "";
+        document.getElementById("edit-description").value =
+          btn.dataset.description || "";
+
+        // 3. Affiche le modal
+        document.getElementById("modal-edit").classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+      }
+
+      function openDeleteModal(id, titre) {
+        document.getElementById("delete-programme-id").value = id;
+        document.getElementById("delete-programme-name").textContent = titre;
+        document.getElementById("modal-delete").classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModal(id) {
+        document.getElementById(id).classList.add("hidden");
+        document.body.style.overflow = "";
+      }
+
+      function confirmDelete() {
+        const id = document.getElementById("delete-programme-id").value;
+        const deleteForm = document.getElementById("js-delete-form");
+        deleteForm.action = `/Dashboard/Programmes/${id}/delete/`;
+        deleteForm.submit();
+      }
+
+      // Fermetures au clic à l'extérieur
+      ["modal-add", "modal-edit", "modal-delete"].forEach((modalId) => {
+        document
+          .getElementById(modalId)
+          .addEventListener("click", function (e) {
+            if (e.target === this) closeModal(modalId);
+          });
+      });
+      document
+        .getElementById("open-modal-add")
+        .addEventListener("click", openAddModal);
+
+      // Filtres et Recherche
+      function filterCards(filter) {
+        document.querySelectorAll(".filter-btn").forEach((btn) => {
+          const isTarget = btn.dataset.filter === filter;
+          btn.classList.toggle("active", isTarget);
+          btn.classList.toggle("bg-as-blue", isTarget);
+          btn.classList.toggle("text-white", isTarget);
+          btn.classList.toggle("bg-white", !isTarget);
+          btn.classList.toggle("text-gray-600", !isTarget);
+        });
+        applyFilters();
+      }
+
+      function searchCards() {
+        applyFilters();
+      }
+
+      function applyFilters() {
+        const query = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const activeBtn = document.querySelector(".filter-btn.active");
+        const activeFilter = activeBtn ? activeBtn.dataset.filter : "all";
+        const cards = document.querySelectorAll("#programmeGrid > div");
+        let visibleCount = 0;
+
+        cards.forEach((card) => {
+          const label = card.dataset.label || "";
+          const title = card.dataset.title || "";
+          const matchFilter = activeFilter === "all" || label === activeFilter;
+          const matchSearch =
+            !query || title.includes(query) || label.includes(query);
+
+          if (matchFilter && matchSearch) {
+            card.style.display = "";
+            visibleCount++;
+          } else {
+            card.style.display = "none";
+          }
+        });
+        document
+          .getElementById("empty-state")
+          .classList.toggle("hidden", visibleCount > 0);
+      }
+    </script>
+  </body>
+</html>

@@ -149,6 +149,32 @@
   </head>
 
   <body class="bg-as-gray text-gray-800 antialiased">
+    {% if messages %}
+      <div class="fixed top-24 right-6 z-[100] flex flex-col gap-3 max-w-sm w-full" id="toast-container">
+        {% for message in messages %}
+          <div class="flex items-center gap-3 p-4 bg-white rounded-xl shadow-xl border {% if 'error' in message.tags %}border-red-200 text-red-950 bg-red-50{% elif 'success' in message.tags %}border-green-200 text-green-950 bg-green-50{% else %}border-blue-200 text-blue-950 bg-blue-50{% endif %} transition-all duration-300 transform translate-y-0 opacity-100" role="alert">
+            <span class="material-symbols-outlined {% if 'error' in message.tags %}text-red-600{% elif 'success' in message.tags %}text-green-600{% else %}text-blue-600{% endif %}">
+              {% if 'error' in message.tags %}error{% elif 'success' in message.tags %}check_circle{% else %}info{% endif %}
+            </span>
+            <div class="text-sm font-medium flex-grow">{{ message }}</div>
+            <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-gray-600 transition flex items-center justify-center p-1 rounded-lg hover:bg-black/5">
+              <span class="material-symbols-outlined text-[18px]">close</span>
+            </button>
+          </div>
+        {% endfor %}
+      </div>
+      <script>
+        setTimeout(() => {
+          const container = document.getElementById('toast-container');
+          if (container) {
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(-10px)';
+            container.style.transition = 'all 0.5s ease';
+            setTimeout(() => container.remove(), 500);
+          }
+        }, 5000);
+      </script>
+    {% endif %}
     <!-- ═══ NAVBAR ═══ -->
     <nav
       class="fixed top-0 w-full z-50 bg-as-blue/95 backdrop-blur-sm shadow-sm"
@@ -287,7 +313,7 @@
               >
             </div>
           </div>
-          <p class="text-3xl font-900 text-as-blue">{{ programmes_count }}</p>
+          <p class="text-3xl font-900 text-as-blue">{{ programmes.count }}</p>
           <p class="text-xs text-gray-400 mt-1 font-medium">
             Programmes disponibles
           </p>
@@ -307,9 +333,7 @@
               >
             </div>
           </div>
-          <p class="text-3xl font-900 text-as-blue">
-            {{ mes_sessions_count }}
-          </p>
+          <p class="text-3xl font-900 text-as-blue">{{ mes_sessions.count }}</p>
           <p class="text-xs text-gray-400 mt-1 font-medium">Sessions à venir</p>
         </div>
 
@@ -326,7 +350,9 @@
               >
             </div>
           </div>
-          <p class="text-3xl font-900 text-as-blue">{{ mes_inscriptions_count }}</p>
+          <p class="text-3xl font-900 text-as-blue">
+            {{ mes_inscriptions.count }}
+          </p>
           <p class="text-xs text-gray-400 mt-1 font-medium">Mes inscriptions</p>
         </div>
 
@@ -356,72 +382,76 @@
       <div class="grid lg:grid-cols-3 gap-8">
         <!-- LEFT: Programmes -->
         <div class="lg:col-span-2">
-        {% if mes_sessions %}
-        <div class="flex items-center justify-between">
-          <div class="text-xl font-bold text-as-red">Mes sessions à venir</div>
-        </div>
+          {% if mes_sessions %}
+          <div class="flex items-center justify-between">
+            <div class="text-xl font-bold text-as-red">
+              Mes sessions à venir
+            </div>
+          </div>
 
-        <div class="space-y-4">
-          {# On boucle sur les inscriptions du participant #}
-          {% for inscription in mes_sessions %}
-            {# On récupère la session liée à cette inscription #}
+          <div class="space-y-4">
+            {# On boucle sur les inscriptions du participant #}
+            {% for inscription in mes_sessions %} {# On récupère la session liée à cette inscription #}
             {% with s=inscription.session %}
-              <div class="border rounded-xl p-5 bg-white shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                
-                <div>
-                  <h1 class="text-lg font-bold text-as-blue mb-1">
-                    {# Ajustez .titre ou .programme.titre selon votre modèle exact #}
-                    {{ s.programme.titre }}
-                  </h1>
-                  
-                  <div class="text-sm text-gray-600 flex items-center gap-6 flex-wrap mt-2">
-                    
-                    <span class="flex items-center gap-2 font-semibold text-gray-800">
-                      <span class="material-symbols-outlined text-[18px] text-gray-400">
-                        calendar_month
-                      </span>
-                      {{ s.date_debut|date:"d M Y" }} → {{ s.date_fin|date:"d M Y" }}
+            <div
+              class="border rounded-xl p-5 bg-white shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+            >
+              <div>
+                <h1 class="text-lg font-bold text-as-blue mb-1">
+                  {# Ajustez .titre ou .programme.titre selon votre modèle exact #}
+                  {{ s.programme.titre }}
+                </h1>
+
+                <div
+                  class="text-sm text-gray-600 flex items-center gap-6 flex-wrap mt-2"
+                >
+                  <span
+                    class="flex items-center gap-2 font-semibold text-gray-800"
+                  >
+                    <span
+                      class="material-symbols-outlined text-[18px] text-gray-400"
+                    >
+                      calendar_month
                     </span>
+                    {{ s.date_debut|date:"d M Y" }} → {{ s.date_fin|date:"d M Y" }}
+                  </span>
 
-                    {% if s.start_time %}
-                    <span class="flex items-center gap-2">
-                      <span class="material-symbols-outlined text-[16px] text-gray-400">
-                        schedule
-                      </span>
-                      {{ s.start_time }}
+                  {% if s.start_time %}
+                  <span class="flex items-center gap-2">
+                    <span
+                      class="material-symbols-outlined text-[16px] text-gray-400"
+                    >
+                      schedule
                     </span>
-                    {% endif %}
+                    {{ s.start_time }}
+                  </span>
+                  {% endif %}
 
-                    <span class="flex items-center gap-2">
-                      <span class="material-symbols-outlined text-[16px] text-gray-400">
-                        location_on
-                      </span>
-                      {{ s.lieu }}
+                  <span class="flex items-center gap-2">
+                    <span
+                      class="material-symbols-outlined text-[16px] text-gray-400"
+                    >
+                      location_on
                     </span>
-
-                  </div>
-                </div>
-
-                <div>
-                  <span class="px-3 py-1.5 text-xs font-semibold rounded-full 
-                    {% if inscription.statut_inscription == 'Confirmé' %} bg-green-100 text-green-800 
-                    {% elif inscription.statut_inscription == 'En attente' %} bg-yellow-100 text-yellow-800 
-                    {% else %} bg-gray-100 text-gray-800 {% endif %}">
-                    {{ inscription.statut_inscription }}
+                    {{ s.lieu }}
                   </span>
                 </div>
-
               </div>
-            {% endwith %}
-          {% endfor %}
-        </div>
-        {% endif %}
 
+              <div>
+                <span
+                  class="px-3 py-1.5 text-xs font-semibold rounded-full {% if inscription.statut_inscription == 'Confirmé' %} bg-green-100 text-green-800 {% elif inscription.statut_inscription == 'En attente' %} bg-yellow-100 text-yellow-800 {% else %} bg-gray-100 text-gray-800 {% endif %}"
+                >
+                  {{ inscription.statut_inscription }}
+                </span>
+              </div>
+            </div>
+            {% endwith %} {% endfor %}
+          </div>
+          {% endif %}
 
           <div class="flex items-center justify-between mt-6">
-            <h2 class="text-xl font-800 text-as-red">
-              Programmes disponibles
-            </h2>
+            <h2 class="text-xl font-800 text-as-red">Programmes disponibles</h2>
             <a
               href="{% url 'Programme' %}"
               class="text-as-red text-sm font-semibold hover:underline flex items-center gap-1"
@@ -435,62 +465,64 @@
 
           <div class="space-y-4">
             {% for p in programmes %}
-            <div
-              class="flex-col sm:flex-row sm:items-center gap-5"
-            >
+            <div class="flex-col sm:flex-row sm:items-center gap-5">
               <h1 class="text-xl font-medium text-as-blue">{{p.titre}}</h1>
               {% for s in p.sessions.all %}
-                <div class="border rounded-xl p-4 flex justify-between items-center m-2">
-
+              <div
+                class="border rounded-xl p-4 flex justify-between items-center m-2"
+              >
                 <div>
                   <h3 class="font-bold text-as-blue">
                     {{s.date_debut}} → {{s.date_fin}}
                   </h3>
-                  <div class="text-sm text-gray-600 flex items-center gap-6 flex-wrap">
-
+                  <div
+                    class="text-sm text-gray-600 flex items-center gap-6 flex-wrap"
+                  >
                     <span class="flex items-center gap-2">
-                      <span class="material-symbols-outlined text-[16px] text-gray-400">
+                      <span
+                        class="material-symbols-outlined text-[16px] text-gray-400"
+                      >
                         schedule
                       </span>
                       {{s.start_time}}
                     </span>
 
                     <span class="flex items-center gap-2">
-                      <span class="material-symbols-outlined text-[16px] text-gray-400">
+                      <span
+                        class="material-symbols-outlined text-[16px] text-gray-400"
+                      >
                         location_on
                       </span>
                       {{s.lieu}}
                     </span>
 
                     <span class="flex items-center gap-2">
-                      <span class="material-symbols-outlined text-[16px] text-gray-400">
+                      <span
+                        class="material-symbols-outlined text-[16px] text-gray-400"
+                      >
                         confirmation_number
                       </span>
                       {{s.prix}} FCFA
                     </span>
-
                   </div>
                 </div>
 
                 <!-- RIGHT SIDE -->
                 <div class="flex items-center gap-3">
-
                   <!-- Places badge -->
-                  <span class="px-3 py-1 text-xs font-bold rounded-full 
-                    {% if s.nombre_de_place > 5 %} bg-green-100 text-green-700 {% else %} bg-amber-100 text-amber-700 {% endif %} 
-                    border">
-                    {{s.nombre_de_place}} places
+                  <span
+                    class="px-3 py-1 text-xs font-bold rounded-full {% if s.nombre_de_place > 5 %} bg-green-100 text-green-700 {% else %} bg-amber-100 text-amber-700 {% endif %} border"
+                  >
+                    {{s.inscrits}}/{{s.nombre_de_place}} places
                   </span>
 
-                  <a href="{% url 'Inscription' s.id %}"
-                    class="px-3 py-1 text-xs font-bold rounded-full 
-                            bg-as-red text-white border border-as-red
-                            hover:bg-as-red-dark transition-all whitespace-nowrap">
-                      S'inscrire
+                  <a
+                    href="{% url 'Inscription' s.id %}"
+                    class="px-3 py-1 text-xs font-bold rounded-full bg-as-red text-white border border-as-red hover:bg-as-red-dark transition-all whitespace-nowrap"
+                  >
+                    S'inscrire
                   </a>
-
                 </div>
-
               </div>
               {% endfor %}
             </div>
@@ -612,7 +644,9 @@
           <span class="font-bold">Alpha Simo</span>
           <span class="text-white/40 text-sm">· Formation</span>
         </div>
-        <div class="text-sm text-white/40">© 2026 Agence Iman</div>
+        <div class="text-sm text-white/40">
+          © 2026 Propulsé par e-IMAN. Tous droits réservés.
+        </div>
       </div>
     </footer>
 

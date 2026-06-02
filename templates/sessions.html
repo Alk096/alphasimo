@@ -1,0 +1,837 @@
+{% load static %} {% load widget_tweaks %}
+<!doctype html>
+<html class="light" lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Alpha Simo — Gestion des Sessions</title>
+    <meta
+      name="description"
+      content="Administration des sessions de formation Alpha Simo."
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              "as-blue": "#1A1A4B",
+              "as-blue-light": "#2A2A6B",
+              "as-red": "#C41E3A",
+              "as-red-dark": "#A31830",
+              "as-light": "#E9F1F9",
+              "as-gray": "#F8FAFC",
+              "as-border": "#E2E8F0",
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+      .material-symbols-outlined {
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 500,
+          "GRAD" 0,
+          "opsz" 24;
+        display: inline-block;
+        vertical-align: middle;
+      }
+      .hero-gradient {
+        background: linear-gradient(
+          135deg,
+          #1a1a4b 0%,
+          #2a2a6b 50%,
+          #1a1a4b 100%
+        );
+      }
+      .modal-backdrop {
+        backdrop-filter: blur(6px);
+        background: rgba(10, 10, 30, 0.4);
+      }
+    </style>
+  </head>
+
+  <body
+    class="bg-as-gray text-slate-800 min-h-screen flex flex-col justify-between"
+  >
+    <!-- Top Navigation Bar -->
+    <header
+      class="bg-as-blue border-b border-white/10 shadow-sm sticky top-0 z-40"
+    >
+      <nav id="navbar" class="w-full bg-as-blue/95 backdrop-blur-sm shadow-sm">
+        <div
+          class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"
+        >
+          <a href="{% url 'Accueil' %}" class="flex items-center gap-3">
+            <img
+              src="{% static 'images/logo.png' %}"
+              alt="Alpha Simo"
+              class="w-10 h-10 rounded-full shadow"
+            />
+            <span class="text-xl font-bold text-white tracking-tight"
+              >Alpha Simo</span
+            >
+          </a>
+
+          <div class="hidden md:flex items-center gap-6">
+            <a
+              href="{% url 'Dashboard' %}"
+              class="text-white/70 hover:text-white text-sm font-medium transition flex items-center gap-1"
+            >
+              <span class="material-symbols-outlined text-[18px]"
+                >dashboard</span
+              >
+              Dashboard
+            </a>
+            <a
+              href="{% url 'Programmes_admin' %}"
+              class="text-white/70 hover:text-white text-sm font-medium transition flex items-center gap-1"
+            >
+              <span class="material-symbols-outlined text-[18px]">school</span>
+              Programmes
+            </a>
+            <a
+              href="{% url 'Sessions_admin' %}"
+              class="text-white text-sm font-semibold border-b-2 border-as-red pb-0.5 flex items-center gap-1"
+            >
+              <span class="material-symbols-outlined text-[18px]"
+                >calendar_month</span
+              >
+              Sessions
+            </a>
+            <a
+              href="{% url 'Demandes_admin' %}"
+              class="text-white/70 hover:text-white text-sm font-medium transition flex items-center gap-1"
+            >
+              <span class="material-symbols-outlined text-[18px]">air</span>
+              Demandes
+            </a>
+            <div class="w-px h-6 bg-white/20"></div>
+            <div class="flex items-center gap-3">
+              <div
+                class="w-9 h-9 rounded-full bg-as-red/20 border border-as-red/30 flex items-center justify-center text-white text-sm font-bold"
+              >
+                {{ user.first_name|first }}{{ user.last_name|first }}
+              </div>
+              <span class="text-white text-sm font-medium"
+                >{{ user.first_name }}</span
+              >
+            </div>
+            <a
+              href="javascript:void(0);"
+              onclick="document.getElementById('logout-form').submit()"
+              class="text-white/40 hover:text-as-red transition text-sm flex items-center gap-1"
+            >
+              <span class="material-symbols-outlined text-[18px]">logout</span>
+            </a>
+          </div>
+
+          <button
+            class="md:hidden text-white"
+            onclick="
+              document.getElementById('mobile-menu').classList.toggle('hidden')
+            "
+          >
+            <span class="material-symbols-outlined text-[28px]">menu</span>
+          </button>
+        </div>
+
+        <div
+          id="mobile-menu"
+          class="hidden md:hidden bg-as-blue/95 backdrop-blur px-6 pb-6 space-y-3 text-white"
+        >
+          <a
+            href="{% url 'Dashboard' %}"
+            class="block py-2 border-b border-white/10"
+            >Dashboard</a
+          >
+          <a
+            href="{% url 'Programmes_admin' %}"
+            class="block py-2 border-b border-white/10"
+            >Programmes</a
+          >
+          <a
+            href="{% url 'Sessions_admin' %}"
+            class="block py-2 border-b border-white/10 font-semibold"
+            >Sessions</a
+          >
+          <a
+            href="{% url 'Demandes_admin' %}"
+            class="block py-2 border-b border-white/10"
+            >Demandes</a
+          >
+          <a
+            href="javascript:void(0);"
+            onclick="document.getElementById('logout-form').submit()"
+            class="block py-2 text-white/60"
+            >Déconnexion</a
+          >
+        </div>
+      </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow pb-12">
+      <!-- Hero Section -->
+      <section
+        class="hero-gradient pt-12 pb-20 relative overflow-hidden text-white"
+      >
+        <div
+          class="absolute top-10 right-10 w-80 h-80 bg-as-red/8 rounded-full blur-3xl"
+        ></div>
+        <div
+          class="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"
+        ></div>
+        <div
+          class="absolute top-1/2 right-1/4 w-[400px] h-[400px] border border-white/5 rounded-full -translate-y-1/2"
+        ></div>
+        <div class="max-w-7xl mx-auto px-6 relative z-10">
+          <div
+            class="flex flex-col md:flex-row md:items-end justify-between gap-6"
+          >
+            <div>
+              <div
+                class="inline-flex items-center gap-2 bg-white/10 px-3 py-1 rounded-full border border-white/10 mb-4"
+              >
+                <span class="material-symbols-outlined text-as-red text-sm"
+                  >event_available</span
+                >
+                <span class="text-[12px] font-medium tracking-wide uppercase"
+                  >Planification</span
+                >
+              </div>
+              <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">
+                Gestion des Sessions
+              </h1>
+              <p class="text-white/70 text-base mt-2 max-w-2xl">
+                Planifiez, modifiez et suivez l'évolution des effectifs et
+                inscriptions pour vos sessions de formation Alpha Simo.
+              </p>
+            </div>
+            <button
+              onclick="toggleModal('create-session-modal')"
+              class="bg-as-red text-white px-5 py-3 rounded-xl font-semibold flex items-center gap-2 hover:bg-as-red-dark transition-all transform active:scale-95 shadow-lg shadow-as-red/20 border-t border-white/20 self-start md:self-auto"
+            >
+              <span class="material-symbols-outlined">add</span>
+              <span>Créer une session</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Content Area -->
+      <div class="max-w-7xl mx-auto px-6 -mt-10 relative z-20">
+        <!-- Filter Bar Card -->
+        <div
+          class="bg-white shadow-xl shadow-as-blue/5 rounded-2xl p-6 border border-as-border mb-8"
+        >
+          <form id="sessions-filter-form" method="get" action="{% url 'Sessions_admin' %}">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+              <div>
+                <label
+                  class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2"
+                  >Programme</label
+                >
+                <div class="relative">
+                  <span
+                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg"
+                    >school</span
+                  >
+                  <select
+                    name="programme"
+                    onchange="document.getElementById('sessions-filter-form').submit()"
+                    class="w-full bg-as-gray border border-as-border rounded-xl pl-10 pr-3 py-2.5 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-as-blue focus:border-as-blue transition-all appearance-none"
+                  >
+                    <option value="">Tous les programmes</option>
+                    {% for programme in programmes %}
+                    <option value="{{ programme.id }}" {% if selected_programme == programme.id|stringformat:'s' %}selected{% endif %}>
+                      {{ programme.titre }}
+                    </option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label
+                  class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2"
+                  >Lieu</label
+                >
+                <div class="relative">
+                  <span
+                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg"
+                    >location_on</span
+                  >
+                  <select
+                    name="lieu"
+                    onchange="document.getElementById('sessions-filter-form').submit()"
+                    class="w-full bg-as-gray border border-as-border rounded-xl pl-10 pr-3 py-2.5 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-as-blue focus:border-as-blue transition-all appearance-none"
+                  >
+                    <option value="">Tous les lieux</option>
+                    <option value="Lome" {% if selected_lieu == 'Lome' %}selected{% endif %}>Lomé</option>
+                    <option value="Tunis" {% if selected_lieu == 'Tunis' %}selected{% endif %}>Tunis</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label
+                  class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2"
+                  >Statut</label
+                >
+                <div class="relative">
+                  <span
+                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg"
+                    >filter_list</span
+                  >
+                  <select
+                    name="statut"
+                    onchange="document.getElementById('sessions-filter-form').submit()"
+                    class="w-full bg-as-gray border border-as-border rounded-xl pl-10 pr-3 py-2.5 text-sm font-medium text-slate-700 focus:ring-2 focus:ring-as-blue focus:border-as-blue transition-all appearance-none"
+                  >
+                    <option value="">Tous les statuts</option>
+                    <option value="ouverte" {% if selected_statut == 'ouverte' %}selected{% endif %}>Ouverte</option>
+                    <option value="complete" {% if selected_statut == 'complete' %}selected{% endif %}>Complète</option>
+                    <option value="terminee" {% if selected_statut == 'terminee' %}selected{% endif %}>Terminée</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <!-- Table Card -->
+        <div
+          class="bg-white shadow-xl shadow-as-blue/5 rounded-2xl overflow-hidden border border-as-border"
+        >
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr
+                  class="bg-as-gray border-b border-as-border text-slate-500 text-xs font-bold uppercase tracking-wider"
+                >
+                  <th class="py-4 px-6">Sessions / Module</th>
+                  <th class="py-4 px-6">Date Début</th>
+                  <th class="py-4 px-6">Date Fin</th>
+                  <th class="py-4 px-6">Lieu</th>
+                  <th class="py-4 px-6">Places & Remplissage</th>
+                  <th class="py-4 px-6">Statut</th>
+                  <th class="py-4 px-6 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-as-border text-sm text-slate-700">
+                {% for s in sessions %}
+                <tr class="group hover:bg-as-light/30 transition-colors">
+                  <td class="py-4 px-6">
+                    <p class="font-semibold text-as-blue text-base">
+                      {{ s.programme }}
+                    </p>
+                  </td>
+                  <td class="py-4 px-6 font-medium">
+                    {{ s.date_debut|date:"Y-m-d" }}
+                  </td>
+                  <td class="py-4 px-6 text-slate-500">
+                    {{ s.date_fin|date:"Y-m-d" }}
+                  </td>
+                  <td class="py-4 px-6">
+                    <span
+                      class="inline-flex items-center gap-1 bg-slate-100 text-slate-700 text-xs px-2.5 py-1 rounded-md font-medium"
+                    >
+                      <span
+                        class="material-symbols-outlined text-slate-400 text-sm"
+                        >location_on</span
+                      >
+                      {{ s.get_lieu_display }}
+                    </span>
+                  </td>
+                  <td class="py-4 px-6">
+                    <div class="w-32">
+                      <div
+                        class="flex justify-between items-center mb-1 text-xs font-bold"
+                      >
+                        <span
+                          class="{% if s.remplissage < 75 %}text-as-blue{% else %}text-as-red{% endif %}"
+                          >{{ s.inscrits }} / {{ s.nombre_de_place }}</span
+                        >
+                        <span class="text-slate-400 font-normal"
+                          >{{ s.remplissage }}%</span
+                        >
+                      </div>
+                      <div
+                        class="h-2 w-full bg-slate-100 rounded-full overflow-hidden"
+                      >
+                        <div
+                          class="h-full {% if s.remplissage < 75 %}bg-as-blue{% else %}bg-as-red{% endif %} rounded-full"
+                          style="width: {{ s.remplissage|floatformat:0 }}%"
+                        ></div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="py-4 px-6">
+                    {% if s.is_active %}
+                    <span
+                      class="inline-flex items-center px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200"
+                    >
+                      Ouverte
+                    </span>
+                    {% else %}
+                    <span
+                      class="inline-flex items-center px-2.5 py-1 rounded-full bg-red-50 text-red-700 text-xs font-semibold border border-red-200"
+                    >
+                      Fermée
+                    </span>
+                    {% endif %}
+                  </td>
+                  <td class="py-4 px-6 text-right">
+                    <div
+                      class="flex items-center justify-end gap-2 transition-opacity"
+                    >
+                      <!-- BOUTON MODIFIER AMÉLIORÉ AVEC DATA ATTRIBUTES -->
+                      <button
+                        type="button"
+                        onclick="openEditModal(this)"
+                        data-id="{{ s.id }}"
+                        data-programme="{{ s.programme.id }}"
+                        data-debut="{{ s.date_debut|date:'Y-m-d' }}"
+                        data-fin="{{ s.date_fin|date:'Y-m-d' }}"
+                        data-time="{{ s.start_time|time:'H:i' }}"
+                        data-prix="{{ s.prix }}"
+                        data-lieu="{{ s.lieu }}"
+                        data-places="{{ s.nombre_de_place }}"
+                        class="p-2 text-as-blue hover:bg-as-light rounded-xl transition-colors"
+                        title="Modifier"
+                      >
+                        <span class="material-symbols-outlined text-xl"
+                          >edit</span
+                        >
+                      </button>
+                      {% if s.is_active %}
+                      <button
+                        type="button"
+                        onclick="openDeleteModal('{{ s.programme }}', {{ s.id }})"
+                        class="p-2 text-as-red hover:bg-red-50 rounded-xl transition-colors"
+                        title="Supprimer"
+                      >
+                        <span class="material-symbols-outlined text-xl"
+                          >delete</span
+                        >
+                      </button>
+                      {% endif %}
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          <div
+            class="bg-as-gray px-6 py-4 border-t border-as-border flex flex-col md:flex-row items-start md:items-center justify-between gap-4"
+          >
+            <p class="text-xs font-medium text-slate-500">
+              Affichage de
+              <span class="font-bold text-slate-700">{{ page_obj.start_index }} à {{ page_obj.end_index }}</span> sur
+              <span class="font-bold text-slate-700">{{ page_obj.paginator.count }}</span> sessions
+            </p>
+            {% if page_obj.paginator.num_pages > 1 %}
+            <div class="flex flex-wrap gap-1">
+              {% if page_obj.has_previous %}
+              <a
+                href="{% if querystring %}?{{ querystring }}&page={{ page_obj.previous_page_number }}{% else %}?page={{ page_obj.previous_page_number }}{% endif %}"
+                class="p-1.5 border border-as-border rounded-lg bg-white text-slate-600 hover:bg-as-gray transition"
+              >
+                <span class="material-symbols-outlined text-xl">chevron_left</span>
+              </a>
+              {% else %}
+              <span
+                class="p-1.5 border border-as-border rounded-lg bg-white text-slate-400 transition opacity-40"
+              >
+                <span class="material-symbols-outlined text-xl">chevron_left</span>
+              </span>
+              {% endif %}
+              {% for num in page_obj.paginator.page_range %}
+              <a
+                href="{% if querystring %}?{{ querystring }}&page={{ num }}{% else %}?page={{ num }}{% endif %}"
+                class="px-3 py-1 rounded-lg text-xs font-semibold transition {% if page_obj.number == num %}bg-as-blue text-white shadow-sm shadow-as-blue/20{% else %}border border-as-border bg-white text-slate-700 hover:bg-as-gray{% endif %}"
+              >
+                {{ num }}
+              </a>
+              {% endfor %}
+              {% if page_obj.has_next %}
+              <a
+                href="{% if querystring %}?{{ querystring }}&page={{ page_obj.next_page_number }}{% else %}?page={{ page_obj.next_page_number }}{% endif %}"
+                class="p-1.5 border border-as-border rounded-lg bg-white text-slate-600 hover:bg-as-gray transition"
+              >
+                <span class="material-symbols-outlined text-xl">chevron_right</span>
+              </a>
+              {% else %}
+              <span
+                class="p-1.5 border border-as-border rounded-lg bg-white text-slate-400 transition opacity-40"
+              >
+                <span class="material-symbols-outlined text-xl">chevron_right</span>
+              </span>
+              {% endif %}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Modal : Créer une Session -->
+    <div
+      id="create-session-modal"
+      class="fixed inset-0 z-50 invisible opacity-0 transition-all duration-300 flex items-center justify-center p-4"
+    >
+      <div
+        class="fixed inset-0 modal-backdrop"
+        onclick="toggleModal('create-session-modal')"
+      ></div>
+      <div
+        class="bg-white rounded-2xl w-full max-w-lg shadow-2xl relative z-10 border border-as-border overflow-hidden transform scale-95 transition-all duration-300"
+      >
+        <div
+          class="bg-as-blue text-white px-6 py-4 flex items-center justify-between"
+        >
+          <h3 class="font-bold text-lg flex items-center gap-2">
+            <span class="material-symbols-outlined text-as-red"
+              >add_circle</span
+            >
+            Ajouter une session
+          </h3>
+          <button
+            onclick="toggleModal('create-session-modal')"
+            class="text-white/70 hover:text-white transition"
+          >
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+
+        <form
+          method="POST"
+          action="{% url 'add_session' %}"
+          class="p-6 space-y-4"
+        >
+          {% csrf_token %}
+
+          <div>
+            <label
+              class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2"
+              >Programme de formation</label
+            >
+            {% render_field form.programme class="w-full bg-as-gray border border-as-border rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-as-blue focus:border-as-blue" %}
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2"
+                >Date de début</label
+              >
+              {% render_field form.date_debut class="w-full bg-as-gray border border-as-border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-as-blue focus:border-as-blue" %}
+            </div>
+            <div>
+              <label
+                class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2"
+                >Date de fin</label
+              >
+              {% render_field form.date_fin class="w-full bg-as-gray border border-as-border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-as-blue focus:border-as-blue" %}
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2"
+                >Heure de début</label
+              >
+              {% render_field form.start_time class="w-full bg-as-gray border border-as-border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-as-blue focus:border-as-blue" %}
+            </div>
+            <div>
+              <label
+                class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2"
+                >Prix / Tarif</label
+              >
+              {% render_field form.prix class="w-full bg-as-gray border border-as-border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-as-blue focus:border-as-blue" placeholder="Ex: 500 000 FCFA" %}
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2"
+                >Lieu / Campus</label
+              >
+              {% render_field form.lieu class="w-full bg-as-gray border border-as-border rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-as-blue focus:border-as-blue" %}
+            </div>
+            <div>
+              <label
+                class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2"
+                >Nombre max de places</label
+              >
+              {% render_field form.nombre_de_place class="w-full bg-as-gray border border-as-border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-as-blue focus:border-as-blue" min="1" placeholder="Ex : 10" %}
+            </div>
+          </div>
+
+          <div class="flex justify-end gap-3 pt-4 border-t border-as-border">
+            <button
+              type="button"
+              onclick="toggleModal('create-session-modal')"
+              class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-as-gray rounded-xl transition"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="px-5 py-2 text-sm font-bold bg-as-blue text-white rounded-xl hover:bg-as-blue-light transition shadow-md shadow-as-blue/10"
+            >
+              Enregistrer la session
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal : Modifier une Session -->
+    <div
+      id="edit-session-modal"
+      class="fixed inset-0 z-50 invisible opacity-0 transition-all duration-300 flex items-center justify-center p-4"
+    >
+      <div
+        class="fixed inset-0 modal-backdrop"
+        onclick="toggleModal('edit-session-modal')"
+      ></div>
+      <div
+        class="bg-white rounded-2xl w-full max-w-lg shadow-2xl relative z-10 border border-as-border overflow-hidden transform scale-95 transition-all duration-300"
+      >
+        <div
+          class="bg-as-blue text-white px-6 py-4 flex items-center justify-between"
+        >
+          <h3 class="font-bold text-lg flex items-center gap-2">
+            <span class="material-symbols-outlined text-amber-500"
+              >edit_note</span
+            >
+            Modifier la session
+          </h3>
+          <button
+            onclick="toggleModal('edit-session-modal')"
+            class="text-white/70 hover:text-white transition"
+          >
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+
+        <!-- L'action du formulaire sera modifiée dynamiquement en JS pour inclure l'ID de la session -->
+        <form
+          id="edit-session-form"
+          method="POST"
+          action=""
+          class="p-6 space-y-4"
+        >
+          {% csrf_token %}
+
+          <div>
+            <label
+              class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2"
+              >Programme de formation</label
+            >
+            {% render_field form.programme id="edit_programme" class="w-full bg-as-gray border border-as-border rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-as-blue focus:border-as-blue" %}
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2"
+                >Date de début</label
+              >
+              {% render_field form.date_debut id="edit_date_debut" class="w-full bg-as-gray border border-as-border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-as-blue focus:border-as-blue" %}
+            </div>
+            <div>
+              <label
+                class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2"
+                >Date de fin</label
+              >
+              {% render_field form.date_fin id="edit_date_fin" class="w-full bg-as-gray border border-as-border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-as-blue focus:border-as-blue" %}
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2"
+                >Heure de début</label
+              >
+              {% render_field form.start_time id="edit_start_time" class="w-full bg-as-gray border border-as-border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-as-blue focus:border-as-blue" %}
+            </div>
+            <div>
+              <label
+                class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2"
+                >Prix / Tarif</label
+              >
+              {% render_field form.prix id="edit_prix" class="w-full bg-as-gray border border-as-border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-as-blue focus:border-as-blue" placeholder="Ex: 500 000 FCFA" %}
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2"
+                >Lieu / Campus</label
+              >
+              {% render_field form.lieu id="edit_lieu" class="w-full bg-as-gray border border-as-border rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-as-blue focus:border-as-blue" %}
+            </div>
+            <div>
+              <label
+                class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2"
+                >Nombre max de places</label
+              >
+              {% render_field form.nombre_de_place id="edit_nombre_de_place" class="w-full bg-as-gray border border-as-border rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-as-blue focus:border-as-blue" min="1" %}
+            </div>
+          </div>
+
+          <div class="flex justify-end gap-3 pt-4 border-t border-as-border">
+            <button
+              type="button"
+              onclick="toggleModal('edit-session-modal')"
+              class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-as-gray rounded-xl transition"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              class="px-5 py-2 text-sm font-bold bg-amber-500 text-white rounded-xl hover:bg-amber-600 transition shadow-md shadow-amber-500/10"
+            >
+              Mettre à jour
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal : Confirmation de Suppression -->
+    <div
+      id="delete-modal"
+      class="fixed inset-0 z-50 invisible opacity-0 transition-all duration-300 flex items-center justify-center p-4"
+    >
+      <div
+        class="fixed inset-0 modal-backdrop"
+        onclick="toggleModal('delete-modal')"
+      ></div>
+      <div
+        class="bg-white rounded-2xl w-full max-w-sm shadow-2xl relative z-10 border border-as-border p-6 text-center transform scale-95 transition-all duration-300"
+      >
+        <div
+          class="w-12 h-12 bg-red-50 border border-red-200 rounded-full flex items-center justify-center mx-auto mb-4"
+        >
+          <span class="material-symbols-outlined text-as-red text-2xl"
+            >warning</span
+          >
+        </div>
+        <h3 class="font-bold text-slate-800 text-lg mb-1">
+          Supprimer cette session ?
+        </h3>
+        <p id="delete-modal-text" class="text-sm text-slate-500 mb-6">
+          Cette action est irréversible et supprimera le calendrier associé.
+        </p>
+        <div class="flex justify-center gap-3">
+          <button
+            type="button"
+            onclick="toggleModal('delete-modal')"
+            class="px-4 py-2 text-sm font-medium text-slate-500 hover:bg-as-gray rounded-xl transition"
+          >
+            Annuler
+          </button>
+          <form id="delete-session-form" method="POST" action="" style="display: inline;">
+            {% csrf_token %}
+            <button
+              type="submit"
+              class="px-4 py-2 text-sm font-bold bg-as-red text-white rounded-xl hover:bg-as-red-dark transition shadow-md shadow-as-red/10"
+            >
+              Oui, supprimer
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-as-blue text-white py-10 px-6">
+      <div
+        class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6"
+      >
+        <div class="flex items-center gap-3">
+          <span class="font-bold">Alpha Simo</span>
+        </div>
+        <div class="text-sm text-white/40">
+          © 2026 Propulsé par e-IMAN. Tous droits réservés.
+        </div>
+      </div>
+    </footer>
+
+    <!-- Interactive JavaScript -->
+    <script>
+      function toggleModal(modalId) {
+        const modal = document.getElementById(modalId);
+        const container = modal.querySelector(".relative.z-10, .bg-white");
+
+        if (modal.classList.contains("invisible")) {
+          modal.classList.remove("invisible", "opacity-0");
+          container.classList.remove("scale-95");
+          container.classList.add("scale-100");
+        } else {
+          modal.classList.add("invisible", "opacity-0");
+          container.classList.remove("scale-100");
+          container.classList.add("scale-95");
+        }
+      }
+
+      function openDeleteModal(sessionName, sessionId) {
+        document.getElementById("delete-modal-text").innerHTML =
+          `Êtes-vous sûr de vouloir supprimer définitivement la session pour <br><strong class="text-slate-700">${sessionName}</strong> ?`;
+        document.getElementById("delete-session-form").action = `/Dashboard/Sessions/${sessionId}/delete/`;
+        toggleModal("delete-modal");
+      }
+
+      function openEditModal(button) {
+        // 1. Récupération des données stockées sur le bouton cliqué
+        const id = button.getAttribute("data-id");
+        const programme = button.getAttribute("data-programme");
+        const debut = button.getAttribute("data-debut");
+        const fin = button.getAttribute("data-fin");
+        const time = button.getAttribute("data-time");
+        const prix = button.getAttribute("data-prix");
+        const lieu = button.getAttribute("data-lieu");
+        const places = button.getAttribute("data-places");
+
+        // 2. Injection des valeurs dans les inputs du modal d'édition
+        document.getElementById("edit_programme").value = programme;
+        document.getElementById("edit_date_debut").value = debut;
+        document.getElementById("edit_date_fin").value = fin;
+        document.getElementById("edit_start_time").value = time;
+        document.getElementById("edit_prix").value = prix;
+        document.getElementById("edit_lieu").value = lieu;
+        document.getElementById("edit_nombre_de_place").value = places;
+
+        // 3. Ajustement dynamique de l'action de soumission vers l'URL Django d'édition
+        // Exemple si votre URL ressemble à /Dashboard/Sessions/ID/edit/:
+        document.getElementById("edit-session-form").action =
+          `/Dashboard/Sessions/${id}/edit/`;
+
+        // 4. Ouverture du modal
+        toggleModal("edit-session-modal");
+      }
+      
+    </script>
+  </body>
+</html>

@@ -35,13 +35,21 @@ class Session(models.Model):
     date_debut = models.DateField()
     date_fin = models.DateField()
     start_time = models.TimeField()
-    prix = models.CharField(max_length=20, null=False, blank=False)
+    prix = models.CharField(max_length=20)
     nombre_de_place = models.PositiveIntegerField()
     lieu = models.CharField(max_length=100, choices=[('Lome', 'Lomé'), ('Tunis', 'Tunis')], default='Lome')
 
     @property
+    def inscrits(self):
+        return Inscription.objects.filter(session=self).count()
+
+    @property
+    def remplissage(self):
+        return (self.inscrits / self.nombre_de_place) * 100
+        
+    @property
     def is_active(self):
-        return self.date_debut >= timezone.localdate()
+        return self.date_debut >= timezone.localdate() or self.inscrits > self.nombre_de_place
 
     @property
     def formatted_date_range(self):
@@ -91,6 +99,7 @@ class Inscription(models.Model):
     condition = models.BooleanField(default=False)
     statut = models.BooleanField(default=False)
     date_inscription = models.DateTimeField(auto_now_add=True)
+    # programme_selectionner
 
     def __str__(self):
         return f"{self.participant} - {self.session}"

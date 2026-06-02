@@ -1,12 +1,15 @@
+from formulaire.forms import SessionForm
 from formulaire.models import Utilisateur
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.timezone import now
 from django.shortcuts import render, redirect, get_object_or_404
+from django.core.mail import send_mail
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.db.models import Prefetch
+from django.core.paginator import Paginator
+from django.db.models import Prefetch, Count, F
 from . import forms, models
 import random, string
 
@@ -22,10 +25,13 @@ def accueil_view(request):
     return render(request, 'accueil.html', context=context)
 
 def programme(request):
-    programmes = models.Programme.objects.filter(
-        sessions__date_debut__gte=timezone.localdate()
-    ).prefetch_related(
-        Prefetch('sessions', queryset=models.Session.objects.filter(date_debut__gte=timezone.localdate()))
+    # programmes = models.Programme.objects.filter(
+    #     sessions__date_debut__gte=timezone.localdate()
+    # ).prefetch_related(
+    #     Prefetch('sessions', queryset=models.Session.objects.filter(date_debut__gte=timezone.localdate()))
+    # ).distinct()
+    programmes = models.Programme.objects.all().prefetch_related(
+        Prefetch('sessions', queryset=models.Session.objects.all())
     ).distinct()
     labels = models.Programme.objects.distinct().values_list('label', flat=True).distinct()
     context = {
@@ -40,6 +46,7 @@ def random_password():
 def formulaire(request, id):
     session = models.Session.objects.get(id=id)
     if not session.is_active:
+        messages.error(request, "Cette session n'est plus disponible. Veuillez effectuer une demande sur mesure.")
         return redirect('Programme')
     
     # Calculer le nombre de places restantes
@@ -117,6 +124,10 @@ def formulaire(request, id):
                 user.set_password(pwd)
                 print("Mot de passe : ", pwd)
                 user.save()
+                # Send credentials via email
+                subject = "Vos identifiants Alpha Simo"
+                message = f"Bonjour {user.first_name},\n\nVotre compte a été créé avec succès.\nIdentifiant (email) : {user.email}\nMot de passe temporaire : {pwd}\n\nVeuillez vous connecter et changer votre mot de passe.\n\nCordialement,\nL'équipe Alpha Simo"
+                send_mail(subject, message, None, [user.email], fail_silently=False)
             
             # Profil Utilisateur
             utilisateur, _ = models.Utilisateur.objects.get_or_create(
@@ -179,6 +190,11 @@ def formulaire(request, id):
                             p_pwd = random_password()
                             p_user.set_password(p_pwd)
                             p_user.save()
+
+                            # Send credentials via email
+                            subject = "Vos identifiants Alpha Simo"
+                            message = f"Bonjour {p_user.first_name},\n\nVotre compte a été créé avec succès.\nIdentifiant (email) : {p_user.email}\nMot de passe temporaire : {p_pwd}\n\nVeuillez vous connecter et changer votre mot de passe.\n\nCordialement,\nL'équipe Alpha Simo"
+                            send_mail(subject, message, None, [p_user.email], fail_silently=False)
                             
                         p_utilisateur, _ = models.Utilisateur.objects.get_or_create(
                             user=p_user,
@@ -228,7 +244,7 @@ def formulaire(request, id):
                 )
                 
             messages.success(request, "Votre inscription a bien été enregistrée.")
-            return redirect('dashboard_user')
+            return redirect('Dashboard_user')
             
         else:
             for error in custom_errors:
@@ -271,11 +287,6 @@ def is_learner(user):
     return utilisateur.profil == 'Learner'
 
 @login_required(login_url='Connexion')
-@user_passes_test(is_formateur, login_url='Connexion')
-def dashboad(request):
-    return render(request, 'dashboad.html')
-
-@login_required(login_url='Connexion')
 @user_passes_test(is_learner, login_url='Connexion')
 def dashboard_user(request):
     programmes = models.Programme.objects.filter(
@@ -290,10 +301,142 @@ def dashboard_user(request):
     context = {
         'programmes': programmes,
         'whatsapp': whatsapp,
-        'programmes_count': programmes.count(),
         'mes_inscriptions': mes_inscriptions,
-        'mes_inscriptions_count': mes_inscriptions.count(),
         'mes_sessions': mes_sessions,
-        'mes_sessions_count': mes_sessions.count()
     }
     return render(request, 'dashboard_user.html', context=context)
+
+
+@login_required(login_url='Connexion')
+@user_passes_test(is_formateur, login_url='Connexion')
+def dashboad(request):
+    programmes = models.Programme.objects.all()
+    sessions_av = models.Session.objects.filter(date_debut__gte=timezone.localdate())
+    sessions = models.Session.objects.filter(date_debut__lt=timezone.localdate())
+    inscris = models.Inscription.objects.all().distinct().order_by('participant__utilisateur__user__date_joined')
+
+    context = {
+        'programmes':programmes,
+        'sessions_av':sessions_av,
+        'sessions':sessions,
+        'inscris':inscris
+    }
+    return render(request, 'dashboad.html',context=context)
+
+def programmes(request):
+    form = forms.ProgrammeForm()
+    programmes = models.Programme.objects.all().prefetch_related('sessions')
+    labels = models.Programme.objects.values_list('label', flat=True).distinct()
+    total_sessions = models.Session.objects.count()
+    sessions_av = models.Session.objects.filter(date_debut__gte=timezone.localdate()).count()
+    total_inscriptions = models.Inscription.objects.count()
+    context = {
+        'programmes': programmes,
+        'labels': labels,
+        'total_sessions': total_sessions,
+        'sessions_av': sessions_av,
+        'total_inscriptions': total_inscriptions,
+        'form': form
+    }
+    return render(request, 'programmes.html', context=context)
+
+def add_programme(request):
+    if request.method == 'POST':
+        form = forms.ProgrammeForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+    else:
+        form = forms.ProgrammeForm()
+    return redirect('Programmes_admin')
+
+def edit_programme(request, id):
+    programme = models.Programme.objects.get(id=id)
+    if request.method == 'POST':
+        form = forms.ProgrammeForm(request.POST, request.FILES, instance=programme)
+        if form.is_valid():
+            form.save()
+            return redirect('Programmes_admin')
+    else:
+        form = forms.ProgrammeForm(programme)
+    context = {'form': form}
+    return render(request, 'edit_programme.html', context=context)
+
+def delete_programme(request, id):
+    programme = models.Programme.objects.get(id=id)
+    programme.delete()
+    return redirect('Programmes_admin')
+
+def sessions(request):
+    form = forms.SessionForm()
+    sessions = models.Session.objects.all().prefetch_related('programme').order_by('-date_debut')
+
+    programme_id = request.GET.get('programme')
+    lieu = request.GET.get('lieu')
+    statut = request.GET.get('statut')
+
+    if programme_id:
+        sessions = sessions.filter(programme_id=programme_id)
+
+    if lieu:
+        sessions = sessions.filter(lieu=lieu)
+
+    today = timezone.localdate()
+    if statut == 'ouverte':
+        sessions = sessions.filter(date_debut__gte=today)
+    elif statut == 'complete':
+        sessions = sessions.annotate(inscrits=Count('inscription_set')).filter(inscrits__gte=F('nombre_de_place'))
+    elif statut == 'terminee':
+        sessions = sessions.filter(date_fin__lt=today)
+
+    paginator = Paginator(sessions, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    query_params = request.GET.copy()
+    if query_params.get('page'):
+        query_params.pop('page')
+    querystring = query_params.urlencode()
+
+    programmes = models.Programme.objects.all()
+
+    context = {
+        'sessions': page_obj,
+        'form': form,
+        'programmes': programmes,
+        'selected_programme': programme_id,
+        'selected_lieu': lieu,
+        'selected_statut': statut,
+        'page_obj': page_obj,
+        'querystring': querystring,
+    }
+    return render(request, 'sessions.html', context=context)
+
+def add_session(request):
+    form = forms.SessionForm(request.POST)
+    if form.is_valid():
+        form.save()
+        return redirect('Sessions_admin')
+    else:
+        form = forms.SessionForm()
+        return redirect('Sessions_admin')
+
+def edit_session(request, id):
+    print("Hi")
+    if request.method == 'POST':
+        print("Post")
+        session = models.Session.objects.get(id=id)
+        form = forms.SessionForm(request.POST, instance=session)
+        if form.is_valid():
+            print("Damned")
+            form.save()
+            return redirect('Sessions_admin')
+    return redirect('Sessions_admin')
+
+def delete_session(request, id):
+    session = models.Session.objects.get(id=id)
+    session.delete()
+    return redirect('Sessions_admin')
+
+def demandes_admin(request):
+    return redirect('Dashboard')
+    return render(request, 'demandes_admin.html')

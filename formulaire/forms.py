@@ -33,10 +33,20 @@ class EntrepriseForm(forms.ModelForm):
         model = models.Entreprise
         fields = '__all__'
 
+class ProgrammeForm(forms.ModelForm):
+    class Meta:
+        model = models.Programme
+        fields = '__all__'
+
 class SessionForm(forms.ModelForm):
     class Meta:
         model = models.Session
         fields = '__all__'
+        widgets = {
+            'date_debut': forms.DateInput(attrs={'type': 'date'}),
+            'date_fin': forms.DateInput(attrs={'type': 'date'}),
+            'start_time': forms.TimeInput(attrs={'type': 'time'}),
+        }
 
 class ParticipantForm(forms.ModelForm):
     class Meta:

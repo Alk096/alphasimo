@@ -1,11 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 {% load static %}
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>AlphaSimo — Catalogue des formations</title>
-    <meta name="description" content="Découvrez nos formations certifiantes en Management QSE, Audit Interne et Gestion Documentaire." />
+    <meta
+      name="description"
+      content="Découvrez nos formations certifiantes en Management QSE, Audit Interne et Gestion Documentaire."
+    />
     <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
     <script>
       tailwind.config = {
@@ -22,96 +25,230 @@
         },
       };
     </script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      body { font-family: 'Inter', sans-serif; }
+      body {
+        font-family: "Inter", sans-serif;
+      }
       .material-symbols-outlined {
-        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        font-variation-settings:
+          "FILL" 0,
+          "wght" 400,
+          "GRAD" 0,
+          "opsz" 24;
         display: inline-block;
         vertical-align: middle;
       }
       .hero-gradient {
-        background: linear-gradient(135deg, #1A1A4B 0%, #2a2a6b 50%, #1A1A4B 100%);
+        background: linear-gradient(
+          135deg,
+          #1a1a4b 0%,
+          #2a2a6b 50%,
+          #1a1a4b 100%
+        );
       }
       .glass {
-        background: rgba(255,255,255,.06);
+        background: rgba(255, 255, 255, 0.06);
         backdrop-filter: blur(12px);
-        border: 1px solid rgba(255,255,255,.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
       }
       @keyframes fadeUp {
-        from { opacity: 0; transform: translateY(30px); }
-        to { opacity: 1; transform: translateY(0); }
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
-      .fade-up { animation: fadeUp .7s ease forwards; opacity: 0; }
-      .fade-up-d1 { animation-delay: .1s; }
-      .fade-up-d2 { animation-delay: .2s; }
-      .card-hover { transition: all .35s cubic-bezier(.4,0,.2,1); }
-      .card-hover:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(26,26,75,.12); }
-      .cta-pulse { position: relative; overflow: hidden; }
+      .fade-up {
+        animation: fadeUp 0.7s ease forwards;
+        opacity: 0;
+      }
+      .fade-up-d1 {
+        animation-delay: 0.1s;
+      }
+      .fade-up-d2 {
+        animation-delay: 0.2s;
+      }
+      .card-hover {
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .card-hover:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 60px rgba(26, 26, 75, 0.12);
+      }
+      .cta-pulse {
+        position: relative;
+        overflow: hidden;
+      }
       .cta-pulse::after {
-        content: '';
+        content: "";
         position: absolute;
         inset: 0;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.15),
+          transparent
+        );
         transform: translateX(-100%);
-        transition: transform .6s;
+        transition: transform 0.6s;
       }
-      .cta-pulse:hover::after { transform: translateX(100%); }
+      .cta-pulse:hover::after {
+        transform: translateX(100%);
+      }
     </style>
   </head>
 
   <body class="bg-as-gray text-gray-800 antialiased">
-
+    {% if messages %}
+      <div class="fixed top-24 right-6 z-[100] flex flex-col gap-3 max-w-sm w-full" id="toast-container">
+        {% for message in messages %}
+          <div class="flex items-center gap-3 p-4 bg-white rounded-xl shadow-xl border {% if 'error' in message.tags %}border-red-200 text-red-950 bg-red-50{% elif 'success' in message.tags %}border-green-200 text-green-950 bg-green-50{% else %}border-blue-200 text-blue-950 bg-blue-50{% endif %} transition-all duration-300 transform translate-y-0 opacity-100" role="alert">
+            <span class="material-symbols-outlined {% if 'error' in message.tags %}text-red-600{% elif 'success' in message.tags %}text-green-600{% else %}text-blue-600{% endif %}">
+              {% if 'error' in message.tags %}error{% elif 'success' in message.tags %}check_circle{% else %}info{% endif %}
+            </span>
+            <div class="text-sm font-medium flex-grow">{{ message }}</div>
+            <button onclick="this.parentElement.remove()" class="text-gray-400 hover:text-gray-600 transition flex items-center justify-center p-1 rounded-lg hover:bg-black/5">
+              <span class="material-symbols-outlined text-[18px]">close</span>
+            </button>
+          </div>
+        {% endfor %}
+      </div>
+      <script>
+        setTimeout(() => {
+          const container = document.getElementById('toast-container');
+          if (container) {
+            container.style.opacity = '0';
+            container.style.transform = 'translateY(-10px)';
+            container.style.transition = 'all 0.5s ease';
+            setTimeout(() => container.remove(), 500);
+          }
+        }, 5000);
+      </script>
+    {% endif %}
     <!-- ═══ NAVBAR ═══ -->
-    <nav class="fixed top-0 w-full z-50 transition-all duration-300 bg-as-blue/95 backdrop-blur-sm shadow-sm" id="navbar">
-      <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+    <nav
+      class="fixed top-0 w-full z-50 transition-all duration-300 bg-as-blue/95 backdrop-blur-sm shadow-sm"
+      id="navbar"
+    >
+      <div
+        class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between"
+      >
         <a href="{% url 'Accueil' %}" class="flex items-center gap-3">
-          <img src="{% static 'images/logo.png' %}" alt="Alpha Simo" class="w-10 h-10 rounded-full shadow" />
-          <span class="text-xl font-bold text-white tracking-tight">Alpha Simo</span>
+          <img
+            src="{% static 'images/logo.png' %}"
+            alt="Alpha Simo"
+            class="w-10 h-10 rounded-full shadow"
+          />
+          <span class="text-xl font-bold text-white tracking-tight"
+            >Alpha Simo</span
+          >
         </a>
         <div class="flex items-center gap-3">
-          <a href="{% url 'Accueil' %}" class="hidden md:inline-flex px-4 py-2 text-white/80 text-sm font-medium hover:text-white transition">
+          <a
+            href="{% url 'Accueil' %}"
+            class="hidden md:inline-flex px-2 py-2 text-white/80 text-sm font-medium hover:text-white transition flex items-center gap-1.5"
+          >
+          <span class="material-symbols-outlined text-[18px]">home</span>
             Accueil
           </a>
-          <a href="{% url 'Programme' %}" class="hidden md:inline-flex px-4 py-2 text-white text-sm font-semibold border-b-2 border-as-red">
+          <a
+            href="{% url 'Programme' %}"
+            class="hidden md:inline-flex px-2 py-2 text-white text-sm font-semibold border-b-2 border-as-red flex items-center gap-1.5"
+          >
+          <span class="material-symbols-outlined text-[18px]">school</span>
             Programmes
           </a>
           {% if user.is_authenticated %}
-          <a href="{% if user.is_admin %}{% url 'Dashboad' %}{% else %}{% url 'Dashboard_user' %}{% endif %}" class="hidden md:inline-flex px-4 py-2 text-white/80 text-sm font-medium hover:text-white transition">
+          <a
+            href="{% if user.is_admin %}{% url 'Dashboad' %}{% else %}{% url 'Dashboard_user' %}{% endif %}"
+            class="hidden md:inline-flex px-2 py-2 text-white/80 text-sm font-medium hover:text-white transition flex items-center gap-1.5"
+          >
+          <span class="material-symbols-outlined text-[18px]">person</span>
             Espace personnel
           </a>
           {% endif %}
-          <button id="burger" class="md:hidden text-white" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+          <button
+            id="burger"
+            class="md:hidden text-white"
+            onclick="
+              document.getElementById('mobile-menu').classList.toggle('hidden')
+            "
+          >
             <span class="material-symbols-outlined text-[28px]">menu</span>
           </button>
         </div>
       </div>
-      <div id="mobile-menu" class="hidden md:hidden bg-as-blue/95 backdrop-blur px-6 pb-6 space-y-3 text-white">
-        <a href="{% url 'Accueil' %}" class="block py-2 border-b border-white/10">Accueil</a>
-        <a href="{% url 'Programme' %}" class="block py-2 border-b border-white/10 font-semibold">Programmes</a>
+      <div
+        id="mobile-menu"
+        class="hidden md:hidden bg-as-blue/95 backdrop-blur px-6 pb-6 space-y-3 text-white"
+      >
+        <a
+          href="{% url 'Accueil' %}"
+          class="block py-2 border-b border-white/10"
+          >Accueil</a
+        >
+        <a
+          href="{% url 'Programme' %}"
+          class="block py-2 border-b border-white/10 font-semibold"
+          >
+          Programmes</a
+        >
         {% if user.is_authenticated %}
-        <a href="{% if user.is_admin %}{% url 'Dashboad' %}{% else %}{% url 'Dashboard_user' %}{% endif %}" class="block py-2 border-b border-white/10">Espace personnel</a>
+        <a
+          href="{% if user.is_admin %}{% url 'Dashboad' %}{% else %}{% url 'Dashboard_user' %}{% endif %}"
+          class="block py-2 border-b border-white/10"
+          >Espace personnel</a
+        >
         {% endif %}
       </div>
     </nav>
 
     <!-- ═══ HERO ═══ -->
     <section class="hero-gradient pt-28 pb-16 relative overflow-hidden">
-      <div class="absolute top-20 right-10 w-72 h-72 bg-as-red/10 rounded-full blur-3xl"></div>
-      <div class="absolute bottom-10 left-10 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
+      <div
+        class="absolute top-10 right-10 w-80 h-80 bg-as-red/8 rounded-full blur-3xl"
+      ></div>
+      <div
+        class="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"
+      ></div>
+      <div
+        class="absolute top-1/2 right-1/4 w-[400px] h-[400px] border border-white/5 rounded-full -translate-y-1/2"
+      ></div>
       <div class="max-w-7xl mx-auto px-6 relative z-10">
-        <div class="fade-up inline-flex items-center gap-2 px-4 py-2 glass rounded-full text-white/90 text-xs font-medium mb-6">
+        <div
+          class="fade-up inline-flex items-center gap-2 px-4 py-2 glass rounded-full text-white/90 text-xs font-medium mb-6"
+        >
           <span class="w-2 h-2 bg-as-red rounded-full animate-pulse"></span>
           {{ programmes|length }} programme{{ programmes|length|pluralize }}
         </div>
-        <h1 class="fade-up fade-up-d1 text-3xl md:text-4xl lg:text-5xl font-900 text-white leading-tight mb-4">
-          Nos programmes<br/>
-          {% comment %} <span class="text-transparent bg-clip-text bg-gradient-to-r from-as-red to-[#FF5C7A]">certifiantes</span> {% endcomment %}
+        <h1
+          class="fade-up fade-up-d1 text-3xl md:text-4xl lg:text-5xl font-900 text-white leading-tight mb-4"
+        >
+          Nos programmes<br />
+          {% comment %}
+          <span
+            class="text-transparent bg-clip-text bg-gradient-to-r from-as-red to-[#FF5C7A]"
+            >certifiantes</span
+          >
+          {% endcomment %}
         </h1>
-        {% comment %} <p class="fade-up fade-up-d2 text-white/60 max-w-xl text-lg">
-          Explorez notre catalogue et choisissez la session qui correspond à vos objectifs professionnels.
-        </p> {% endcomment %}
+        {% comment %}
+        <p class="fade-up fade-up-d2 text-white/60 max-w-xl text-lg">
+          Explorez notre catalogue et choisissez la session qui correspond à vos
+          objectifs professionnels.
+        </p>
+        {% endcomment %}
       </div>
     </section>
 
@@ -121,7 +258,9 @@
         <div class="flex flex-col md:flex-row gap-4 items-center">
           <div class="relative flex-1 w-full">
             <span class="absolute inset-y-0 left-0 pl-4 flex items-center">
-              <span class="material-symbols-outlined text-gray-400 text-[20px]">search</span>
+              <span class="material-symbols-outlined text-gray-400 text-[20px]"
+                >search</span
+              >
             </span>
             <input
               id="searchInput"
@@ -131,7 +270,11 @@
               oninput="filterCards()"
             />
           </div>
-          <select id="themeFilter" class="rounded-xl border-gray-200 text-as-blue py-3 pl-4 pr-10 text-sm focus:ring-as-blue bg-as-gray w-full md:w-auto" onchange="filterCards()">
+          <select
+            id="themeFilter"
+            class="rounded-xl border-gray-200 text-as-blue py-3 pl-4 pr-10 text-sm focus:ring-as-blue bg-as-gray w-full md:w-auto"
+            onchange="filterCards()"
+          >
             <option value="">Tous les thèmes</option>
             {% for l in labels %}
             <option value="{{ l }}">{{ l }}</option>
@@ -143,73 +286,99 @@
 
     <!-- ═══ TRAINING GRID ═══ -->
     <main class="max-w-7xl mx-auto px-6 pb-20">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="courseGrid">
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        id="courseGrid"
+      >
         {% for p in programmes %}
+        <div
+          class="course-card group rounded-2xl overflow-hidden border border-gray-100 bg-white card-hover flex flex-col"
+          data-title="{{ p.titre|lower }}"
+          data-label="{{ p.label|lower }}"
+        >
+          <!-- Top accent bar -->
           <div
-            class="course-card group rounded-2xl overflow-hidden border border-gray-100 bg-white card-hover flex flex-col"
-            data-title="{{ p.titre|lower }}"
-            data-label="{{ p.label|lower }}">
-            
-            <!-- Top accent bar -->
-            <div class="h-2 {% if p.label|lower == 'qse' or p.label|lower == 'qshe' %}bg-gradient-to-r from-as-blue to-blue-800{% elif p.label|lower == 'audit' %}bg-gradient-to-r from-as-red to-as-red-dark{% else %}bg-gradient-to-r from-as-blue via-purple-700 to-as-red{% endif %}"></div>
+            class="h-2 {% if p.label|lower == 'qse' or p.label|lower == 'qshe' %}bg-gradient-to-r from-as-blue to-blue-800{% elif p.label|lower == 'audit' %}bg-gradient-to-r from-as-red to-as-red-dark{% else %}bg-gradient-to-r from-as-blue via-purple-700 to-as-red{% endif %}"
+          ></div>
 
-            <div class="p-7 flex-grow flex flex-col">
-              <!-- Badge -->
-              <div class="flex items-center justify-between mb-5">
-                <span class="inline-block px-3 py-1 {% if p.label|lower == 'qse' or p.label|lower == 'qshe' or p.label|lower == 'management' %}bg-as-blue{% else %}bg-as-red{% endif %} text-white text-xs font-bold rounded">
-                  {{ p.label }}
-                </span>
-                {% if p.restant is not None and p.restant <= 5 %}
-                <span class="inline-flex items-center gap-1 px-2 py-1 bg-amber-50 text-amber-700 text-xs font-semibold rounded border border-amber-200">
-                  <span class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"></span>
-                  {{ p.restant }} place{{ p.restant|pluralize }}
-                </span>
-                {% endif %}
-              </div>
-
-              <!-- Title -->
-              <h3 class="text-lg font-bold text-as-blue mb-4 leading-snug">{{ p.titre }}</h3>
-
-              <!-- Info list -->
-              <p class="text-sm text-gray-600 leading-relaxed mb-5">
-                  {{ p.description|truncatewords:20 }}
-              </p>
-
-              {% if p.document %}
-                <a href="{{ p.document.url }}"
-                  target="_blank"
-                  class="inline-flex items-center justify-center gap-2 mb-6 px-4 py-2 border border-as-blue text-as-blue hover:bg-as-blue hover:text-white rounded-lg text-sm font-semibold transition-all duration-300">
-                    
-                    <span class="material-symbols-outlined text-[18px]">
-                        download
-                    </span>
-
-                    Télécharger le programme
-                </a>
-                {% endif %}
-
-              <a
-                class="w-full block bg-as-red hover:bg-as-red-dark text-white text-center font-bold py-3.5 rounded-xl cursor-pointer"
-                onclick="openModal({{ p.id }})"
+          <div class="p-7 flex-grow flex flex-col">
+            <!-- Badge -->
+            <div class="flex items-center justify-between mb-5">
+              <span
+                class="inline-block px-3 py-1 {% if p.label|lower == 'qse' or p.label|lower == 'qshe' or p.label|lower == 'management' %}bg-as-blue{% else %}bg-as-red{% endif %} text-white text-xs font-bold rounded"
               >
-                Voir les sessions
-              </a>
+                {{ p.label }}
+              </span>
+              {% if p.restant is not None and p.restant <= 5 %}
+              <span
+                class="inline-flex items-center gap-1 px-2 py-1 bg-amber-50 text-amber-700 text-xs font-semibold rounded border border-amber-200"
+              >
+                <span
+                  class="w-1.5 h-1.5 bg-amber-500 rounded-full animate-pulse"
+                ></span>
+                {{ p.restant }} place{{ p.restant|pluralize }}
+              </span>
+              {% endif %}
             </div>
+
+            <!-- Title -->
+            <h3 class="text-lg font-bold text-as-blue mb-4 leading-snug">
+              {{ p.titre }}
+            </h3>
+
+            <!-- Info list -->
+            <p class="text-sm text-gray-600 leading-relaxed mb-5">
+              {{ p.description|truncatewords:20 }}
+            </p>
+
+            {% if p.document %}
+            <a
+              href="{{ p.document.url }}"
+              target="_blank"
+              class="inline-flex items-center justify-center gap-2 mb-6 px-4 py-2 border border-as-blue text-as-blue hover:bg-as-blue hover:text-white rounded-lg text-sm font-semibold transition-all duration-300"
+            >
+              <span class="material-symbols-outlined text-[18px]">
+                download
+              </span>
+
+              Télécharger le programme
+            </a>
+            {% endif %}
+
+            <a
+              class="w-full block bg-as-red hover:bg-as-red-dark text-white text-center font-bold py-3.5 rounded-xl cursor-pointer"
+              onclick="openModal({{ p.id }})"
+            >
+              Voir les sessions
+            </a>
           </div>
-          {% empty %}
-          <div class="col-span-full text-center py-20">
-            <span class="material-symbols-outlined text-gray-300 text-[64px] mb-4">school</span>
-            <h3 class="text-xl font-bold text-gray-400 mb-2">Aucune formation disponible</h3>
-            <p class="text-gray-400 text-sm">Revenez bientôt pour découvrir nos prochaines sessions.</p>
-          </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full text-center py-20">
+          <span class="material-symbols-outlined text-gray-300 text-[64px] mb-4"
+            >school</span
+          >
+          <h3 class="text-xl font-bold text-gray-400 mb-2">
+            Aucune formation disponible
+          </h3>
+          <p class="text-gray-400 text-sm">
+            Revenez bientôt pour découvrir nos prochaines sessions.
+          </p>
+        </div>
         {% endfor %}
         <!-- MODAL -->
-        <div id="sessionModal" class="fixed inset-0 hidden bg-black/50 flex items-center justify-center z-50">
-          
-          <div class="bg-white w-full max-w-3xl rounded-2xl shadow-xl p-6 relative">
-
+        <div
+          id="sessionModal"
+          class="fixed inset-0 hidden bg-black/50 flex items-center justify-center z-50"
+        >
+          <div
+            class="bg-white w-full max-w-3xl rounded-2xl shadow-xl p-6 relative"
+          >
             <!-- Close -->
-            <button onclick="closeModal()" class="absolute top-3 right-3 text-gray-500 hover:text-red-500">
+            <button
+              onclick="closeModal()"
+              class="absolute top-3 right-3 text-gray-500 hover:text-red-500"
+            >
               ✕
             </button>
 
@@ -220,7 +389,6 @@
             <div id="sessionContent" class="grid gap-4">
               <!-- JS injecte ici -->
             </div>
-
           </div>
         </div>
       </div>
@@ -228,37 +396,52 @@
 
     <!-- ═══ FOOTER ═══ -->
     <footer class="bg-as-blue text-white py-12 px-6">
-      <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+      <div
+        class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6"
+      >
         <div class="flex items-center gap-3">
-          <img src="{% static 'images/logo.png' %}" alt="Alpha Simo" class="w-8 h-8 rounded-full" />
+          <img
+            src="{% static 'images/logo.png' %}"
+            alt="Alpha Simo"
+            class="w-8 h-8 rounded-full"
+          />
           <span class="font-bold">Alpha Simo</span>
           <span class="text-white/40 text-sm">· Formation</span>
         </div>
         <div class="flex gap-6 text-sm text-white/50">
-          <a href="tel:+22796968188" class="hover:text-white transition flex items-center gap-1">
+          <a
+            href="tel:+22796968188"
+            class="hover:text-white transition flex items-center gap-1"
+          >
             <span class="material-symbols-outlined text-[16px]">call</span>
             +227 96 96 81 88
           </a>
-          <a href="mailto:formations@alphasimo.ne" class="hover:text-white transition flex items-center gap-1">
+          <a
+            href="mailto:formations@alphasimo.ne"
+            class="hover:text-white transition flex items-center gap-1"
+          >
             <span class="material-symbols-outlined text-[16px]">mail</span>
             formations@alphasimo.ne
           </a>
         </div>
-        <div class="text-sm text-white/40">© 2026 Agence Iman</div>
+        <div class="text-sm text-white/40">
+          © 2026 Propulsé par e-IMAN. Tous droits réservés.
+        </div>
       </div>
     </footer>
 
     <!-- ═══ SCRIPTS ═══ -->
     <script>
       // Navbar scroll effect
-      const nav = document.getElementById('navbar');
-      window.addEventListener('scroll', () => {
-        nav.classList.toggle('shadow-lg', window.scrollY > 50);
+      const nav = document.getElementById("navbar");
+      window.addEventListener("scroll", () => {
+        nav.classList.toggle("shadow-lg", window.scrollY > 50);
       });
 
       // Update card data on session change
       function updateCard(programmeId, selectElement) {
-        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const selectedOption =
+          selectElement.options[selectElement.selectedIndex];
         const newPrix = selectedOption.getAttribute("data-prix");
         const newDate = selectedOption.getAttribute("data-date");
         const newLieu = selectedOption.getAttribute("data-lieu");
@@ -270,7 +453,9 @@
         const btnElement = document.getElementById(`btn-${programmeId}`);
 
         if (priceElement) {
-          priceElement.textContent = new Intl.NumberFormat('fr-FR').format(newPrix);
+          priceElement.textContent = new Intl.NumberFormat("fr-FR").format(
+            newPrix,
+          );
         }
         if (dateElement) {
           dateElement.textContent = newDate;
@@ -285,16 +470,20 @@
 
       // Search & filter
       function filterCards() {
-        const query = document.getElementById('searchInput').value.toLowerCase();
-        const theme = document.getElementById('themeFilter').value.toLowerCase();
-        const cards = document.querySelectorAll('.course-card');
+        const query = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const theme = document
+          .getElementById("themeFilter")
+          .value.toLowerCase();
+        const cards = document.querySelectorAll(".course-card");
 
-        cards.forEach(card => {
-          const title = card.getAttribute('data-title') || '';
-          const label = card.getAttribute('data-label') || '';
+        cards.forEach((card) => {
+          const title = card.getAttribute("data-title") || "";
+          const label = card.getAttribute("data-label") || "";
           const matchSearch = !query || title.includes(query);
           const matchTheme = !theme || label.includes(theme);
-          card.style.display = (matchSearch && matchTheme) ? '' : 'none';
+          card.style.display = matchSearch && matchTheme ? "" : "none";
         });
       }
     </script>
@@ -311,7 +500,8 @@
               start_time: "{{ s.start_time }}",
               prix: "{{ s.prix }}",
               lieu: "{{ s.lieu }}",
-              places: {{ s.nombre_de_place }}
+              places: {{ s.nombre_de_place }},
+              inscrits: {{ s.inscrits }}
             },
             {% endfor %}
           ],
@@ -371,16 +561,16 @@
                 <div class="flex items-center gap-3">
 
                   <!-- Places badge -->
-                  <span class="px-3 py-1 text-xs font-bold rounded-full 
-                    ${s.places > 5 
-                      ? 'bg-green-100 text-green-700' 
-                      : 'bg-amber-100 text-amber-700'} 
+                  <span class="px-3 py-1 text-xs font-bold rounded-full
+                    ${s.places > 5
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-amber-100 text-amber-700'}
                     border">
-                    ${s.places} places
+          ${s.inscrits}/${s.places} places
                   </span>
 
                   <a href="/Inscription/${s.id}/"
-                    class="px-3 py-1 text-xs font-bold rounded-full 
+                    class="px-3 py-1 text-xs font-bold rounded-full
                             bg-as-red text-white border border-as-red
                             hover:bg-as-red-dark transition-all whitespace-nowrap">
                       S'inscrire
@@ -400,6 +590,5 @@
         document.getElementById("sessionModal").classList.add("hidden");
       }
     </script>
-
   </body>
 </html>

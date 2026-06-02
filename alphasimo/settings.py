@@ -66,7 +66,7 @@ WSGI_APPLICATION = 'alphasimo.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
+'''
 DATABASES = {
      'default': {
          'ENGINE': 'django.db.backends.sqlite3',
@@ -84,7 +84,7 @@ DATABASES = {
         'PORT': os.getenv('DB_PORT'),
     }
 }
-'''
+
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
 
@@ -140,4 +140,4 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'rhimanadch@gmail.com'
 EMAIL_HOST_PASSWORD = 'bapk yczh dejk mtkc'
-DEFAULT_FROM_EMAIL = 'Recrutement Iman'
+DEFAULT_FROM_EMAIL = 'Recrutement Iman <rhimanadch@gmail.com>'
